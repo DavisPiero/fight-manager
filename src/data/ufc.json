@@ -1,0 +1,3427 @@
+{
+ "Islam Makhachev": {
+  "slug": "islam-makhachev",
+  "file": "islam-makhachev.webp",
+  "source": "https://www.ufc.com/athlete/islam-makhachev",
+  "nickname": null,
+  "tags": [
+   "Welterweight Division",
+   "#1 PFP",
+   "Active",
+   "Title Holder"
+  ],
+  "hometown": "Dagestan, Russia",
+  "camp": "AKA (American Kickboxing Academy) San Jose",
+  "style": "Sambo",
+  "age": 34,
+  "height": 70,
+  "reach": 70.5,
+  "stats": {
+   "slpm": 2.27,
+   "sapm": 1.42,
+   "td": 3.22,
+   "sub": 0.87,
+   "strdef": 61,
+   "tddef": 91,
+   "kd": 0.34,
+   "stracc": 58,
+   "tdacc": 15
+  }
+ },
+ "Joshua Van": {
+  "slug": "joshua-van",
+  "file": "joshua-van.webp",
+  "source": "https://www.ufc.com/athlete/joshua-van",
+  "nickname": "&quot;The Fearless&quot;",
+  "tags": [
+   "Flyweight Division",
+   "#6 PFP",
+   "Active",
+   "Title Holder"
+  ],
+  "hometown": "Hakha, Myanmar",
+  "camp": "4oz Fight Club",
+  "style": "Freestyle",
+  "age": 25,
+  "height": 65,
+  "reach": 65,
+  "stats": {
+   "slpm": 8.26,
+   "sapm": 5.83,
+   "td": 0.7,
+   "sub": 0.26,
+   "strdef": 57,
+   "tddef": 75,
+   "kd": 0.7,
+   "stracc": 58,
+   "tdacc": 0
+  }
+ },
+ "Alexandre Pantoja": {
+  "slug": "alexandre-pantoja",
+  "file": "alexandre-pantoja.webp",
+  "source": "https://www.ufc.com/athlete/alexandre-pantoja",
+  "nickname": "&quot;The Cannibal&quot;",
+  "tags": [
+   "#1\n        Flyweight Division",
+   "#14 PFP",
+   "Active"
+  ],
+  "hometown": "RJ, Brazil",
+  "camp": "American Top Team",
+  "style": "MMA",
+  "age": 36,
+  "height": 65,
+  "reach": 67,
+  "stats": {
+   "slpm": 4.54,
+   "sapm": 4.23,
+   "td": 2.82,
+   "sub": 0.88,
+   "strdef": 48,
+   "tddef": 69,
+   "kd": 0.25,
+   "stracc": 51,
+   "tdacc": 3
+  }
+ },
+ "Manel Kape": {
+  "slug": "manel-kape",
+  "file": "manel-kape.webp",
+  "source": "https://www.ufc.com/athlete/manel-kape",
+  "nickname": "&quot;StarBoy&quot;",
+  "tags": [
+   "#2\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "Angola",
+  "camp": "Kleber Repolho Jiujitsu MMA",
+  "style": "MMA",
+  "age": 33,
+  "height": 65,
+  "reach": 68,
+  "stats": {
+   "slpm": 4.68,
+   "sapm": 3.88,
+   "td": 0.36,
+   "sub": 0.24,
+   "strdef": 57,
+   "tddef": 79,
+   "kd": 0.97,
+   "stracc": 55,
+   "tdacc": 20
+  }
+ },
+ "Brandon Royval": {
+  "slug": "brandon-royval",
+  "file": "brandon-royval.webp",
+  "source": "https://www.ufc.com/athlete/brandon-royval",
+  "nickname": "&quot;Raw Dawg&quot;",
+  "tags": [
+   "#3\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "Denver, CO, United States",
+  "camp": "Mile High Militia",
+  "style": "Brawler",
+  "age": 34,
+  "height": 69,
+  "reach": 68,
+  "stats": {
+   "slpm": 5.6,
+   "sapm": 4.24,
+   "td": 0.89,
+   "sub": 1.18,
+   "strdef": 43,
+   "tddef": 45,
+   "kd": 0.3,
+   "stracc": 43,
+   "tdacc": 14
+  }
+ },
+ "Tatsuro Taira": {
+  "slug": "tatsuro-taira",
+  "file": "tatsuro-taira.webp",
+  "source": "https://www.ufc.com/athlete/tatsuro-taira",
+  "nickname": "&quot;The Best&quot;",
+  "tags": [
+   "#4\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "Okinawa, Japan",
+  "camp": null,
+  "style": null,
+  "age": 26,
+  "height": 67,
+  "reach": 70,
+  "stats": {
+   "slpm": 2.87,
+   "sapm": 3.1,
+   "td": 3.57,
+   "sub": 1.28,
+   "strdef": 44,
+   "tddef": 46,
+   "kd": 0.38,
+   "stracc": 54,
+   "tdacc": 2
+  }
+ },
+ "Kyoji Horiguchi": {
+  "slug": "kyoji-horiguchi",
+  "file": "kyoji-horiguchi.webp",
+  "source": "https://www.ufc.com/athlete/kyoji-horiguchi",
+  "nickname": "&quot;Karate Kid&quot;",
+  "tags": [
+   "#5\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "Gumma, Japan",
+  "camp": "American Top Team",
+  "style": "MMA",
+  "age": 36,
+  "height": 64,
+  "reach": 63,
+  "stats": {
+   "slpm": 3.64,
+   "sapm": 2.08,
+   "td": 1.67,
+   "sub": 0.1,
+   "strdef": 64,
+   "tddef": 61,
+   "kd": 0.59,
+   "stracc": 48,
+   "tdacc": 36
+  }
+ },
+ "Lone'er Kavanagh": {
+  "slug": "loneer-kavanagh",
+  "file": "loneer-kavanagh.webp",
+  "source": "https://www.ufc.com/athlete/loneer-kavanagh",
+  "nickname": null,
+  "tags": [
+   "#6\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "London, England",
+  "camp": "GB Top Team",
+  "style": "Kickboxer",
+  "age": 27,
+  "height": 66,
+  "reach": 67,
+  "stats": {
+   "slpm": 4.18,
+   "sapm": 3.95,
+   "td": 1.06,
+   "sub": 0.35,
+   "strdef": 54,
+   "tddef": 83,
+   "kd": 0.53,
+   "stracc": 51,
+   "tdacc": 0
+  }
+ },
+ "Asu Almabayev": {
+  "slug": "asu-almabayev",
+  "file": "asu-almabayev.webp",
+  "source": "https://www.ufc.com/athlete/asu-almabayev",
+  "nickname": "&quot;Zulfikar&quot;",
+  "tags": [
+   "#7\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "Kazakhstan",
+  "camp": "Dar Team",
+  "style": "Jiu-Jitsu",
+  "age": 32,
+  "height": 64,
+  "reach": 65,
+  "stats": {
+   "slpm": 2.28,
+   "sapm": 1.94,
+   "td": 4.74,
+   "sub": 1.44,
+   "strdef": 54,
+   "tddef": 44,
+   "kd": 0.14,
+   "stracc": 51,
+   "tdacc": 3
+  }
+ },
+ "Brandon Moreno": {
+  "slug": "brandon-moreno",
+  "file": "brandon-moreno.webp",
+  "source": "https://www.ufc.com/athlete/brandon-moreno",
+  "nickname": "&quot;The Assassin Baby&quot;",
+  "tags": [
+   "#8\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "Tijuana, Méx., Mexico",
+  "camp": "Team Moreno",
+  "style": "Jiu-Jitsu",
+  "age": 32,
+  "height": 67,
+  "reach": 70,
+  "stats": {
+   "slpm": 3.86,
+   "sapm": 3.69,
+   "td": 1.39,
+   "sub": 0.38,
+   "strdef": 60,
+   "tddef": 67,
+   "kd": 0.17,
+   "stracc": 44,
+   "tdacc": 15
+  }
+ },
+ "Amir Albazi": {
+  "slug": "amir-albazi",
+  "file": "amir-albazi.webp",
+  "source": "https://www.ufc.com/athlete/amir-albazi",
+  "nickname": "&quot;The Prince&quot;",
+  "tags": [
+   "#9\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "Baghdad, Iraq",
+  "camp": "Atreus MMA",
+  "style": "Jiu-Jitsu",
+  "age": 33,
+  "height": 65,
+  "reach": 68,
+  "stats": {
+   "slpm": 2.47,
+   "sapm": 3.88,
+   "td": 1.18,
+   "sub": 0.44,
+   "strdef": 59,
+   "tddef": 63,
+   "kd": 0.3,
+   "stracc": 34,
+   "tdacc": 9
+  }
+ },
+ "Ramazan Temirov": {
+  "slug": "ramazan-temirov",
+  "file": "ramazan-temirov.webp",
+  "source": "https://www.ufc.com/athlete/ramazan-temirov",
+  "nickname": "&quot;Temurlan&quot;",
+  "tags": [
+   "#10\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "Karshi, Uzbekistan",
+  "camp": "Legion Fight Club",
+  "style": "Striker",
+  "age": 29,
+  "height": 64,
+  "reach": 63,
+  "stats": {
+   "slpm": 4.62,
+   "sapm": 3.9,
+   "td": 0.56,
+   "sub": 0,
+   "strdef": 60,
+   "tddef": 100,
+   "kd": 2.81,
+   "stracc": 42,
+   "tdacc": 0
+  }
+ },
+ "Tim Elliott": {
+  "slug": "tim-elliott",
+  "file": "tim-elliott.webp",
+  "source": "https://www.ufc.com/athlete/tim-elliott",
+  "nickname": null,
+  "tags": [
+   "#11\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "United States",
+  "camp": "Next Generation Gym",
+  "style": "Freestyle",
+  "age": 39,
+  "height": 67,
+  "reach": 66,
+  "stats": {
+   "slpm": 3.55,
+   "sapm": 3.05,
+   "td": 3.69,
+   "sub": 1,
+   "strdef": 56,
+   "tddef": 59,
+   "kd": 0.11,
+   "stracc": 42,
+   "tdacc": 23
+  }
+ },
+ "Sumudaerji": {
+  "slug": "su-mudaerji",
+  "file": "su-mudaerji.webp",
+  "source": "https://www.ufc.com/athlete/su-mudaerji",
+  "nickname": "&quot;The Tibetan Eagle&quot;",
+  "tags": [
+   "#12\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "Sichuan, China",
+  "camp": "Team Alpha Male",
+  "style": "Striker",
+  "age": 30,
+  "height": 68,
+  "reach": 72,
+  "stats": {
+   "slpm": 4.21,
+   "sapm": 2.1,
+   "td": 0.68,
+   "sub": 0.45,
+   "strdef": 64,
+   "tddef": 70,
+   "kd": 0.34,
+   "stracc": 51,
+   "tdacc": 0
+  }
+ },
+ "Steve Erceg": {
+  "slug": "steve-erceg",
+  "file": "steve-erceg.webp",
+  "source": "https://www.ufc.com/athlete/steve-erceg",
+  "nickname": "&quot;Astroboy&quot;",
+  "tags": [
+   "#12\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "Perth, WA, Australia",
+  "camp": "Wilkes Martial Arts &amp; Fitness Academy",
+  "style": "MMA",
+  "age": 31,
+  "height": 68,
+  "reach": 68,
+  "stats": {
+   "slpm": 4.56,
+   "sapm": 4.14,
+   "td": 1.09,
+   "sub": 0.36,
+   "strdef": 56,
+   "tddef": 67,
+   "kd": 0.12,
+   "stracc": 47,
+   "tdacc": 9
+  }
+ },
+ "Charles Johnson": {
+  "slug": "charles-johnson",
+  "file": "charles-johnson.webp",
+  "source": "https://www.ufc.com/athlete/charles-johnson",
+  "nickname": "&quot;Inner G&quot;",
+  "tags": [
+   "#14\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "Topeka, KS, United States",
+  "camp": "Fusion X-Cel",
+  "style": null,
+  "age": 35,
+  "height": 69,
+  "reach": 70,
+  "stats": {
+   "slpm": 4.6,
+   "sapm": 3.93,
+   "td": 0.44,
+   "sub": 0.44,
+   "strdef": 56,
+   "tddef": 67,
+   "kd": 0.3,
+   "stracc": 50,
+   "tdacc": 0
+  }
+ },
+ "Tagir Ulanbekov": {
+  "slug": "tagir-ulanbekov",
+  "file": "tagir-ulanbekov.webp",
+  "source": "https://www.ufc.com/athlete/tagir-ulanbekov",
+  "nickname": null,
+  "tags": [
+   "#15\n        Flyweight Division",
+   "Active"
+  ],
+  "hometown": "Dagestan, Russia",
+  "camp": "AKA / Eagles MMA",
+  "style": "Wrestling",
+  "age": 35,
+  "height": 67,
+  "reach": 70,
+  "stats": {
+   "slpm": 3.01,
+   "sapm": 3.44,
+   "td": 2.73,
+   "sub": 1.52,
+   "strdef": 51,
+   "tddef": 63,
+   "kd": 0.15,
+   "stracc": 48,
+   "tdacc": 24
+  }
+ },
+ "Petr Yan": {
+  "slug": "petr-yan",
+  "file": "petr-yan.webp",
+  "source": "https://www.ufc.com/athlete/petr-yan",
+  "nickname": "&quot;No Mercy&quot;",
+  "tags": [
+   "Bantamweight Division",
+   "#3 PFP",
+   "Active",
+   "Title Holder"
+  ],
+  "hometown": "Krasnoyarsk Krai, Russia",
+  "camp": null,
+  "style": "Boxer",
+  "age": 33,
+  "height": 67.5,
+  "reach": 67,
+  "stats": {
+   "slpm": 5.16,
+   "sapm": 4.32,
+   "td": 1.56,
+   "sub": 0.1,
+   "strdef": 60,
+   "tddef": 88,
+   "kd": 0.49,
+   "stracc": 55,
+   "tdacc": 0
+  }
+ },
+ "Merab Dvalishvili": {
+  "slug": "merab-dvalishvili",
+  "file": "merab-dvalishvili.webp",
+  "source": "https://www.ufc.com/athlete/merab-dvalishvili",
+  "nickname": "&quot;The Machine&quot;",
+  "tags": [
+   "#1\n        Bantamweight Division",
+   "#10 PFP",
+   "Active"
+  ],
+  "hometown": "Tbilisi, Georgia",
+  "camp": "Team Serra/Longo",
+  "style": "Freestyle",
+  "age": 35,
+  "height": 66,
+  "reach": 68,
+  "stats": {
+   "slpm": 4.48,
+   "sapm": 2.98,
+   "td": 5.74,
+   "sub": 0.32,
+   "strdef": 53,
+   "tddef": 76,
+   "kd": 0.05,
+   "stracc": 41,
+   "tdacc": 4
+  }
+ },
+ "Sean O’Malley": {
+  "slug": "sean-omalley",
+  "file": "sean-omalley.webp",
+  "source": "https://www.ufc.com/athlete/sean-omalley",
+  "nickname": "&quot;Suga&quot;",
+  "tags": [
+   "#2\n        Bantamweight Division",
+   "Active"
+  ],
+  "hometown": "Helena, MT, United States",
+  "camp": "MMA LAB - Glendale, AZ",
+  "style": null,
+  "age": 32,
+  "height": 71,
+  "reach": 72,
+  "stats": {
+   "slpm": 5.98,
+   "sapm": 3.4,
+   "td": 0.23,
+   "sub": 0.23,
+   "strdef": 60,
+   "tddef": 61,
+   "kd": 0.7,
+   "stracc": 60,
+   "tdacc": 43
+  }
+ },
+ "Song Yadong": {
+  "slug": "song-yadong",
+  "file": "song-yadong.webp",
+  "source": "https://www.ufc.com/athlete/song-yadong",
+  "nickname": "&quot;Kung Fu Kid&quot;",
+  "tags": [
+   "#3\n        Bantamweight Division",
+   "Active"
+  ],
+  "hometown": "Heilongjiang, China",
+  "camp": "Team Alpha Male",
+  "style": "Boxer",
+  "age": 28,
+  "height": 68,
+  "reach": 67,
+  "stats": {
+   "slpm": 4.26,
+   "sapm": 3.76,
+   "td": 0.79,
+   "sub": 0.26,
+   "strdef": 55,
+   "tddef": 74,
+   "kd": 0.53,
+   "stracc": 44,
+   "tdacc": 3
+  }
+ },
+ "Umar Nurmagomedov": {
+  "slug": "umar-nurmagomedov",
+  "file": "umar-nurmagomedov.webp",
+  "source": "https://www.ufc.com/athlete/umar-nurmagomedov",
+  "nickname": null,
+  "tags": [
+   "#4\n        Bantamweight Division",
+   "Active"
+  ],
+  "hometown": "Republic of Dagestan, Russia",
+  "camp": null,
+  "style": "MMA",
+  "age": 30,
+  "height": 68,
+  "reach": 69,
+  "stats": {
+   "slpm": 3.76,
+   "sapm": 1.85,
+   "td": 3.94,
+   "sub": 0.22,
+   "strdef": 61,
+   "tddef": 79,
+   "kd": 0.11,
+   "stracc": 57,
+   "tdacc": 8
+  }
+ },
+ "Mario Bautista": {
+  "slug": "mario-bautista",
+  "file": "mario-bautista.webp",
+  "source": "https://www.ufc.com/athlete/mario-bautista",
+  "nickname": null,
+  "tags": [
+   "#5\n        Bantamweight Division",
+   "Active"
+  ],
+  "hometown": "Winnemucca, NV, United States",
+  "camp": "The MMA Lab",
+  "style": "Freestyle",
+  "age": 33,
+  "height": 69,
+  "reach": 72,
+  "stats": {
+   "slpm": 5.52,
+   "sapm": 4.17,
+   "td": 2.49,
+   "sub": 1.06,
+   "strdef": 54,
+   "tddef": 57,
+   "kd": 0.29,
+   "stracc": 50,
+   "tdacc": 1
+  }
+ },
+ "Cory Sandhagen": {
+  "slug": "cory-sandhagen",
+  "file": "cory-sandhagen.webp",
+  "source": "https://www.ufc.com/athlete/cory-sandhagen",
+  "nickname": null,
+  "tags": [
+   "#6\n        Bantamweight Division",
+   "Active"
+  ],
+  "hometown": "Aurora, CO, United States",
+  "camp": null,
+  "style": "MMA",
+  "age": 34,
+  "height": 71,
+  "reach": 70,
+  "stats": {
+   "slpm": 4.92,
+   "sapm": 3.72,
+   "td": 1.14,
+   "sub": 0.24,
+   "strdef": 55,
+   "tddef": 57,
+   "kd": 0.24,
+   "stracc": 45,
+   "tdacc": 2
+  }
+ },
+ "Payton Talbott": {
+  "slug": "payton-talbott",
+  "file": "payton-talbott.webp",
+  "source": "https://www.ufc.com/athlete/payton-talbott",
+  "nickname": null,
+  "tags": [
+   "#7\n        Bantamweight Division",
+   "Active"
+  ],
+  "hometown": "Las Vegas, NV, United States",
+  "camp": "Reno Academy of Combat",
+  "style": null,
+  "age": 28,
+  "height": 70,
+  "reach": 70.5,
+  "stats": {
+   "slpm": 6.75,
+   "sapm": 3.38,
+   "td": 0.76,
+   "sub": 0.19,
+   "strdef": 46,
+   "tddef": 78,
+   "kd": 0.95,
+   "stracc": 57,
+   "tdacc": 0
+  }
+ },
+ "David Martinez": {
+  "slug": "david-martinez",
+  "file": "david-martinez.webp",
+  "source": "https://www.ufc.com/athlete/david-martinez",
+  "nickname": null,
+  "tags": [
+   "#8\n        Bantamweight Division",
+   "Active"
+  ],
+  "hometown": "Mexico City, Méx., Mexico",
+  "camp": "UFC Performance Institute",
+  "style": null,
+  "age": 28,
+  "height": 65,
+  "reach": 67.5,
+  "stats": {
+   "slpm": 4.5,
+   "sapm": 2.65,
+   "td": 0.7,
+   "sub": 0,
+   "strdef": 71,
+   "tddef": 100,
+   "kd": 0.23,
+   "stracc": 45,
+   "tdacc": 0
+  }
+ },
+ "Aiemann Zahabi": {
+  "slug": "aiemann-zahabi",
+  "file": "aiemann-zahabi.webp",
+  "source": "https://www.ufc.com/athlete/aiemann-zahabi",
+  "nickname": "&quot;Icemann&quot;",
+  "tags": [
+   "#9\n        Bantamweight Division",
+   "Active"
+  ],
+  "hometown": "Laval, QC, Canada",
+  "camp": "Tristar Gym - Montreal",
+  "style": "MMA",
+  "age": 38,
+  "height": 68,
+  "reach": 68.5,
+  "stats": {
+   "slpm": 4.47,
+   "sapm": 4.11,
+   "td": 0.12,
+   "sub": 0,
+   "strdef": 68,
+   "tddef": 84,
+   "kd": 0.35,
+   "stracc": 48,
+   "tdacc": 0
+  }
+ },
+ "Raul Rosas Jr.": {
+  "slug": "raul-rosas-jr",
+  "file": "raul-rosas-jr.webp",
+  "source": "https://www.ufc.com/athlete/raul-rosas-jr",
+  "nickname": "&quot;El Nino Problema&quot;",
+  "tags": [
+   "#10\n        Bantamweight Division",
+   "Active"
+  ],
+  "hometown": "Clovis, NM, United States",
+  "camp": "Rosas Brothers MMA",
+  "style": "Freestyle",
+  "age": 22,
+  "height": 69,
+  "reach": 67,
+  "stats": {
+   "slpm": 2.12,
+   "sapm": 2.17,
+   "td": 5.02,
+   "sub": 0.7,
+   "strdef": 48,
+   "tddef": 54,
+   "kd": 0.14,
+   "stracc": 44,
+   "tdacc": 3
+  }
+ },
+ "Marlon Vera": {
+  "slug": "marlon-vera",
+  "file": "marlon-vera.webp",
+  "source": "https://www.ufc.com/athlete/marlon-vera",
+  "nickname": "&quot;Chito&quot;",
+  "tags": [
+   "#11\n        Bantamweight Division",
+   "Active"
+  ],
+  "hometown": "Chone, Ecuador",
+  "camp": "Team 5050 Guayaquil Ecuador",
+  "style": "Grappler",
+  "age": 33,
+  "height": 68,
+  "reach": 70.5,
+  "stats": {
+   "slpm": 4.24,
+   "sapm": 5.39,
+   "td": 0.57,
+   "sub": 0.74,
+   "strdef": 50,
+   "tddef": 72,
+   "kd": 0.66,
+   "stracc": 48,
+   "tdacc": 0
+  }
+ },
+ "Deiveson Figueiredo": {
+  "slug": "deiveson-figueiredo",
+  "file": "deiveson-figueiredo.webp",
+  "source": "https://www.ufc.com/athlete/deiveson-figueiredo",
+  "nickname": "&quot;Deus da Guerra&quot;",
+  "tags": [
+   "#12\n        Bantamweight Division",
+   "Active"
+  ],
+  "hometown": "Soure, PA, Brazil",
+  "camp": "Team Figueiredo",
+  "style": "Boxing",
+  "age": 38,
+  "height": 65,
+  "reach": 68,
+  "stats": {
+   "slpm": 2.56,
+   "sapm": 3.5,
+   "td": 1.6,
+   "sub": 1.17,
+   "strdef": 49,
+   "tddef": 57,
+   "kd": 0.64,
+   "stracc": 54,
+   "tdacc": 8
+  }
+ },
+ "Marcus McGhee": {
+  "slug": "marcus-mcghee",
+  "file": "marcus-mcghee.webp",
+  "source": "https://www.ufc.com/athlete/marcus-mcghee",
+  "nickname": "&quot;The Maniac&quot;",
+  "tags": [
+   "Featherweight Division",
+   "Active"
+  ],
+  "hometown": "Detroit, MI, United States",
+  "camp": "The MMA Lab",
+  "style": "Brazilian Jiu-Jitsu",
+  "age": 36,
+  "height": 68,
+  "reach": 69,
+  "stats": {
+   "slpm": 5.54,
+   "sapm": 3.57,
+   "td": 0.22,
+   "sub": 0.22,
+   "strdef": 57,
+   "tddef": 82,
+   "kd": 1.11,
+   "stracc": 44,
+   "tdacc": 0
+  }
+ },
+ "Raoni Barcelos": {
+  "slug": "raoni-barcelos",
+  "file": "raoni-barcelos.webp",
+  "source": "https://www.ufc.com/athlete/raoni-barcelos",
+  "nickname": null,
+  "tags": [
+   "#14\n        Bantamweight Division",
+   "Active"
+  ],
+  "hometown": "State of Rio de Janeiro, Brazil",
+  "camp": "Top Brother",
+  "style": "Jiu-Jitsu",
+  "age": 39,
+  "height": 67.5,
+  "reach": 67,
+  "stats": {
+   "slpm": 4.77,
+   "sapm": 4.34,
+   "td": 2.88,
+   "sub": 0.96,
+   "strdef": 60,
+   "tddef": 86,
+   "kd": 0.34,
+   "stracc": 52,
+   "tdacc": 2
+  }
+ },
+ "Bryce Mitchell": {
+  "slug": "bryce-mitchell",
+  "file": "bryce-mitchell.webp",
+  "source": "https://www.ufc.com/athlete/bryce-mitchell",
+  "nickname": "&quot;Thug Nasty&quot;",
+  "tags": [
+   "#15\n        Bantamweight Division",
+   "Active"
+  ],
+  "hometown": "Texarkana, AR, United States",
+  "camp": null,
+  "style": "MMA",
+  "age": 32,
+  "height": 70,
+  "reach": 70,
+  "stats": {
+   "slpm": 2.19,
+   "sapm": 1.51,
+   "td": 3.12,
+   "sub": 1.27,
+   "strdef": 59,
+   "tddef": 38,
+   "kd": 0.1,
+   "stracc": 59,
+   "tdacc": 3
+  }
+ },
+ "Alexander Volkanovski": {
+  "slug": "alexander-volkanovski",
+  "file": "alexander-volkanovski.webp",
+  "source": "https://www.ufc.com/athlete/alexander-volkanovski",
+  "nickname": "&quot;The Great&quot;",
+  "tags": [
+   "Featherweight Division",
+   "#2 PFP",
+   "Active",
+   "Title Holder"
+  ],
+  "hometown": "Wollongong, NSW, Australia",
+  "camp": "Freestyle Fighting Gym",
+  "style": null,
+  "age": 38,
+  "height": 66,
+  "reach": 71.5,
+  "stats": {
+   "slpm": 5.98,
+   "sapm": 3.33,
+   "td": 1.63,
+   "sub": 0.19,
+   "strdef": 58,
+   "tddef": 67,
+   "kd": 0.29,
+   "stracc": 57,
+   "tdacc": 16
+  }
+ },
+ "Movsar Evloev": {
+  "slug": "movsar-evloev",
+  "file": "movsar-evloev.webp",
+  "source": "https://www.ufc.com/athlete/movsar-evloev",
+  "nickname": null,
+  "tags": [
+   "#1\n        Featherweight Division",
+   "Active"
+  ],
+  "hometown": "Ingushetia, Russia",
+  "camp": "American Top Team",
+  "style": "Freestyle",
+  "age": 32,
+  "height": 67,
+  "reach": 72.5,
+  "stats": {
+   "slpm": 3.91,
+   "sapm": 2.97,
+   "td": 4.77,
+   "sub": 0.18,
+   "strdef": 60,
+   "tddef": 61,
+   "kd": 0,
+   "stracc": 48,
+   "tdacc": 5
+  }
+ },
+ "Diego Lopes": {
+  "slug": "diego-lopes",
+  "file": "diego-lopes.webp",
+  "source": "https://www.ufc.com/athlete/diego-lopes",
+  "nickname": null,
+  "tags": [
+   "Lightweight Division",
+   "Active"
+  ],
+  "hometown": "Manaus, AM, Brazil",
+  "camp": "Brazilian Warriors / Lobo Gym",
+  "style": "Jiu-Jitsu",
+  "age": 31,
+  "height": 71,
+  "reach": 72.5,
+  "stats": {
+   "slpm": 3.79,
+   "sapm": 4.65,
+   "td": 0.82,
+   "sub": 1.3,
+   "strdef": 47,
+   "tddef": 69,
+   "kd": 0.71,
+   "stracc": 47,
+   "tdacc": 0
+  }
+ },
+ "Lerone Murphy": {
+  "slug": "lerone-murphy",
+  "file": "lerone-murphy.webp",
+  "source": "https://www.ufc.com/athlete/lerone-murphy",
+  "nickname": "&quot;The Miracle&quot;",
+  "tags": [
+   "#3\n        Featherweight Division",
+   "Active"
+  ],
+  "hometown": "Manchester, England",
+  "camp": "Manchester Top Team",
+  "style": "Kickboxer",
+  "age": 35,
+  "height": 69,
+  "reach": 73.5,
+  "stats": {
+   "slpm": 4.34,
+   "sapm": 2.65,
+   "td": 1.2,
+   "sub": 0.46,
+   "strdef": 60,
+   "tddef": 44,
+   "kd": 0.28,
+   "stracc": 51,
+   "tdacc": 0
+  }
+ },
+ "Aljamain Sterling": {
+  "slug": "aljamain-sterling",
+  "file": "aljamain-sterling.webp",
+  "source": "https://www.ufc.com/athlete/aljamain-sterling",
+  "nickname": "&quot;Funk Master&quot;",
+  "tags": [
+   "#4\n        Featherweight Division",
+   "Active"
+  ],
+  "hometown": "NY, United States",
+  "camp": "Serra-Longo - Long Island, NY",
+  "style": "Kickboxer",
+  "age": 37,
+  "height": 67,
+  "reach": 71,
+  "stats": {
+   "slpm": 4.26,
+   "sapm": 2.15,
+   "td": 2.54,
+   "sub": 0.64,
+   "strdef": 59,
+   "tddef": 45,
+   "kd": 0,
+   "stracc": 53,
+   "tdacc": 12
+  }
+ },
+ "Jean Silva": {
+  "slug": "jean-silva",
+  "file": "jean-silva.webp",
+  "source": "https://www.ufc.com/athlete/jean-silva",
+  "nickname": "&quot;Lord&quot;",
+  "tags": [
+   "#5\n        Featherweight Division",
+   "Active"
+  ],
+  "hometown": "Foz do Iguaçu, Brazil",
+  "camp": "The Fighting Nerds",
+  "style": "Striker",
+  "age": 29,
+  "height": 67,
+  "reach": 69,
+  "stats": {
+   "slpm": 4.55,
+   "sapm": 4.29,
+   "td": 1.19,
+   "sub": 0.68,
+   "strdef": 55,
+   "tddef": 79,
+   "kd": 1.02,
+   "stracc": 52,
+   "tdacc": 8
+  }
+ },
+ "Arnold Allen": {
+  "slug": "arnold-allen",
+  "file": "arnold-allen.webp",
+  "source": "https://www.ufc.com/athlete/arnold-allen",
+  "nickname": "&quot;Almighty&quot;",
+  "tags": [
+   "#6\n        Featherweight Division",
+   "Active"
+  ],
+  "hometown": "Ipswich, England",
+  "camp": "BKK / Tristar",
+  "style": "MMA",
+  "age": 32,
+  "height": 68,
+  "reach": 70,
+  "stats": {
+   "slpm": 3.52,
+   "sapm": 3.15,
+   "td": 1.24,
+   "sub": 0.28,
+   "strdef": 60,
+   "tddef": 73,
+   "kd": 0.28,
+   "stracc": 44,
+   "tdacc": 27
+  }
+ },
+ "Yair Rodriguez": {
+  "slug": "yair-rodriguez",
+  "file": "yair-rodriguez.webp",
+  "source": "https://www.ufc.com/athlete/yair-rodriguez",
+  "nickname": "&quot;El Pantera&quot;",
+  "tags": [
+   "#7\n        Featherweight Division",
+   "Active"
+  ],
+  "hometown": "Hidalgo Del Parral, Méx., Mexico",
+  "camp": "Izzystyle wrestling &amp; VFS Chicago",
+  "style": "Freestyle",
+  "age": 34,
+  "height": 71,
+  "reach": 71,
+  "stats": {
+   "slpm": 4.65,
+   "sapm": 3.78,
+   "td": 0.71,
+   "sub": 0.64,
+   "strdef": 53,
+   "tddef": 59,
+   "kd": 0.35,
+   "stracc": 47,
+   "tdacc": 24
+  }
+ },
+ "Youssef Zalal": {
+  "slug": "youssef-zalal",
+  "file": "youssef-zalal.webp",
+  "source": "https://www.ufc.com/athlete/youssef-zalal",
+  "nickname": "&quot;The Moroccan Devil&quot;",
+  "tags": [
+   "#8\n        Featherweight Division",
+   "Active"
+  ],
+  "hometown": "Casablanca, Morocco",
+  "camp": "Factory X",
+  "style": "Freestyle",
+  "age": 30,
+  "height": 70,
+  "reach": 72,
+  "stats": {
+   "slpm": 2.78,
+   "sapm": 1.79,
+   "td": 1.84,
+   "sub": 1.29,
+   "strdef": 65,
+   "tddef": 56,
+   "kd": 0.18,
+   "stracc": 51,
+   "tdacc": 10
+  }
+ },
+ "Kevin Vallejos": {
+  "slug": "kevin-vallejos",
+  "file": "kevin-vallejos.webp",
+  "source": "https://www.ufc.com/athlete/kevin-vallejos",
+  "nickname": "&quot;El Chino&quot;",
+  "tags": [
+   "#9\n        Featherweight Division",
+   "Active"
+  ],
+  "hometown": "Mar del Plata, Buenos Aires, Argentina",
+  "camp": "Team Lucas Mineiro",
+  "style": "Striker",
+  "age": 24,
+  "height": 67,
+  "reach": 68,
+  "stats": {
+   "slpm": 6.12,
+   "sapm": 4.41,
+   "td": 0.66,
+   "sub": 0,
+   "strdef": 57,
+   "tddef": 85,
+   "kd": 1.65,
+   "stracc": 48,
+   "tdacc": 0
+  }
+ },
+ "Steve Garcia": {
+  "slug": "steve-garcia",
+  "file": "steve-garcia.webp",
+  "source": "https://www.ufc.com/athlete/steve-garcia",
+  "nickname": "&quot;Mean Machine&quot;",
+  "tags": [
+   "#10\n        Featherweight Division",
+   "Active"
+  ],
+  "hometown": "Albuquerque, NM, United States",
+  "camp": "Jackson Wink MMA Academy - NM",
+  "style": "Freestyle",
+  "age": 34,
+  "height": 72,
+  "reach": 75,
+  "stats": {
+   "slpm": 5.46,
+   "sapm": 2.22,
+   "td": 0.77,
+   "sub": 0.39,
+   "strdef": 60,
+   "tddef": 89,
+   "kd": 2.12,
+   "stracc": 49,
+   "tdacc": 40
+  }
+ },
+ "Aaron Pico": {
+  "slug": "aaron-pico",
+  "file": "aaron-pico.webp",
+  "source": "https://www.ufc.com/athlete/aaron-pico",
+  "nickname": null,
+  "tags": [
+   "#11\n        Featherweight Division",
+   "Active"
+  ],
+  "hometown": "Whittier, CA, United States",
+  "camp": "Jackson Wink MMA Academy - NM",
+  "style": "Boxing",
+  "age": 30,
+  "height": 68,
+  "reach": 70.5,
+  "stats": {
+   "slpm": 6.08,
+   "sapm": 3.01,
+   "td": 6.89,
+   "sub": 0,
+   "strdef": 45,
+   "tddef": null,
+   "kd": 0.77,
+   "stracc": 54,
+   "tdacc": 11
+  }
+ },
+ "Melquizael Costa": {
+  "slug": "melquizael-costa",
+  "file": "melquizael-costa.webp",
+  "source": "https://www.ufc.com/athlete/melquizael-costa",
+  "nickname": "&quot;The Dalmatian&quot;",
+  "tags": [
+   "Featherweight Division",
+   "Active"
+  ],
+  "hometown": "Porto de Moz, PA, Brazil",
+  "camp": "Chute Boxe",
+  "style": "MMA",
+  "age": 30,
+  "height": 70,
+  "reach": 71,
+  "stats": {
+   "slpm": 4.21,
+   "sapm": 2.96,
+   "td": 1.35,
+   "sub": 0.98,
+   "strdef": 51,
+   "tddef": 54,
+   "kd": 0.24,
+   "stracc": 46,
+   "tdacc": 0
+  }
+ },
+ "Brian Ortega": {
+  "slug": "brian-ortega",
+  "file": "brian-ortega.webp",
+  "source": "https://www.ufc.com/athlete/brian-ortega",
+  "nickname": "&quot;T-City&quot;",
+  "tags": [
+   "Lightweight Division",
+   "Active"
+  ],
+  "hometown": "Carson, CA, United States",
+  "camp": "Team Ortega",
+  "style": "Jiu-Jitsu",
+  "age": 35,
+  "height": 68,
+  "reach": 69,
+  "stats": {
+   "slpm": 3.84,
+   "sapm": 6.38,
+   "td": 0.93,
+   "sub": 0.93,
+   "strdef": 49,
+   "tddef": 55,
+   "kd": 0.39,
+   "stracc": 37,
+   "tdacc": 2
+  }
+ },
+ "David Onama": {
+  "slug": "david-onama",
+  "file": "david-onama.webp",
+  "source": "https://www.ufc.com/athlete/david-onama",
+  "nickname": null,
+  "tags": [
+   "#14\n        Featherweight Division",
+   "Active"
+  ],
+  "hometown": "Uganda",
+  "camp": "Factory X",
+  "style": "Striker",
+  "age": 32,
+  "height": 71,
+  "reach": 74,
+  "stats": {
+   "slpm": 5.07,
+   "sapm": 4.89,
+   "td": 1.05,
+   "sub": 0.45,
+   "strdef": 52,
+   "tddef": 53,
+   "kd": 0.6,
+   "stracc": 50,
+   "tdacc": 0
+  }
+ },
+ "Justin Gaethje": {
+  "slug": "justin-gaethje",
+  "file": "justin-gaethje.webp",
+  "source": "https://www.ufc.com/athlete/justin-gaethje",
+  "nickname": "&quot;The Highlight&quot;",
+  "tags": [
+   "Lightweight Division",
+   "#4 PFP",
+   "Active",
+   "Title Holder"
+  ],
+  "hometown": "Tucson, AZ, United States",
+  "camp": "Genesis Training Center",
+  "style": "MMA",
+  "age": 37,
+  "height": 71,
+  "reach": 70,
+  "stats": {
+   "slpm": 6.29,
+   "sapm": 6.83,
+   "td": 0.3,
+   "sub": 0,
+   "strdef": 51,
+   "tddef": 73,
+   "kd": 0.67,
+   "stracc": 58,
+   "tdacc": 0
+  }
+ },
+ "Ilia Topuria": {
+  "slug": "ilia-topuria",
+  "file": "ilia-topuria.webp",
+  "source": "https://www.ufc.com/athlete/ilia-topuria",
+  "nickname": "&quot;El Matador&quot;",
+  "tags": [
+   "#1\n        Lightweight Division",
+   "#5 PFP",
+   "Active"
+  ],
+  "hometown": "Germany",
+  "camp": "Team Topuria",
+  "style": "Brazilian Jiu-Jitsu",
+  "age": 29,
+  "height": 67,
+  "reach": 69,
+  "stats": {
+   "slpm": 4.82,
+   "sapm": 3.97,
+   "td": 1.73,
+   "sub": 0.86,
+   "strdef": 62,
+   "tddef": 95,
+   "kd": 1.15,
+   "stracc": 50,
+   "tdacc": 24
+  }
+ },
+ "Arman Tsarukyan": {
+  "slug": "arman-tsarukyan",
+  "file": "arman-tsarukyan.webp",
+  "source": "https://www.ufc.com/athlete/arman-tsarukyan",
+  "nickname": "&quot;Ahalkalakets&quot;",
+  "tags": [
+   "#2\n        Lightweight Division",
+   "#13 PFP",
+   "Active"
+  ],
+  "hometown": "Georgia",
+  "camp": "Syndicate MMA - Las Vegas, NV",
+  "style": "Kickboxer",
+  "age": 30,
+  "height": 67,
+  "reach": 72.5,
+  "stats": {
+   "slpm": 3.78,
+   "sapm": 1.77,
+   "td": 3.25,
+   "sub": 0.1,
+   "strdef": 55,
+   "tddef": 75,
+   "kd": 0.39,
+   "stracc": 50,
+   "tdacc": 3
+  }
+ },
+ "Charles Oliveira": {
+  "slug": "charles-oliveira",
+  "file": "charles-oliveira.webp",
+  "source": "https://www.ufc.com/athlete/charles-oliveira",
+  "nickname": "&quot;Do Bronxs&quot;",
+  "tags": [
+   "#3\n        Lightweight Division",
+   "Active"
+  ],
+  "hometown": "State of São Paulo, Brazil",
+  "camp": "Bronx&#039;s Gold Team",
+  "style": "Jiu-Jitsu",
+  "age": 37,
+  "height": 70,
+  "reach": 74,
+  "stats": {
+   "slpm": 3.23,
+   "sapm": 3.05,
+   "td": 2.29,
+   "sub": 2.59,
+   "strdef": 49,
+   "tddef": 55,
+   "kd": 0.41,
+   "stracc": 56,
+   "tdacc": 23
+  }
+ },
+ "Max Holloway": {
+  "slug": "max-holloway",
+  "file": "max-holloway.webp",
+  "source": "https://www.ufc.com/athlete/max-holloway",
+  "nickname": "&quot;Blessed&quot;",
+  "tags": [
+   "#4\n        Lightweight Division",
+   "Active"
+  ],
+  "hometown": "Waianae, HI, United States",
+  "camp": "Hawaii Elite MMA - Hawaii",
+  "style": "Muay Thai",
+  "age": 34,
+  "height": 71,
+  "reach": 69,
+  "stats": {
+   "slpm": 6.92,
+   "sapm": 4.6,
+   "td": 0.22,
+   "sub": 0.28,
+   "strdef": 59,
+   "tddef": 81,
+   "kd": 0.34,
+   "stracc": 48,
+   "tdacc": 27
+  }
+ },
+ "Paddy Pimblett": {
+  "slug": "paddy-pimblett",
+  "file": "paddy-pimblett.webp",
+  "source": "https://www.ufc.com/athlete/paddy-pimblett",
+  "nickname": "&quot;The Baddy&quot;",
+  "tags": [
+   "#5\n        Lightweight Division",
+   "Active"
+  ],
+  "hometown": "Liverpool, England",
+  "camp": "NEXT Generation MMA",
+  "style": null,
+  "age": 31,
+  "height": 70,
+  "reach": 73,
+  "stats": {
+   "slpm": 5.48,
+   "sapm": 3.86,
+   "td": 0.68,
+   "sub": 1.36,
+   "strdef": 43,
+   "tddef": 46,
+   "kd": 0.34,
+   "stracc": 53,
+   "tdacc": 0
+  }
+ },
+ "Benoit Saint Denis": {
+  "slug": "benoit-saint-denis",
+  "file": "benoit-saint-denis.webp",
+  "source": "https://www.ufc.com/athlete/benoit-saint-denis",
+  "nickname": "&quot;God of War&quot;",
+  "tags": [
+   "#6\n        Lightweight Division",
+   "Active"
+  ],
+  "hometown": "Nîmes, France",
+  "camp": "Venum Training Camp Paris",
+  "style": "MMA",
+  "age": 30,
+  "height": 71,
+  "reach": 73,
+  "stats": {
+   "slpm": 5.58,
+   "sapm": 4.09,
+   "td": 4.15,
+   "sub": 1.73,
+   "strdef": 42,
+   "tddef": 72,
+   "kd": 0.86,
+   "stracc": 58,
+   "tdacc": 3
+  }
+ },
+ "Quillan Salkilld": {
+  "slug": "quillan-salkilld",
+  "file": "quillan-salkilld.webp",
+  "source": "https://www.ufc.com/athlete/quillan-salkilld",
+  "nickname": null,
+  "tags": [
+   "#7\n        Lightweight Division",
+   "Active"
+  ],
+  "hometown": "Pinjarra, WA, Australia",
+  "camp": "Luistro Combat Academy",
+  "style": "MMA",
+  "age": 26,
+  "height": 72,
+  "reach": 75,
+  "stats": {
+   "slpm": 4.73,
+   "sapm": 2.79,
+   "td": 6.86,
+   "sub": 1.03,
+   "strdef": 46,
+   "tddef": 81,
+   "kd": 1.03,
+   "stracc": 57,
+   "tdacc": 0
+  }
+ },
+ "Mauricio Ruffy": {
+  "slug": "mauricio-ruffy",
+  "file": "mauricio-ruffy.webp",
+  "source": "https://www.ufc.com/athlete/mauricio-ruffy",
+  "nickname": null,
+  "tags": [
+   "#8\n        Lightweight Division",
+   "Active"
+  ],
+  "hometown": "State of São Paulo, Brazil",
+  "camp": "Fusion X-Cel",
+  "style": "Striker",
+  "age": 30,
+  "height": 71,
+  "reach": 75,
+  "stats": {
+   "slpm": 3.93,
+   "sapm": 3.66,
+   "td": 0,
+   "sub": 0,
+   "strdef": 59,
+   "tddef": 88,
+   "kd": 1.42,
+   "stracc": 57,
+   "tdacc": 0
+  }
+ },
+ "Salahdine Parnasse": {
+  "slug": "salahdine-parnasse",
+  "file": "salahdine-parnasse.webp",
+  "source": "https://www.ufc.com/athlete/salahdine-parnasse",
+  "nickname": "&quot;Lion of Atlas&quot;",
+  "tags": [
+   "#9\n        Lightweight Division",
+   "Active"
+  ],
+  "hometown": "Aubervilliers, France",
+  "camp": "Atch Academy",
+  "style": "MMA",
+  "age": 28,
+  "height": 70,
+  "reach": 71.5,
+  "stats": {
+   "slpm": 4.65,
+   "sapm": 5.42,
+   "td": 0,
+   "sub": 0,
+   "strdef": 55,
+   "tddef": null,
+   "kd": 5.81,
+   "stracc": 71,
+   "tdacc": null
+  }
+ },
+ "Mateusz Gamrot": {
+  "slug": "mateusz-gamrot",
+  "file": "mateusz-gamrot.webp",
+  "source": "https://www.ufc.com/athlete/mateusz-gamrot",
+  "nickname": "&quot;Gamer&quot;",
+  "tags": [
+   "#10\n        Lightweight Division",
+   "Active"
+  ],
+  "hometown": "Bielsko, Biala, Poland",
+  "camp": "American Top Team",
+  "style": "Wrestling",
+  "age": 35,
+  "height": 70,
+  "reach": 70.5,
+  "stats": {
+   "slpm": 3.14,
+   "sapm": 2.79,
+   "td": 5.08,
+   "sub": 0.38,
+   "strdef": 60,
+   "tddef": 77,
+   "kd": 0.09,
+   "stracc": 51,
+   "tdacc": 9
+  }
+ },
+ "Rafael Fiziev": {
+  "slug": "rafael-fiziev",
+  "file": "rafael-fiziev.webp",
+  "source": "https://www.ufc.com/athlete/rafael-fiziev",
+  "nickname": "&quot;Ataman&quot;",
+  "tags": [
+   "#11\n        Lightweight Division",
+   "Active"
+  ],
+  "hometown": "Kyrgyzstan",
+  "camp": "Tiger Muay Thai - Phuket, Thailand",
+  "style": "Muay Thai",
+  "age": 33,
+  "height": 68,
+  "reach": 71.5,
+  "stats": {
+   "slpm": 4.71,
+   "sapm": 4.81,
+   "td": 1,
+   "sub": 0,
+   "strdef": 50,
+   "tddef": 90,
+   "kd": 0.3,
+   "stracc": 53,
+   "tdacc": 0
+  }
+ },
+ "Tom Nolan": {
+  "slug": "tom-nolan",
+  "file": "tom-nolan.webp",
+  "source": "https://www.ufc.com/athlete/tom-nolan",
+  "nickname": "&quot;Big Train&quot;",
+  "tags": [
+   "#12\n        Lightweight Division",
+   "Active"
+  ],
+  "hometown": "Australia",
+  "camp": "Team Compton Training Centre",
+  "style": null,
+  "age": 26,
+  "height": 74,
+  "reach": 73,
+  "stats": {
+   "slpm": 5.04,
+   "sapm": 3.23,
+   "td": 1.12,
+   "sub": 1.12,
+   "strdef": 48,
+   "tddef": 53,
+   "kd": 0.67,
+   "stracc": 50,
+   "tdacc": 0
+  }
+ },
+ "Renato Moicano": {
+  "slug": "renato-moicano",
+  "file": "renato-moicano.webp",
+  "source": "https://www.ufc.com/athlete/renato-moicano",
+  "nickname": null,
+  "tags": [
+   "#13\n        Lightweight Division",
+   "Active"
+  ],
+  "hometown": "Brasilia, Brazil",
+  "camp": "American Top Team",
+  "style": "Jiu-Jitsu",
+  "age": 37,
+  "height": 71,
+  "reach": 72,
+  "stats": {
+   "slpm": 3.91,
+   "sapm": 3.69,
+   "td": 1.8,
+   "sub": 0.6,
+   "strdef": 58,
+   "tddef": 63,
+   "kd": 0.15,
+   "stracc": 49,
+   "tdacc": 11
+  }
+ },
+ "Dan Hooker": {
+  "slug": "dan-hooker",
+  "file": "dan-hooker.webp",
+  "source": "https://www.ufc.com/athlete/dan-hooker",
+  "nickname": "&quot;The Hangman&quot;",
+  "tags": [
+   "#14\n        Lightweight Division",
+   "Active"
+  ],
+  "hometown": "Aukland, New Zealand",
+  "camp": "Saigon Sports Club- Vietnam",
+  "style": "MMA",
+  "age": 36,
+  "height": 72,
+  "reach": 75,
+  "stats": {
+   "slpm": 4.82,
+   "sapm": 4.94,
+   "td": 0.67,
+   "sub": 0.55,
+   "strdef": 49,
+   "tddef": 77,
+   "kd": 0.55,
+   "stracc": 49,
+   "tdacc": 9
+  }
+ },
+ "Grant Dawson": {
+  "slug": "grant-dawson",
+  "file": "grant-dawson.webp",
+  "source": "https://www.ufc.com/athlete/grant-dawson",
+  "nickname": "&quot;KGD&quot;",
+  "tags": [
+   "#15\n        Lightweight Division",
+   "Active"
+  ],
+  "hometown": "Cambria, WI, United States",
+  "camp": "American Top Team",
+  "style": null,
+  "age": 32,
+  "height": 70,
+  "reach": 72,
+  "stats": {
+   "slpm": 3.39,
+   "sapm": 2.31,
+   "td": 3.69,
+   "sub": 1.34,
+   "strdef": 44,
+   "tddef": 64,
+   "kd": 0.08,
+   "stracc": 51,
+   "tdacc": 0
+  }
+ },
+ "Ian Machado Garry": {
+  "slug": "ian-machado-garry",
+  "file": "ian-machado-garry.webp",
+  "source": "https://www.ufc.com/athlete/ian-machado-garry",
+  "nickname": "&quot;The Future&quot;",
+  "tags": [
+   "#1\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "Dublin, Ireland",
+  "camp": "Team Garry",
+  "style": null,
+  "age": 29,
+  "height": 75,
+  "reach": 74.5,
+  "stats": {
+   "slpm": 4.29,
+   "sapm": 2.59,
+   "td": 0.8,
+   "sub": 0.32,
+   "strdef": 53,
+   "tddef": 71,
+   "kd": 0.32,
+   "stracc": 54,
+   "tdacc": 0
+  }
+ },
+ "Carlos Prates": {
+  "slug": "carlos-prates",
+  "file": "carlos-prates.webp",
+  "source": "https://www.ufc.com/athlete/carlos-prates",
+  "nickname": "&quot;The Nightmare&quot;",
+  "tags": [
+   "#2\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "State of São Paulo, Brazil",
+  "camp": "The Fighting Nerds",
+  "style": "Striker",
+  "age": 33,
+  "height": 73,
+  "reach": 78,
+  "stats": {
+   "slpm": 4.41,
+   "sapm": 4.3,
+   "td": 0.18,
+   "sub": 0,
+   "strdef": 48,
+   "tddef": 78,
+   "kd": 2.33,
+   "stracc": 55,
+   "tdacc": 0
+  }
+ },
+ "Michael Morales": {
+  "slug": "michael-morales",
+  "file": "michael-morales.webp",
+  "source": "https://www.ufc.com/athlete/michael-morales",
+  "nickname": null,
+  "tags": [
+   "#3\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "Pasaje, Ecuador",
+  "camp": null,
+  "style": "Striker",
+  "age": 27,
+  "height": 72,
+  "reach": 79,
+  "stats": {
+   "slpm": 5.68,
+   "sapm": 3.26,
+   "td": 1.04,
+   "sub": 0,
+   "strdef": 54,
+   "tddef": 90,
+   "kd": 1.46,
+   "stracc": 49,
+   "tdacc": 0
+  }
+ },
+ "Jack Della Maddalena": {
+  "slug": "jack-della-maddalena",
+  "file": "jack-della-maddalena.webp",
+  "source": "https://www.ufc.com/athlete/jack-della-maddalena",
+  "nickname": null,
+  "tags": [
+   "#4\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "WA, Australia",
+  "camp": "Scrappy MMA",
+  "style": "MMA",
+  "age": 30,
+  "height": 71,
+  "reach": 73,
+  "stats": {
+   "slpm": null,
+   "sapm": null,
+   "td": null,
+   "sub": null,
+   "strdef": null,
+   "tddef": null,
+   "kd": null,
+   "stracc": null,
+   "tdacc": null
+  }
+ },
+ "Gabriel Bonfim": {
+  "slug": "gabriel-bonfim",
+  "file": "gabriel-bonfim.webp",
+  "source": "https://www.ufc.com/athlete/gabriel-bonfim",
+  "nickname": "&quot;Marretinha&quot;",
+  "tags": [
+   "#5\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "Brasilia, Brazil",
+  "camp": "Bonfim Brothers Academy",
+  "style": "Striker",
+  "age": 29,
+  "height": 73,
+  "reach": 72.5,
+  "stats": {
+   "slpm": 4.76,
+   "sapm": 3.61,
+   "td": 2.57,
+   "sub": 1.03,
+   "strdef": 65,
+   "tddef": 79,
+   "kd": 0.17,
+   "stracc": 47,
+   "tdacc": 0
+  }
+ },
+ "Sean Brady": {
+  "slug": "sean-brady",
+  "file": "sean-brady.webp",
+  "source": "https://www.ufc.com/athlete/sean-brady",
+  "nickname": null,
+  "tags": [
+   "#6\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "Philadelphia, PA, United States",
+  "camp": "Marquez MMA",
+  "style": "Jiu-Jitsu",
+  "age": 33,
+  "height": 70,
+  "reach": 72,
+  "stats": {
+   "slpm": 4.08,
+   "sapm": 2.77,
+   "td": 3.58,
+   "sub": 0.82,
+   "strdef": 60,
+   "tddef": 87,
+   "kd": 0.1,
+   "stracc": 53,
+   "tdacc": 3
+  }
+ },
+ "Belal Muhammad": {
+  "slug": "belal-muhammad",
+  "file": "belal-muhammad.webp",
+  "source": "https://www.ufc.com/athlete/belal-muhammad",
+  "nickname": "&quot;Remember The Name&quot;",
+  "tags": [
+   "#7\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "Chicago, IL, United States",
+  "camp": "Roufusport, (Mikwaukee, WI) &amp; Chicago Fight Team (Chicago, IL)",
+  "style": null,
+  "age": 38,
+  "height": 71,
+  "reach": 72,
+  "stats": {
+   "slpm": 4.36,
+   "sapm": 3.92,
+   "td": 1.98,
+   "sub": 0.13,
+   "strdef": 55,
+   "tddef": 91,
+   "kd": 0,
+   "stracc": 42,
+   "tdacc": 12
+  }
+ },
+ "Leon Edwards": {
+  "slug": "leon-edwards",
+  "file": "leon-edwards.webp",
+  "source": "https://www.ufc.com/athlete/leon-edwards",
+  "nickname": "&quot;Rocky&quot;",
+  "tags": [
+   "#8\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "Kingston, Jamaica",
+  "camp": "UTC Ultimate Training Centre Birmingham",
+  "style": "MMA",
+  "age": 35,
+  "height": 72,
+  "reach": 74,
+  "stats": {
+   "slpm": 2.6,
+   "sapm": 2.44,
+   "td": 1.25,
+   "sub": 0.36,
+   "strdef": 53,
+   "tddef": 64,
+   "kd": 0.22,
+   "stracc": 54,
+   "tdacc": 16
+  }
+ },
+ "Mike Malott": {
+  "slug": "mike-malott",
+  "file": "mike-malott.webp",
+  "source": "https://www.ufc.com/athlete/mike-malott",
+  "nickname": "&quot;Proper&quot;",
+  "tags": [
+   "#9\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "Cleveland, OH, United States",
+  "camp": "Niagara Top Team",
+  "style": "MMA",
+  "age": 35,
+  "height": 73,
+  "reach": 73,
+  "stats": {
+   "slpm": 4.09,
+   "sapm": 2.99,
+   "td": 1.51,
+   "sub": 0.6,
+   "strdef": 58,
+   "tddef": 57,
+   "kd": 0.9,
+   "stracc": 50,
+   "tdacc": 0
+  }
+ },
+ "Kamaru Usman": {
+  "slug": "kamaru-usman",
+  "file": "kamaru-usman.webp",
+  "source": "https://www.ufc.com/athlete/kamaru-usman",
+  "nickname": "&quot;Nigerian Nightmare&quot;",
+  "tags": [
+   "Middleweight Division",
+   "Active"
+  ],
+  "hometown": "Auchi, Edo, Nigeria",
+  "camp": "Blackzilians - Boca Raton, FL",
+  "style": "Freestyle",
+  "age": 39,
+  "height": 72,
+  "reach": 76,
+  "stats": {
+   "slpm": 4.13,
+   "sapm": 2.86,
+   "td": 2.6,
+   "sub": 0.08,
+   "strdef": 55,
+   "tddef": 90,
+   "kd": 0.41,
+   "stracc": 51,
+   "tdacc": 19
+  }
+ },
+ "Uros Medic": {
+  "slug": "uros-medic",
+  "file": "uros-medic.webp",
+  "source": "https://www.ufc.com/athlete/uros-medic",
+  "nickname": "&quot;The Doctor&quot;",
+  "tags": [
+   "#12\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "Novi Sad, Serbia",
+  "camp": "Anchorage Brazilian Jiu Jitsu",
+  "style": "MMA",
+  "age": 33,
+  "height": 73,
+  "reach": 71,
+  "stats": {
+   "slpm": 4.9,
+   "sapm": 3.44,
+   "td": 0.25,
+   "sub": 0,
+   "strdef": 55,
+   "tddef": 63,
+   "kd": 2.78,
+   "stracc": 61,
+   "tdacc": 0
+  }
+ },
+ "Yaroslav Amosov": {
+  "slug": "yaroslav-amosov",
+  "file": "yaroslav-amosov.webp",
+  "source": "https://www.ufc.com/athlete/yaroslav-amosov",
+  "nickname": null,
+  "tags": [
+   "#11\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "Irpin, Ukraine",
+  "camp": "American Top Team",
+  "style": null,
+  "age": 32,
+  "height": 72,
+  "reach": 75,
+  "stats": {
+   "slpm": 2.65,
+   "sapm": 1.38,
+   "td": 11.11,
+   "sub": 3.17,
+   "strdef": 61,
+   "tddef": null,
+   "kd": 0,
+   "stracc": 53,
+   "tdacc": 8
+  }
+ },
+ "Joaquin Buckley": {
+  "slug": "joaquin-buckley",
+  "file": "joaquin-buckley.webp",
+  "source": "https://www.ufc.com/athlete/joaquin-buckley",
+  "nickname": "&quot;New Mansa&quot;",
+  "tags": [
+   "#13\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "MO, United States",
+  "camp": "STL Boxing",
+  "style": "Freestyle",
+  "age": 32,
+  "height": 70,
+  "reach": 76,
+  "stats": {
+   "slpm": 3.55,
+   "sapm": 3.16,
+   "td": 1.37,
+   "sub": 0.07,
+   "strdef": 58,
+   "tddef": 70,
+   "kd": 0.65,
+   "stracc": 36,
+   "tdacc": 17
+  }
+ },
+ "Daniel Rodriguez": {
+  "slug": "daniel-rodriguez",
+  "file": "daniel-rodriguez.webp",
+  "source": "https://www.ufc.com/athlete/daniel-rodriguez",
+  "nickname": "&quot;D-Rod&quot;",
+  "tags": [
+   "#15\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "Los Angeles, CA, United States",
+  "camp": "10th Planet Jiu-Jitsu",
+  "style": "Freestyle",
+  "age": 39,
+  "height": 73,
+  "reach": 74,
+  "stats": {
+   "slpm": 7.19,
+   "sapm": 5.44,
+   "td": 0.51,
+   "sub": 0.08,
+   "strdef": 57,
+   "tddef": 64,
+   "kd": 0.59,
+   "stracc": 49,
+   "tdacc": 0
+  }
+ },
+ "Kevin Holland": {
+  "slug": "kevin-holland",
+  "file": "kevin-holland.webp",
+  "source": "https://www.ufc.com/athlete/kevin-holland",
+  "nickname": "&quot;Trailblazer&quot;",
+  "tags": [
+   "#14\n        Welterweight Division",
+   "Active"
+  ],
+  "hometown": "Riverside, CA, United States",
+  "camp": "4oz Fight Club",
+  "style": "Kung Fu",
+  "age": 34,
+  "height": 75,
+  "reach": 81,
+  "stats": {
+   "slpm": 4.21,
+   "sapm": 3.17,
+   "td": 0.84,
+   "sub": 0.66,
+   "strdef": 50,
+   "tddef": 58,
+   "kd": 0.35,
+   "stracc": 50,
+   "tdacc": 0
+  }
+ },
+ "Sean Strickland": {
+  "slug": "sean-strickland",
+  "file": "sean-strickland.webp",
+  "source": "https://www.ufc.com/athlete/sean-strickland",
+  "nickname": null,
+  "tags": [
+   "Middleweight Division",
+   "#7 PFP",
+   "Active",
+   "Title Holder"
+  ],
+  "hometown": "CA, United States",
+  "camp": "Millennia MMA, Rancho, CA",
+  "style": "MMA",
+  "age": 35,
+  "height": 73,
+  "reach": 76,
+  "stats": {
+   "slpm": 5.98,
+   "sapm": 4.53,
+   "td": 0.66,
+   "sub": 0.15,
+   "strdef": 61,
+   "tddef": 69,
+   "kd": 0.26,
+   "stracc": 43,
+   "tdacc": 38
+  }
+ },
+ "Khamzat Chimaev": {
+  "slug": "khamzat-chimaev",
+  "file": "khamzat-chimaev.webp",
+  "source": "https://www.ufc.com/athlete/khamzat-chimaev",
+  "nickname": "&quot;Borz&quot;",
+  "tags": [
+   "#1\n        Middleweight Division",
+   "#12 PFP",
+   "Active"
+  ],
+  "hometown": null,
+  "camp": "TKMMA Fit, Akhmat MMA",
+  "style": "Wrestler",
+  "age": 32,
+  "height": 74,
+  "reach": 75,
+  "stats": {
+   "slpm": 4.01,
+   "sapm": 2.98,
+   "td": 5.32,
+   "sub": 1.37,
+   "strdef": 52,
+   "tddef": 88,
+   "kd": 0.3,
+   "stracc": 54,
+   "tdacc": 7
+  }
+ },
+ "Dricus Du Plessis": {
+  "slug": "dricus-du-plessis",
+  "file": "dricus-du-plessis.webp",
+  "source": "https://www.ufc.com/athlete/dricus-du-plessis",
+  "nickname": "&quot;Stillknocks&quot;",
+  "tags": [
+   "#2\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "Welkom, South Africa",
+  "camp": "CIT MMA",
+  "style": "MMA",
+  "age": 32,
+  "height": 73,
+  "reach": 76,
+  "stats": {
+   "slpm": 5.21,
+   "sapm": 4.24,
+   "td": 1.9,
+   "sub": 0.6,
+   "strdef": 54,
+   "tddef": 50,
+   "kd": 0.35,
+   "stracc": 49,
+   "tdacc": 4
+  }
+ },
+ "Nassourdine Imavov": {
+  "slug": "nassourdine-imavov",
+  "file": "nassourdine-imavov.webp",
+  "source": "https://www.ufc.com/athlete/nassourdine-imavov",
+  "nickname": "&quot;The Sniper&quot;",
+  "tags": [
+   "#3\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "Russia",
+  "camp": "Venum Training Camp Paris",
+  "style": "Striker",
+  "age": 30,
+  "height": 75,
+  "reach": 75,
+  "stats": {
+   "slpm": 4.28,
+   "sapm": 3.17,
+   "td": 0.74,
+   "sub": 0.98,
+   "strdef": 59,
+   "tddef": 81,
+   "kd": 0.16,
+   "stracc": 55,
+   "tdacc": 7
+  }
+ },
+ "Brendan Allen": {
+  "slug": "brendan-allen",
+  "file": "brendan-allen.webp",
+  "source": "https://www.ufc.com/athlete/brendan-allen",
+  "nickname": "&quot;All In&quot;",
+  "tags": [
+   "#4\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "Beaufort, SC, United States",
+  "camp": "Kill Cliff FC",
+  "style": "MMA",
+  "age": 30,
+  "height": 74,
+  "reach": 75,
+  "stats": {
+   "slpm": 3.61,
+   "sapm": 3.86,
+   "td": 1.63,
+   "sub": 1.08,
+   "strdef": 47,
+   "tddef": 58,
+   "kd": 0.24,
+   "stracc": 52,
+   "tdacc": 3
+  }
+ },
+ "Caio Borralho": {
+  "slug": "caio-borralho",
+  "file": "caio-borralho.webp",
+  "source": "https://www.ufc.com/athlete/caio-borralho",
+  "nickname": "&quot;The Natural&quot;",
+  "tags": [
+   "#5\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "State of Maranhão, Brazil",
+  "camp": "The Fighting Nerds",
+  "style": "MMA",
+  "age": 33,
+  "height": 73.5,
+  "reach": 75,
+  "stats": {
+   "slpm": 3.28,
+   "sapm": 2.54,
+   "td": 1.58,
+   "sub": 0.44,
+   "strdef": 60,
+   "tddef": 76,
+   "kd": 0.35,
+   "stracc": 56,
+   "tdacc": 3
+  }
+ },
+ "Joe Pyfer": {
+  "slug": "joe-pyfer",
+  "file": "joe-pyfer.webp",
+  "source": "https://www.ufc.com/athlete/joe-pyfer",
+  "nickname": "&quot;Bodybagz&quot;",
+  "tags": [
+   "#6\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "Vineland, NJ, United States",
+  "camp": "Team Marquez MMA",
+  "style": "Boxing",
+  "age": 30,
+  "height": 74,
+  "reach": 75,
+  "stats": {
+   "slpm": 3.52,
+   "sapm": 3.22,
+   "td": 1.45,
+   "sub": 0.91,
+   "strdef": 53,
+   "tddef": 63,
+   "kd": 1.09,
+   "stracc": 44,
+   "tdacc": 0
+  }
+ },
+ "Gregory Rodrigues": {
+  "slug": "gregory-rodrigues",
+  "file": "gregory-rodrigues.webp",
+  "source": "https://www.ufc.com/athlete/gregory-rodrigues",
+  "nickname": "&quot;Robocop&quot;",
+  "tags": [
+   "#7\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "RJ, Brazil",
+  "camp": "Kill Cliff FC",
+  "style": "Grappler",
+  "age": 34,
+  "height": 75,
+  "reach": 75,
+  "stats": {
+   "slpm": 5.78,
+   "sapm": 4.57,
+   "td": 1.57,
+   "sub": 0.31,
+   "strdef": 50,
+   "tddef": 85,
+   "kd": 1.15,
+   "stracc": 53,
+   "tdacc": 16
+  }
+ },
+ "Anthony Hernandez": {
+  "slug": "anthony-hernandez",
+  "file": "anthony-hernandez.webp",
+  "source": "https://www.ufc.com/athlete/anthony-hernandez",
+  "nickname": "&quot;Fluffy&quot;",
+  "tags": [
+   "#8\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "Oakland, CA, United States",
+  "camp": "Team Fluffy",
+  "style": "Striker",
+  "age": 33,
+  "height": 72,
+  "reach": 75,
+  "stats": {
+   "slpm": 4.42,
+   "sapm": 3.69,
+   "td": 5.25,
+   "sub": 1.38,
+   "strdef": 48,
+   "tddef": 68,
+   "kd": 0.09,
+   "stracc": 60,
+   "tdacc": 0
+  }
+ },
+ "Israel Adesanya": {
+  "slug": "israel-adesanya",
+  "file": "israel-adesanya.webp",
+  "source": "https://www.ufc.com/athlete/israel-adesanya",
+  "nickname": "&quot;The Last Stylebender&quot;",
+  "tags": [
+   "#9\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "Lagos, Lagos, Nigeria",
+  "camp": "City Kickboxing",
+  "style": "Freestyle",
+  "age": 37,
+  "height": 76,
+  "reach": 80,
+  "stats": {
+   "slpm": 4.03,
+   "sapm": 3.22,
+   "td": 0.05,
+   "sub": 0.14,
+   "strdef": 56,
+   "tddef": 76,
+   "kd": 0.6,
+   "stracc": 48,
+   "tdacc": 0
+  }
+ },
+ "Christian Leroy Duncan": {
+  "slug": "christian-leroy-duncan",
+  "file": "christian-leroy-duncan.webp",
+  "source": "https://www.ufc.com/athlete/christian-leroy-duncan",
+  "nickname": "&quot;CLD&quot;",
+  "tags": [
+   "#10\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "United Kingdom",
+  "camp": null,
+  "style": "MMA",
+  "age": 31,
+  "height": 74,
+  "reach": 79,
+  "stats": {
+   "slpm": 4.49,
+   "sapm": 2.34,
+   "td": 0.35,
+   "sub": 0,
+   "strdef": 54,
+   "tddef": 59,
+   "kd": 0.35,
+   "stracc": 58,
+   "tdacc": 0
+  }
+ },
+ "Abus Magomedov": {
+  "slug": "abus-magomedov",
+  "file": "abus-magomedov.webp",
+  "source": "https://www.ufc.com/athlete/abus-magomedov",
+  "nickname": null,
+  "tags": [
+   "#11\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "Argun, Russia",
+  "camp": null,
+  "style": "MMA",
+  "age": 36,
+  "height": 74,
+  "reach": 78,
+  "stats": {
+   "slpm": 3.13,
+   "sapm": 3.28,
+   "td": 2.44,
+   "sub": 0.75,
+   "strdef": 57,
+   "tddef": 83,
+   "kd": 0.38,
+   "stracc": 49,
+   "tdacc": 0
+  }
+ },
+ "Jared Cannonier": {
+  "slug": "jared-cannonier",
+  "file": "jared-cannonier.webp",
+  "source": "https://www.ufc.com/athlete/jared-cannonier",
+  "nickname": "&quot;Tha Killa Gorilla&quot;",
+  "tags": [
+   "#12\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "Dallas, TX, United States",
+  "camp": "ABJJ + Gracie Barra Alaska",
+  "style": "Striker",
+  "age": 42,
+  "height": 71,
+  "reach": 77.5,
+  "stats": {
+   "slpm": 4.25,
+   "sapm": 4.36,
+   "td": 0.77,
+   "sub": 0,
+   "strdef": 56,
+   "tddef": 65,
+   "kd": 0.36,
+   "stracc": 49,
+   "tdacc": 3
+  }
+ },
+ "Ikram Aliskerov": {
+  "slug": "ikram-aliskerov",
+  "file": "ikram-aliskerov.webp",
+  "source": "https://www.ufc.com/athlete/ikram-aliskerov",
+  "nickname": null,
+  "tags": [
+   "#13\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "Makhachkala, Dagestan, Russia",
+  "camp": null,
+  "style": "Sambo",
+  "age": 33,
+  "height": 72,
+  "reach": 76,
+  "stats": {
+   "slpm": 5.56,
+   "sapm": 4.01,
+   "td": 3.82,
+   "sub": 0.7,
+   "strdef": 45,
+   "tddef": 100,
+   "kd": 1.04,
+   "stracc": 61,
+   "tdacc": 0
+  }
+ },
+ "Bo Nickal": {
+  "slug": "bo-nickal",
+  "file": "bo-nickal.webp",
+  "source": "https://www.ufc.com/athlete/bo-nickal",
+  "nickname": null,
+  "tags": [
+   "#14\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "Rifle, CO, United States",
+  "camp": "American Top Team",
+  "style": "Wrestler",
+  "age": 30,
+  "height": 73,
+  "reach": 76,
+  "stats": {
+   "slpm": 3.36,
+   "sapm": 1.93,
+   "td": 3.12,
+   "sub": 2.27,
+   "strdef": 60,
+   "tddef": 100,
+   "kd": 0.85,
+   "stracc": 62,
+   "tdacc": 5
+  }
+ },
+ "Shara Magomedov": {
+  "slug": "shara-magomedov",
+  "file": "shara-magomedov.webp",
+  "source": "https://www.ufc.com/athlete/shara-magomedov",
+  "nickname": "&quot;Bullet&quot;",
+  "tags": [
+   "#15\n        Middleweight Division",
+   "Active"
+  ],
+  "hometown": "Republic of Dagestan, Russia",
+  "camp": null,
+  "style": null,
+  "age": 32,
+  "height": 74,
+  "reach": 73,
+  "stats": {
+   "slpm": 5.55,
+   "sapm": 3.62,
+   "td": 0,
+   "sub": 0,
+   "strdef": 45,
+   "tddef": 73,
+   "kd": 0.31,
+   "stracc": 63,
+   "tdacc": 0
+  }
+ },
+ "Carlos Ulberg": {
+  "slug": "carlos-ulberg",
+  "file": "carlos-ulberg.webp",
+  "source": "https://www.ufc.com/athlete/carlos-ulberg",
+  "nickname": "&quot;Black Jag&quot;",
+  "tags": [
+   "Light Heavyweight Division",
+   "#15 PFP",
+   "Active",
+   "Title Holder"
+  ],
+  "hometown": "Auckland, New Zealand",
+  "camp": "City Kickboxing",
+  "style": "Kickboxer",
+  "age": 36,
+  "height": 76,
+  "reach": 77,
+  "stats": {
+   "slpm": 6.57,
+   "sapm": 4.03,
+   "td": 0.53,
+   "sub": 0.18,
+   "strdef": 51,
+   "tddef": 86,
+   "kd": 1.4,
+   "stracc": 56,
+   "tdacc": 40
+  }
+ },
+ "Magomed Ankalaev": {
+  "slug": "magomed-ankalaev",
+  "file": "magomed-ankalaev.webp",
+  "source": "https://www.ufc.com/athlete/magomed-ankalaev",
+  "nickname": null,
+  "tags": [
+   "#1\n        Light Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Russia",
+  "camp": null,
+  "style": "MMA",
+  "age": 34,
+  "height": 75,
+  "reach": 75,
+  "stats": {
+   "slpm": 3.52,
+   "sapm": 2.49,
+   "td": 0.85,
+   "sub": 0.21,
+   "strdef": 55,
+   "tddef": 88,
+   "kd": 0.5,
+   "stracc": 52,
+   "tdacc": 0
+  }
+ },
+ "Jiri Prochazka": {
+  "slug": "jiri-prochazka",
+  "file": "jiri-prochazka.webp",
+  "source": "https://www.ufc.com/athlete/jiri-prochazka",
+  "nickname": null,
+  "tags": [
+   "#2\n        Light Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Hostěradice, Czechia",
+  "camp": "JETSAAM GYM",
+  "style": "Karate",
+  "age": 34,
+  "height": 75,
+  "reach": 80,
+  "stats": {
+   "slpm": 5.61,
+   "sapm": 5.67,
+   "td": 0.49,
+   "sub": 0.16,
+   "strdef": 45,
+   "tddef": 68,
+   "kd": 0.81,
+   "stracc": 56,
+   "tdacc": 20
+  }
+ },
+ "Alex Pereira": {
+  "slug": "alex-pereira",
+  "file": "alex-pereira.webp",
+  "source": "https://www.ufc.com/athlete/alex-pereira",
+  "nickname": "&quot;Poatan&quot;",
+  "tags": [
+   "Heavyweight Division",
+   "#11 PFP",
+   "Active"
+  ],
+  "hometown": "São Bernardo do Campo, SP, Brazil",
+  "camp": "Teixeira MMA &amp; Fitness-Bethel, CT",
+  "style": "Kickboxer",
+  "age": 38,
+  "height": 76,
+  "reach": 79,
+  "stats": {
+   "slpm": 5.01,
+   "sapm": 3.72,
+   "td": 0.11,
+   "sub": 0.22,
+   "strdef": 53,
+   "tddef": 80,
+   "kd": 0.75,
+   "stracc": 61,
+   "tdacc": 0
+  }
+ },
+ "Khalil Rountree Jr.": {
+  "slug": "khalil-rountree-jr",
+  "file": "khalil-rountree-jr.webp",
+  "source": "https://www.ufc.com/athlete/khalil-rountree-jr",
+  "nickname": null,
+  "tags": [
+   "#4\n        Light Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Los Angeles, CA, United States",
+  "camp": "Syndicate MMA - Las Vegas, NV",
+  "style": "MMA",
+  "age": 36,
+  "height": 73,
+  "reach": 76.5,
+  "stats": {
+   "slpm": 3.88,
+   "sapm": 4.33,
+   "td": 0,
+   "sub": 0.09,
+   "strdef": 50,
+   "tddef": 59,
+   "kd": 1.2,
+   "stracc": 41,
+   "tdacc": null
+  }
+ },
+ "Navajo Stirling": {
+  "slug": "navajo-stirling",
+  "file": "navajo-stirling.webp",
+  "source": "https://www.ufc.com/athlete/navajo-stirling",
+  "nickname": null,
+  "tags": [
+   "#5\n        Light Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Upper Hutt, New Zealand",
+  "camp": "City Kickboxing",
+  "style": "Kickboxer",
+  "age": 29,
+  "height": 76,
+  "reach": 79,
+  "stats": {
+   "slpm": 6.47,
+   "sapm": 2.56,
+   "td": 0.82,
+   "sub": 0,
+   "strdef": 58,
+   "tddef": 71,
+   "kd": 0.62,
+   "stracc": 55,
+   "tdacc": 0
+  }
+ },
+ "Paulo Costa": {
+  "slug": "paulo-costa",
+  "file": "paulo-costa.webp",
+  "source": "https://www.ufc.com/athlete/paulo-costa",
+  "nickname": "&quot;The Eraser&quot;",
+  "tags": [
+   "#6\n        Light Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "State of Minas Gerais, Brazil",
+  "camp": "Team Borracha",
+  "style": "Striker",
+  "age": 35,
+  "height": 73,
+  "reach": 72,
+  "stats": {
+   "slpm": 6.15,
+   "sapm": 5.96,
+   "td": 0.3,
+   "sub": 0,
+   "strdef": 49,
+   "tddef": 78,
+   "kd": 0.59,
+   "stracc": 59,
+   "tdacc": 0
+  }
+ },
+ "Dominick Reyes": {
+  "slug": "dominick-reyes",
+  "file": "dominick-reyes.webp",
+  "source": "https://www.ufc.com/athlete/dominick-reyes",
+  "nickname": "&quot;The Devastator&quot;",
+  "tags": [
+   "#7\n        Light Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Apple Valley, CA, United States",
+  "camp": "Cobra Kai Victorville",
+  "style": "Kickboxer",
+  "age": 36,
+  "height": 76,
+  "reach": 77,
+  "stats": {
+   "slpm": 5,
+   "sapm": 3.35,
+   "td": 0.25,
+   "sub": 0.25,
+   "strdef": 50,
+   "tddef": 83,
+   "kd": 1,
+   "stracc": 54,
+   "tdacc": 14
+  }
+ },
+ "Bogdan Guskov": {
+  "slug": "bogdan-guskov",
+  "file": "bogdan-guskov.webp",
+  "source": "https://www.ufc.com/athlete/bogdan-guskov",
+  "nickname": "&quot;Hitman&quot;",
+  "tags": [
+   "#8\n        Light Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Dukent, Uzbekistan",
+  "camp": "Gor MMA",
+  "style": "MMA",
+  "age": 33,
+  "height": 75,
+  "reach": 76,
+  "stats": {
+   "slpm": 3.87,
+   "sapm": 3.4,
+   "td": 0,
+   "sub": 0,
+   "strdef": 50,
+   "tddef": 50,
+   "kd": 0,
+   "stracc": 51,
+   "tdacc": null
+  }
+ },
+ "Azamat Murzakanov": {
+  "slug": "azamat-murzakanov",
+  "file": "azamat-murzakanov.webp",
+  "source": "https://www.ufc.com/athlete/azamat-murzakanov",
+  "nickname": "&quot;Professional&quot;",
+  "tags": [
+   "#9\n        Light Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Nalchik, Russia",
+  "camp": "K Dojo Warrior Tribe",
+  "style": "MMA",
+  "age": 37,
+  "height": 70,
+  "reach": 71.5,
+  "stats": {
+   "slpm": 4.28,
+   "sapm": 3.28,
+   "td": 0.65,
+   "sub": 0.22,
+   "strdef": 55,
+   "tddef": 89,
+   "kd": 1.52,
+   "stracc": 56,
+   "tdacc": 6
+  }
+ },
+ "Robert Whittaker": {
+  "slug": "robert-whittaker",
+  "file": "robert-whittaker.webp",
+  "source": "https://www.ufc.com/athlete/robert-whittaker",
+  "nickname": "&quot;The Reaper&quot;",
+  "tags": [
+   "#10\n        Light Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Otahuhu, Australia",
+  "camp": "PMA, Padstow NSW, Australia",
+  "style": "Brazilian Jiu-Jitsu",
+  "age": 35,
+  "height": 72,
+  "reach": 73.5,
+  "stats": {
+   "slpm": 4.41,
+   "sapm": 3.4,
+   "td": 0.71,
+   "sub": 0,
+   "strdef": 59,
+   "tddef": 80,
+   "kd": 0.53,
+   "stracc": 43,
+   "tdacc": 10
+  }
+ },
+ "Jan Blachowicz": {
+  "slug": "jan-blachowicz",
+  "file": "jan-blachowicz.webp",
+  "source": "https://www.ufc.com/athlete/jan-blachowicz",
+  "nickname": null,
+  "tags": [
+   "#11\n        Light Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Cieszyn, Poland",
+  "camp": "Ankos MMA - Zapaśniczy 67, Warszawa",
+  "style": "MMA",
+  "age": 43,
+  "height": 74,
+  "reach": 78,
+  "stats": {
+   "slpm": 3.53,
+   "sapm": 3.23,
+   "td": 0.97,
+   "sub": 0.36,
+   "strdef": 52,
+   "tddef": 70,
+   "kd": 0.36,
+   "stracc": 50,
+   "tdacc": 31
+  }
+ },
+ "Alonzo Menifield": {
+  "slug": "alonzo-menifield",
+  "file": "alonzo-menifield.webp",
+  "source": "https://www.ufc.com/athlete/alonzo-menifield",
+  "nickname": "&quot;Atomic&quot;",
+  "tags": [
+   "#13\n        Light Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Los Angeles, CA, United States",
+  "camp": null,
+  "style": "Freestyle",
+  "age": 39,
+  "height": 72,
+  "reach": 76,
+  "stats": {
+   "slpm": 3.87,
+   "sapm": 3.86,
+   "td": 0.53,
+   "sub": 0.18,
+   "strdef": 51,
+   "tddef": 78,
+   "kd": 0.7,
+   "stracc": 51,
+   "tdacc": 0
+  }
+ },
+ "Reinier de Ridder": {
+  "slug": "reinier-de-ridder",
+  "file": "reinier-de-ridder.webp",
+  "source": "https://www.ufc.com/athlete/reinier-de-ridder",
+  "nickname": "&quot;RdR&quot;",
+  "tags": [
+   "#14\n        Light Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Tilburg, Netherlands",
+  "camp": "Kill Cliff FC",
+  "style": "Jiu-Jitsu",
+  "age": 36,
+  "height": 76,
+  "reach": 78,
+  "stats": {
+   "slpm": 3.18,
+   "sapm": 2.26,
+   "td": 2.44,
+   "sub": 0.52,
+   "strdef": 47,
+   "tddef": 40,
+   "kd": 0.35,
+   "stracc": 55,
+   "tdacc": 10
+  }
+ },
+ "Nikita Krylov": {
+  "slug": "nikita-krylov",
+  "file": "nikita-krylov.webp",
+  "source": "https://www.ufc.com/athlete/nikita-krylov",
+  "nickname": "&quot;The Miner&quot;",
+  "tags": [
+   "#15\n        Light Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Donetsk, Ukraine",
+  "camp": "Fight Club No1 - Moscow, Russia",
+  "style": "Karate",
+  "age": 34,
+  "height": 75,
+  "reach": 77.5,
+  "stats": {
+   "slpm": 4.33,
+   "sapm": 2.74,
+   "td": 2.16,
+   "sub": 1.13,
+   "strdef": 48,
+   "tddef": 52,
+   "kd": 0.56,
+   "stracc": 54,
+   "tdacc": 2
+  }
+ },
+ "Ciryl Gane": {
+  "slug": "ciryl-gane",
+  "file": "ciryl-gane.webp",
+  "source": "https://www.ufc.com/athlete/ciryl-gane",
+  "nickname": "&quot;Bon Gamin&quot;",
+  "tags": [
+   "Heavyweight Division",
+   "#8 PFP",
+   "Active",
+   "Title Holder"
+  ],
+  "hometown": "La Roche-sur-Yon, Vendée, France",
+  "camp": "MMA Factory - Paris, France",
+  "style": "Muay Thai",
+  "age": 36,
+  "height": 76,
+  "reach": 81,
+  "stats": {
+   "slpm": 5.9,
+   "sapm": 2.74,
+   "td": 0.58,
+   "sub": 0.51,
+   "strdef": 58,
+   "tddef": 74,
+   "kd": 0.29,
+   "stracc": 63,
+   "tdacc": 0
+  }
+ },
+ "Tom Aspinall": {
+  "slug": "tom-aspinall",
+  "file": "tom-aspinall.webp",
+  "source": "https://www.ufc.com/athlete/tom-aspinall",
+  "nickname": null,
+  "tags": [
+   "#1\n        Heavyweight Division",
+   "#9 PFP",
+   "Active"
+  ],
+  "hometown": "Salford, England",
+  "camp": "Team Kaobon",
+  "style": "Freestyle",
+  "age": 33,
+  "height": 77,
+  "reach": 78,
+  "stats": {
+   "slpm": 7.63,
+   "sapm": 3.62,
+   "td": 2.62,
+   "sub": 1.31,
+   "strdef": 57,
+   "tddef": 100,
+   "kd": 3.27,
+   "stracc": 68,
+   "tdacc": 40
+  }
+ },
+ "Alexander Volkov": {
+  "slug": "alexander-volkov",
+  "file": "alexander-volkov.webp",
+  "source": "https://www.ufc.com/athlete/alexander-volkov",
+  "nickname": "&quot;Drago&quot;",
+  "tags": [
+   "#2\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Moscow, Russia",
+  "camp": "Global Fight Gym",
+  "style": "Brazilian Jiu-Jitsu",
+  "age": 38,
+  "height": 79,
+  "reach": 80,
+  "stats": {
+   "slpm": 4.84,
+   "sapm": 2.92,
+   "td": 0.52,
+   "sub": 0.26,
+   "strdef": 54,
+   "tddef": 70,
+   "kd": 0.21,
+   "stracc": 57,
+   "tdacc": 31
+  }
+ },
+ "Sergei Pavlovich": {
+  "slug": "sergei-pavlovich",
+  "file": "sergei-pavlovich.webp",
+  "source": "https://www.ufc.com/athlete/sergei-pavlovich",
+  "nickname": null,
+  "tags": [
+   "#3\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Russia",
+  "camp": null,
+  "style": "MMA",
+  "age": 34,
+  "height": 75,
+  "reach": 84,
+  "stats": {
+   "slpm": 4.49,
+   "sapm": 3.58,
+   "td": 0.47,
+   "sub": 0,
+   "strdef": 56,
+   "tddef": 75,
+   "kd": 1.89,
+   "stracc": 45,
+   "tdacc": 0
+  }
+ },
+ "Josh Hokit": {
+  "slug": "josh-hokit",
+  "file": "josh-hokit.webp",
+  "source": "https://www.ufc.com/athlete/josh-hokit",
+  "nickname": null,
+  "tags": [
+   "#4\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Bakersfield, CA, United States",
+  "camp": "Jackson Wink MMA Academy - NM",
+  "style": "Wrestling",
+  "age": 29,
+  "height": 73,
+  "reach": 73.5,
+  "stats": {
+   "slpm": 7.88,
+   "sapm": 7,
+   "td": 2.94,
+   "sub": 0.25,
+   "strdef": 40,
+   "tddef": 78,
+   "kd": 0.74,
+   "stracc": 60,
+   "tdacc": 2
+  }
+ },
+ "Curtis Blaydes": {
+  "slug": "curtis-blaydes",
+  "file": "curtis-blaydes.webp",
+  "source": "https://www.ufc.com/athlete/curtis-blaydes",
+  "nickname": "&quot;Razor&quot;",
+  "tags": [
+   "#5\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Naperville, IL, United States",
+  "camp": "Dutch Style MMA/ UFC Gym Lombard IL",
+  "style": "MMA",
+  "age": 35,
+  "height": 76,
+  "reach": 80,
+  "stats": {
+   "slpm": 3.99,
+   "sapm": 2.7,
+   "td": 5.04,
+   "sub": 0,
+   "strdef": 55,
+   "tddef": 35,
+   "kd": 0.14,
+   "stracc": 51,
+   "tdacc": 22
+  }
+ },
+ "Rizvan Kuniev": {
+  "slug": "rizvan-kuniev",
+  "file": "rizvan-kuniev.webp",
+  "source": "https://www.ufc.com/athlete/rizvan-kuniev",
+  "nickname": null,
+  "tags": [
+   "#7\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Makhachkala, Dagestan, Russia",
+  "camp": "American Top Team",
+  "style": null,
+  "age": 34,
+  "height": 76,
+  "reach": 76,
+  "stats": {
+   "slpm": 4.13,
+   "sapm": 2.78,
+   "td": 0.62,
+   "sub": 0,
+   "strdef": 50,
+   "tddef": 94,
+   "kd": 0.42,
+   "stracc": 55,
+   "tdacc": 0
+  }
+ },
+ "Johnny Walker": {
+  "slug": "johnny-walker",
+  "file": "johnny-walker.webp",
+  "source": "https://www.ufc.com/athlete/johnny-walker",
+  "nickname": null,
+  "tags": [
+   "#6\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Belford Roxo, RJ, Brazil",
+  "camp": "SBG Ireland",
+  "style": "MMA",
+  "age": 34,
+  "height": 78,
+  "reach": 82,
+  "stats": {
+   "slpm": 3.99,
+   "sapm": 3.01,
+   "td": 0.32,
+   "sub": 0.65,
+   "strdef": 47,
+   "tddef": 57,
+   "kd": 0.75,
+   "stracc": 56,
+   "tdacc": 0
+  }
+ },
+ "Waldo Cortes Acosta": {
+  "slug": "waldo-cortes-acosta",
+  "file": "waldo-cortes-acosta.webp",
+  "source": "https://www.ufc.com/athlete/waldo-cortes-acosta",
+  "nickname": "&quot;Salsa Boy&quot;",
+  "tags": [
+   "#8\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Fundacion, Barahona, Dominican Republic",
+  "camp": null,
+  "style": "Striker",
+  "age": 35,
+  "height": 76,
+  "reach": 78,
+  "stats": {
+   "slpm": 4.9,
+   "sapm": 3.49,
+   "td": 0.34,
+   "sub": 0.08,
+   "strdef": 54,
+   "tddef": 70,
+   "kd": 0.68,
+   "stracc": 47,
+   "tdacc": 0
+  }
+ },
+ "Vitor Petrino": {
+  "slug": "vitor-petrino",
+  "file": "vitor-petrino.webp",
+  "source": "https://www.ufc.com/athlete/vitor-petrino",
+  "nickname": null,
+  "tags": [
+   "#9\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Santa Luzia, MG, Brazil",
+  "camp": "CM System",
+  "style": "Striker",
+  "age": 29,
+  "height": 74,
+  "reach": 77.5,
+  "stats": {
+   "slpm": 3.37,
+   "sapm": 2.56,
+   "td": 2.78,
+   "sub": 0.63,
+   "strdef": 53,
+   "tddef": 81,
+   "kd": 0.51,
+   "stracc": 51,
+   "tdacc": 16
+  }
+ },
+ "Serghei Spivac": {
+  "slug": "serghei-spivac",
+  "file": "serghei-spivac.webp",
+  "source": "https://www.ufc.com/athlete/serghei-spivac",
+  "nickname": "&quot;Polar Bear&quot;",
+  "tags": [
+   "#10\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Moldova",
+  "camp": "Polar Bear Team",
+  "style": "Sambo",
+  "age": 31,
+  "height": 75,
+  "reach": 78,
+  "stats": {
+   "slpm": 3.35,
+   "sapm": 4.23,
+   "td": 3.42,
+   "sub": 0.43,
+   "strdef": 51,
+   "tddef": 53,
+   "kd": 0,
+   "stracc": 47,
+   "tdacc": 0
+  }
+ },
+ "Ante Delija": {
+  "slug": "ante-delija",
+  "file": "ante-delija.webp",
+  "source": "https://www.ufc.com/athlete/ante-delija",
+  "nickname": "&quot;Walking Trouble&quot;",
+  "tags": [
+   "#11\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Dubrovnik, Croatia",
+  "camp": "UFK Gladiator Maro Perak / Aspinall BJJ",
+  "style": "MMA",
+  "age": 36,
+  "height": 75.5,
+  "reach": 78,
+  "stats": {
+   "slpm": 4.28,
+   "sapm": 3.95,
+   "td": 0,
+   "sub": 0,
+   "strdef": 53,
+   "tddef": 75,
+   "kd": 0.71,
+   "stracc": 38,
+   "tdacc": 0
+  }
+ },
+ "Valter Walker": {
+  "slug": "valter-walker",
+  "file": "valter-walker.webp",
+  "source": "https://www.ufc.com/athlete/valter-walker",
+  "nickname": "&quot;The Clean Monster &quot;",
+  "tags": [
+   "#12\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "State of Rio de Janeiro, Brazil",
+  "camp": null,
+  "style": "MMA",
+  "age": 28,
+  "height": 78,
+  "reach": 78.5,
+  "stats": {
+   "slpm": 1.92,
+   "sapm": 2.67,
+   "td": 5.39,
+   "sub": 3.59,
+   "strdef": 43,
+   "tddef": 100,
+   "kd": 0,
+   "stracc": 53,
+   "tdacc": 31
+  }
+ },
+ "Tyrell Fortune": {
+  "slug": "tyrell-fortune",
+  "file": "tyrell-fortune.webp",
+  "source": "https://www.ufc.com/athlete/tyrell-fortune",
+  "nickname": null,
+  "tags": [
+   "#13\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Portland, OR, United States",
+  "camp": "Arizona Combat Sports",
+  "style": null,
+  "age": 36,
+  "height": 75,
+  "reach": 75.5,
+  "stats": {
+   "slpm": 1.91,
+   "sapm": 4.31,
+   "td": 1.72,
+   "sub": 0,
+   "strdef": 51,
+   "tddef": 100,
+   "kd": 0,
+   "stracc": 49,
+   "tdacc": 43
+  }
+ },
+ "Derrick Lewis": {
+  "slug": "derrick-lewis",
+  "file": "derrick-lewis.webp",
+  "source": "https://www.ufc.com/athlete/derrick-lewis",
+  "nickname": "&quot;The Black Beast&quot;",
+  "tags": [
+   "#14\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "New Orleans, LA, United States",
+  "camp": "4oz Fight Club",
+  "style": "Brawler",
+  "age": 41,
+  "height": 75,
+  "reach": 79,
+  "stats": {
+   "slpm": 2.41,
+   "sapm": 2.79,
+   "td": 0.53,
+   "sub": 0,
+   "strdef": 39,
+   "tddef": 52,
+   "kd": 0.58,
+   "stracc": 49,
+   "tdacc": 13
+  }
+ },
+ "Aleksandar Rakic": {
+  "slug": "aleksandar-rakic",
+  "file": "aleksandar-rakic.webp",
+  "source": "https://www.ufc.com/athlete/aleksandar-rakic",
+  "nickname": "&quot;Rocket&quot;",
+  "tags": [
+   "#15\n        Heavyweight Division",
+   "Active"
+  ],
+  "hometown": "Vienna, Austria",
+  "camp": "American Top Team Zagreb",
+  "style": "Freestyle",
+  "age": 34,
+  "height": 76,
+  "reach": 78,
+  "stats": {
+   "slpm": 4.2,
+   "sapm": 2.78,
+   "td": 0.57,
+   "sub": 0.11,
+   "strdef": 55,
+   "tddef": 87,
+   "kd": 0.45,
+   "stracc": 51,
+   "tdacc": 13
+  }
+ }
+}

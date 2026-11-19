@@ -1,6 +1,6 @@
 # Fight Manager
 
-Run an MMA management agency in your browser. Play it at https://davispiero.github.io/fight-manager/.
+Play it at https://davispiero.github.io/fight-manager/.
 
 Run an MMA management agency in your browser. Sign prospects, build them up in the gym, work the corner on fight night, and sell them to rival agencies when their value peaks, or keep them and chase the belt.
 
