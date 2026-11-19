@@ -1,20 +1,19 @@
 # State — 2026-11-20
 
 ## Where we are
-- Fight Camp prototype (`original/FIGHT CAMP.html`) rebuilt as **Fight Manager**: Vite + plain JS, on branch `rebuild` (not merged to `main` yet).
-- New look: dark broadcast style, no pixel art. Real fighter photos from Wikimedia Commons, drawn SVG avatars for everyone else.
-- New loop: transfer list, rival agency bids (accept/counter/reject), unsolicited bids, buy-outs from rivals, contracts that expire, renewals, release.
-- Fight night: tale of the tape, live tactics, corner calls between rounds, speed/skip, title shots.
-- Smoke test (`npm test`) passes: plays a fight, gets a bid, sells a fighter, checks phone width.
-- Repo: https://github.com/DavisPiero/fight-manager (public).
+- Branch `rebuild` (not merged to `main`). Live from this branch: https://davispiero.github.io/fight-manager/
+- v2 done: broadcast-style redesign, calm default screens + Analyst Mode, first-run tutorial, auto-train switch, new menu with 3 save slots, agency setup (manager, colour, emblem, home city, gym focus), random events, sponsorship deals, new sounds.
+- Fighters: 126 of 128 real fighters have official UFC.com headshots, bios and career stats (stored in `public/fighters/`, `src/data/ufc.json`). Patricio Pitbull and Abdul Rakhman Yakhyaev had no headshot and are removed. Made-up prospects use a silhouette.
+- `npm test` passes: setup, tutorial, fights, an event, a sponsor deal, a sale, Analyst Mode, save slot, phone width.
 
 ## Next
-- Get sign-off on the rebuild, then merge `rebuild` → `main`.
-- Put a build in front of one new player and note where they get stuck.
-- Balance: one simulated year ends at roughly $450k by keeping fighters and $750k by flipping them (start $250k). Nobody went bankrupt, so Normal may be too easy.
+- Sign-off, then merge `rebuild` → `main`.
+- One new player tries it cold; note where they first get stuck (the tutorial is untested on a real person).
+- Balance check of events and sponsor income over a full season.
 
 ## Open with you
-- Guess: roster cap 8, 6-week no-sale window, 6 weeks in the red = game over. Confirm or change.
-- Guess: rival agency names are invented (Apex Sports Group, Iron Circle, etc.).
-- Playable link: https://davispiero.github.io/fight-manager/ (deploys from `rebuild` and `main`).
-- 84 of 128 real fighters have a free photo; the other 44 (e.g. Volkanovski, O'Malley, Aspinall) use drawn avatars.
+- Copyright: UFC.com images are in a public repo and public site, as you chose. A takedown is possible.
+- Guess: prospects keep silhouettes rather than being removed. Confirm.
+- Guess: 8 home cities and their perks, sponsor brand names, event list and odds (~40% of weeks).
+- Guess: roster cap 8, 6-week no-sale window, 6 weeks in the red = game over.
+- Old saves from the first version don't carry over (new save format).
