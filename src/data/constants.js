@@ -75,6 +75,38 @@ export const DIFFICULTY = {
   Hard: { cash: 120000, label: "$120k start, tough negotiators" },
 };
 export const ROSTER_MAX = 8;
-export const SAVE_KEY = "fightmanager_v1";
+export const SAVE_PREFIX = "fightmanager_slot_";
 export const WEEKS_IN_RED_LIMIT = 6;
 export const NO_SALE_WEEKS = 6; // can't flip a fighter within this many weeks of signing
+
+// Where the agency is based. Bonus skills train 25% faster; cost scales weekly office costs.
+export const CITIES = [
+  { id: "vegas", name: "Las Vegas", country: "USA", nat: "USA", cost: 1.25, rep: 8, bonus: ["iq"], note: "Fight capital. Pricier, but you start with more reputation." },
+  { id: "abq", name: "Albuquerque", country: "USA", nat: "USA", cost: 0.9, rep: 2, bonus: ["cardio", "dur"], note: "Altitude camp. Conditioning trains faster." },
+  { id: "rio", name: "Rio de Janeiro", country: "Brazil", nat: "Brazil", cost: 0.8, rep: 0, bonus: ["bjj"], note: "Jiu-jitsu heartland. Cheap to run." },
+  { id: "dag", name: "Makhachkala", country: "Russia", nat: "Russia", cost: 0.75, rep: 0, bonus: ["wres", "tdd"], note: "Wrestling factory. Cheapest office." },
+  { id: "dublin", name: "Dublin", country: "Ireland", nat: "Ireland", cost: 1.0, rep: 4, bonus: ["box"], note: "Loud fans. Wins add extra popularity." },
+  { id: "mex", name: "Mexico City", country: "Mexico", nat: "Mexico", cost: 0.85, rep: 2, bonus: ["box", "dur"], note: "Boxing culture. Tough, durable fighters." },
+  { id: "syd", name: "Sydney", country: "Australia", nat: "Australia", cost: 1.05, rep: 3, bonus: ["kick"], note: "Kickboxing scene. Kicks train faster." },
+  { id: "tokyo", name: "Tokyo", country: "Japan", nat: "Japan", cost: 1.1, rep: 3, bonus: ["thai", "iq"], note: "Technical striking. Fight IQ trains faster." },
+];
+export const FOCUS = {
+  strike: { name: "Striking gym", keys: ["box", "kick", "thai"] },
+  grapple: { name: "Grappling gym", keys: ["wres", "bjj", "tdd"] },
+  cond: { name: "Strength & conditioning", keys: ["cardio", "dur"] },
+};
+export const EMBLEMS = {
+  fist: '<path d="M7 11V7.5a1.5 1.5 0 013 0V6a1.5 1.5 0 013 0v.5a1.5 1.5 0 013 0V8a1.5 1.5 0 013 0v5c0 4-2.5 7-6.5 7h-1C7.7 20 5 17.6 5 14v-1.5A1.5 1.5 0 017 11z"/>',
+  bolt: '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
+  crown: '<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/>',
+  shield: '<path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z"/>',
+  star: '<path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21l1.5-7L2 9.3l7-.8z"/>',
+  flame: '<path d="M12 2c1 4 6 6 6 12a6 6 0 01-12 0c0-3 2-5 3-6 0 2 1 3 2 3 0-3-1-6 1-9z"/>',
+};
+// Fictional sponsors.
+export const BRANDS = [
+  { name: "Ironclad Nutrition", col: "#8b9bb4" }, { name: "Redline Energy", col: "#ff3b3b" }, { name: "Kodiak Apparel", col: "#c08a4a" },
+  { name: "Northgate Watches", col: "#d8c48a" }, { name: "Titan Fightwear", col: "#9aa7ff" }, { name: "Bolt Hydration", col: "#43d6ff" },
+  { name: "Summit Bank", col: "#5fd39a" }, { name: "Overtime Sportsbook", col: "#ffb347" }, { name: "Nightjar Headphones", col: "#c784ff" },
+];
+export const SLOTS = 3;

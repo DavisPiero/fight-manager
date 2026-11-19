@@ -7,8 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "photos": "node scripts/fetch-photos.mjs",
-    "test": "node scripts/smoke.mjs"
+    "test": "node scripts/smoke.mjs",
+    "ufc": "node scripts/fetch-ufc.mjs"
   },
   "devDependencies": {
     "playwright": "^1.49.1",

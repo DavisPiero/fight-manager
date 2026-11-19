@@ -3,7 +3,7 @@ export const UI = {
   view: "menu",
   last: "",
   pid: null,
-  setup: { name: "", col: 0, diff: "Normal" },
+  setup: { slot: 1, name: "", manager: "", col: 0, diff: "Normal", city: "vegas", focus: "strike", emblem: "fist" },
   gym: { fid: null, area: "strike", key: "box", int: 1 },
   mk: { tab: "free", div: -1, q: "", sort: "ovr" },
   rk: 3,

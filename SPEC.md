@@ -6,6 +6,8 @@
 3. **Every week has a decision.** The dashboard's To-do list always shows what needs attention: offers, bookings, expiring contracts, training.
 4. **Real names, real stakes.** The real UFC roster (Nov 2026) fills the rankings; beating a ranked star or taking a title feels big.
 5. **Pressure.** Weekly costs, injuries, contracts running out, and a bankruptcy clock (6 weeks in the red) force trade-offs.
+6. **Calm by default, deep on demand.** Plain grades and one line of commentary for most players; Analyst Mode for the numbers.
+7. **Surprises.** Random events with choices, sponsorship offers, and short-notice fights keep weeks from feeling the same.
 
 ## Core loop (one week)
 Check To-do → book fights / answer bids → train → Next week → fight night if booked → results, value changes.
@@ -19,6 +21,12 @@ Check To-do → book fights / answer bids → train → Next week → fight nigh
 - **Fights:** 3 rounds × 12 exchanges. Live tactics (Balanced / Pressure / Counter / Wrestle), corner calls (water / cutman / fire up), speed 1–4× and skip. AI corner adapts.
 - **Money:** commission (your % of purse + win bonus), sales; costs are bonuses, fees, gym sessions, $1,200 + $350/fighter weekly.
 - **Roster:** max 8.
+- **Agency setup:** name, manager, colour, emblem, home city (cost, starting rep, local prospects, faster-training skills), gym focus (+15% in an area). 3 save slots.
+- **Events:** ~40% of weeks from week 3: short-notice fight, contract talk, viral clip, night out, sparring scare, rival poaching, media day, local sponsor, scout's tip, gym repairs, fan meet.
+- **Sponsors:** fictional brands offer weekly pay to fighters with popularity 25+; you take your cut. Some deals end after two straight losses. Pitching costs $2,500.
+- **Auto-train:** a Gym switch; each Next week, fighters with 55+ energy train their weakest skill at Normal.
+- **Analyst Mode:** Settings switch, off by default. Shows exact skills, radar, UFC stats, stamina, momentum, judges, value maths.
+- **Tutorial:** 9-step spotlight tour on a new career; replay from Settings.
 
 ## Not building
 Women's divisions, 5-round main events, managers' staff/coaches, multiplayer, online saves, UFC branding.

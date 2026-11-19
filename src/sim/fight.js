@@ -137,7 +137,7 @@ export function finish(FS) {
   const b = FS.b, F = FS.f, W = F[w], L = F[1 - w], won = w === 0, me = F[0];
   W.w++; L.l++;
   W.streak = Math.max(1, (W.streak || 0) + 1); L.streak = Math.min(-1, (L.streak || 0) - 1);
-  W.pop = Math.min(100, W.pop + (won && ovr(L) > ovr(W) ? 5 : 3)); L.pop = Math.max(0, L.pop - 1);
+  W.pop = Math.min(100, W.pop + (won && ovr(L) > ovr(W) ? 5 : 3) + (won && G.ag.city === "dublin" ? 2 : 0)); L.pop = Math.max(0, L.pop - 1);
   const wasChamp = FS.r0[1] === 0 && won;
   const pay = b.purse + (won ? b.bonus : 0), cut = Math.round(pay * me.ct.pct / 100);
   me.earn += pay - cut; earn(cut);

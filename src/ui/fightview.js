@@ -1,88 +1,79 @@
 // Fight night: tale of the tape, live broadcast view, corner between rounds, result.
 import { G, ovr, rec, rankLabel } from "../state.js";
-import { DIVISIONS, ATTR_KEYS, ATTR_SHORT } from "../data/constants.js";
+import { DIVISIONS, ATTR_KEYS, ATTR_SHORT, AGENCY_COLOURS } from "../data/constants.js";
 import { esc, money, last } from "../util.js";
-import { avatar } from "./avatar.js";
+import { photoOf } from "./avatar.js";
+import { analyst, AREAS, areaVal, grade } from "./components.js";
 import { PLANS, CORNER, clock } from "../sim/fight.js";
 import { UI } from "./uistate.js";
-import { AGENCY_COLOURS } from "../data/constants.js";
 
-const hpCol = (h) => (h > 55 ? "var(--green)" : h > 28 ? "var(--gold)" : "var(--red)");
+const SIL = '<svg viewBox="0 0 100 120" class="sil"><path d="M50 10c-12 0-20 10-20 23 0 10 5 18 10 22v7c-16 3-30 11-34 26L4 120h92l-2-32c-4-15-18-23-34-26v-7c5-4 10-12 10-22 0-13-8-23-20-23z"/></svg>';
+const pic = (f) => { const p = photoOf(f); return p ? `<img src="${p}" alt="${esc(f.name)}">` : SIL; };
+const hpCol = (h) => (h > 55 ? "#2fbf71" : h > 28 ? "#e8c46a" : "#ff2d2d");
+const myCol = () => AGENCY_COLOURS[G.ag.col];
 
-export function vFight() {
-  const FS = UI.FS;
-  return FS.ph === "pre" ? pre(FS) : live(FS);
-}
+export function vFight() { return UI.FS.ph === "pre" ? pre(UI.FS) : live(UI.FS); }
 
 function pre(FS) {
-  const [A, B] = FS.f;
-  const row = (l, a, b, better) => `<div class="l ${better === 0 ? "adv" : ""}">${a}</div><div class="m">${l}</div><div class="r ${better === 1 ? "adv" : ""}">${b}</div>`;
-  const cmp = (a, b) => (a > b ? 0 : b > a ? 1 : -1);
-  return `<div class="view-in" style="max-width:1000px;margin:0 auto;padding:18px 16px 60px">
-    <div class="centre small mute" style="letter-spacing:.16em;text-transform:uppercase">${FS.b.title ? '<span class="warn">Title fight</span> · ' : ""}${DIVISIONS[A.wc]} · 3 rounds · week ${G.wk}</div>
-    <div class="arena" style="margin-top:12px">
-      <div class="stage" style="min-height:0;margin:6px 0 18px">
-        <div class="portrait" style="--pc:${AGENCY_COLOURS[G.ag.col]};animation:lungeL .7s reverse">${avatar(A, 190)}</div>
-        <div class="centre"><div class="vs">VS</div></div>
-        <div class="portrait" style="--pc:#4c8dff;animation:lungeR .7s reverse">${avatar(B, 190)}</div>
-      </div>
-      <div class="tape">
-        <div class="l" style="font-size:28px">${esc(A.name)}</div><div class="m">Fighter</div><div class="r" style="font-size:28px">${esc(B.name)}</div>
-        ${row("Record", rec(A), rec(B), -1)}
-        ${row("Overall", ovr(A), ovr(B), cmp(ovr(A), ovr(B)))}
-        ${row("Ranking", rankLabel(FS.r0[0]), rankLabel(FS.r0[1]), -1)}
-        ${row("Age", A.age, B.age, -1)}
-        ${row("Style", A.style, B.style, -1)}
-        ${ATTR_KEYS.map((k, i) => row(ATTR_SHORT[i], A.at[k], B.at[k], cmp(A.at[k], B.at[k]))).join("")}
-        ${row("Camp prep", A.prep + "%", "—", -1)}
-      </div>
+  const [A, B] = FS.f, a = analyst();
+  const cmp = (x, y) => (x > y ? 0 : y > x ? 1 : -1);
+  const row = (l, x, y, better = -1) => `<div class="trow"><b class="${better === 0 ? "adv" : ""}">${x}</b><span>${l}</span><b class="${better === 1 ? "adv" : ""}" style="text-align:left">${y}</b></div>`;
+  const rows = [row("Record", rec(A), rec(B)), row("Rank", rankLabel(FS.r0[0]), rankLabel(FS.r0[1])), row("Age", A.age, B.age), row("Overall", ovr(A), ovr(B), cmp(ovr(A), ovr(B)))];
+  if (a) ATTR_KEYS.forEach((k, i) => rows.push(row(ATTR_SHORT[i], A.at[k], B.at[k], cmp(A.at[k], B.at[k]))));
+  else AREAS.forEach(([n, k]) => { const x = areaVal(A, k), y = areaVal(B, k); rows.push(row(n, grade(x), grade(y), cmp(x, y))); });
+  if (A.reach && B.reach) rows.push(row("Reach", A.reach + '"', B.reach + '"'));
+  return `<div class="fn view-in">
+    <div class="row spread" style="margin-bottom:12px"><div class="eyebrow">${FS.b.title ? "Title fight · " : ""}${DIVISIONS[A.wc]} bout · 3 rounds</div><span class="small mute">Week ${G.wk}</span></div>
+    <div class="tape">
+      <div class="side l">${pic(A)}</div>
+      <div class="mid"><div class="names"><b style="text-align:right">${esc(A.name)}</b><span class="vs">VS</span><b>${esc(B.name)}</b></div>${rows.join("")}</div>
+      <div class="side r">${pic(B)}</div>
     </div>
-    <div class="card" style="margin-top:16px"><h2>Your game plan for round 1</h2><p class="small mute">You can change it at any moment during the fight.</p>
-      <div class="controls">${planButtons(FS)}</div>
-      <button class="btn primary lg" data-a="fstart" style="margin-top:16px">Walk out</button></div></div>`;
+    <div class="panel" style="margin-top:16px"><div class="panel-h"><h2>Game plan</h2><span class="small mute">You can shout new instructions at any time</span></div>
+      <div class="plans">${planButtons(FS)}</div>
+      <button class="btn red lg" data-a="fstart" style="margin-top:16px">Walk out</button></div></div>`;
 }
-
 const planButtons = (FS) => Object.entries(PLANS).map(([k, p]) => `<button class="plan ${FS.plan[0] === k ? "on" : ""}" data-a="plan" data-i="${k}"><b>${p.name}</b><small>${p.tip}</small></button>`).join("");
 
-function side(FS, i) {
-  const f = FS.f[i];
-  return `<div class="fside ${i ? "r" : ""}">${avatar(f, 54, "round")}<div class="bars"><div class="nm">${esc(last(f.name))}</div><div class="small mute">${rec(f)} · OVR ${ovr(f)}</div>
-    <div class="hpbar"><i class="ghost" id="hpg${i}" style="width:${Math.max(0, FS.hp[i])}%"></i><i id="hp${i}" style="width:${Math.max(0, FS.hp[i])}%;background:${hpCol(FS.hp[i])}"></i></div>
-    <div class="stbar"><i id="st${i}" style="width:${FS.st[i]}%"></i></div>
-    <div class="small dim" id="ss${i}">Strikes ${FS.stats[i].str}/${FS.stats[i].att} · TD ${FS.stats[i].td}</div></div></div>`;
+function fs(FS, i) {
+  const f = FS.f[i], a = analyst();
+  return `<div class="fs ${i ? "r" : ""}" style="--c:${i ? "#3d7bff" : myCol()}"><div class="nm">${esc(last(f.name))}</div><div class="rk">${rankLabel(FS.r0[i])} · ${rec(f)}</div>
+    <div class="hp"><i class="gh" id="hpg${i}" style="width:${Math.max(0, FS.hp[i])}%"></i><i id="hp${i}" style="width:${Math.max(0, FS.hp[i])}%;background:${hpCol(FS.hp[i])}"></i></div>
+    ${a ? `<div class="stam"><i id="st${i}" style="width:${FS.st[i]}%"></i></div><div class="sub" id="ss${i}">${statLine(FS, i)}</div>` : ""}</div>`;
 }
+const statLine = (FS, i) => `Strikes ${FS.stats[i].str}/${FS.stats[i].att} · TD ${FS.stats[i].td}`;
 
 function live(FS) {
-  const [A, B] = FS.f, end = FS.ph === "end", res = FS.res;
-  const lw = end ? res.w : -1;
-  const pos = FS.pos === "ground" ? `<span class="posbadge gr">Ground · ${esc(last(FS.f[FS.top].name))} on top</span>` : '<span class="posbadge">Standing</span>';
+  const [A, B] = FS.f, end = FS.ph === "end", a = analyst();
+  const loser = end && FS.fin ? 1 - FS.res.w : -1;
   let ctl = "";
-  if (FS.ph === "run") ctl = `<div class="controls"><span class="small mute" style="margin-right:4px">Shout to your fighter:</span>${planButtons(FS)}
-    <div style="margin-left:auto" class="seg">${[1, 2, 4].map((s) => `<button class="${UI.speed === s ? "on" : ""}" data-a="speed" data-i="${s}">${s}×</button>`).join("")}<button data-a="skip">Skip ›</button></div></div>`;
+  if (FS.ph === "run") ctl = `<div class="plans">${planButtons(FS)}</div>
+    <div class="fctl"><span class="small mute">Speed</span><div class="seg">${[1, 2, 4].map((s) => `<button class="${UI.speed === s ? "on" : ""}" data-a="speed" data-i="${s}">${s}×</button>`).join("")}</div><button class="btn quiet sm" data-a="skip" style="margin-left:auto">Skip to result</button></div>`;
   else if (FS.ph === "corner") {
-    const c = FS.cards.map((cd) => cd[cd.length - 1].join("-")).join(" · ");
-    ctl = `<div class="card" style="margin-top:14px;border-color:#f2b33d66"><div class="card-h"><h2>Corner · before round ${FS.rd + 1}</h2><span class="small mute">Round ${FS.rd} judges: ${c}</span></div>
-      <p class="small mute">${FS.dm[0] > FS.dm[1] ? "You probably won that round." : FS.dm[0] < FS.dm[1] ? "You probably lost that round." : "Close round."} Pick one corner call and a plan.</p>
-      <div class="controls">${Object.entries(CORNER).map(([k, c]) => `<button class="plan ${UI.corner === k ? "on" : ""}" data-a="corner" data-i="${k}"><b>${c.name}</b><small>${c.tip}</small></button>`).join("")}</div>
-      <div class="controls">${Object.entries(PLANS).map(([k, p]) => `<button class="plan ${FS.plan[0] === k ? "on" : ""}" data-a="plan" data-i="${k}"><b>${p.corner}</b><small>${p.tip}</small></button>`).join("")}</div>
-      <button class="btn primary lg" data-a="nextround" style="margin-top:14px">Seconds out · Round ${FS.rd + 1}</button></div>`;
+    const verdict = FS.dm[0] > FS.dm[1] + 3 ? "You took that round." : FS.dm[0] < FS.dm[1] - 3 ? "You lost that round." : "Too close to call.";
+    ctl = `<div class="panel" style="margin-top:14px;border-top:4px solid var(--gold)"><div class="panel-h"><h2>Corner · Round ${FS.rd} done</h2><span class="mute">${verdict}${a ? ` Judges: ${FS.cards.map((c) => c[c.length - 1].join("-")).join(" · ")}` : ""}</span></div>
+      <div class="eyebrow" style="margin-bottom:8px">Your corner's call</div>
+      <div class="plans" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:0">${Object.entries(CORNER).map(([k, c]) => `<button class="plan ${UI.corner === k ? "on" : ""}" data-a="corner" data-i="${k}"><b>${c.name}</b><small>${c.tip}</small></button>`).join("")}</div>
+      <div class="eyebrow" style="margin:16px 0 0">Plan for round ${FS.rd + 1}</div>
+      <div class="plans" style="margin-top:8px">${Object.entries(PLANS).map(([k, p]) => `<button class="plan ${FS.plan[0] === k ? "on" : ""}" data-a="plan" data-i="${k}"><b>${p.corner}</b><small>${p.tip}</small></button>`).join("")}</div>
+      <button class="btn red lg" data-a="nextround" style="margin-top:16px">Round ${FS.rd + 1}</button></div>`;
   } else if (end) ctl = endCard(FS);
-  return `<div style="max-width:1000px;margin:0 auto;padding:18px 16px 60px">
-    <div class="arena">
-      <div class="scorebug">${side(FS, 0)}<div class="clock"><div class="rd" id="rd">Round ${FS.rd} of 3</div><b id="clk">${clock(FS)}</b></div>${side(FS, 1)}</div>
-      <div class="stage">
-        <div class="portrait ${lw === 1 && FS.fin ? "down" : lw === 0 ? "win" : ""}" id="p0" style="--pc:${AGENCY_COLOURS[G.ag.col]}">${avatar(A, 200)}</div>
-        <div class="centre"><div id="pos">${pos}</div><div class="small dim" style="margin-top:8px">${FS.b.title ? "TITLE FIGHT" : DIVISIONS[A.wc]}</div></div>
-        <div class="portrait ${lw === 0 && FS.fin ? "down" : lw === 1 ? "win" : ""}" id="p1" style="--pc:#4c8dff">${avatar(B, 200)}</div>
-      </div>
-      <div class="row spread small dim"><span>${esc(last(A.name))} momentum</span><span>${esc(last(B.name))} momentum</span></div>
-      <div class="momentum"><i id="mom" style="left:${50 - FS.mom / 2}%"></i></div>
-      <div class="pbp" id="pbp">${FS.feed.slice(0, 5).map(pbpLine).join("") || '<div class="ln"><span class="t">0:00</span><span>The cage door closes. The referee waves them in.</span></div>'}</div>
-    </div>${ctl}</div>`;
+  const e = FS.feed[0];
+  return `<div class="fn">
+    <div class="octagon">
+      <div class="posb ${FS.pos === "ground" ? "gr" : ""}" id="pos">${posText(FS)}</div>
+      <div class="corner-l ${loser === 0 ? "down" : ""}" id="p0">${pic(A)}</div>
+      <div class="corner-r ${loser === 1 ? "down" : ""}" id="p1">${pic(B)}</div>
+      <div class="bug">${fs(FS, 0)}<div class="clk"><small id="rd">R${FS.rd} OF 3</small><b id="clk">${clock(FS)}</b></div>${fs(FS, 1)}</div>
+    </div>
+    ${a ? `<div class="momentum" title="Momentum"><i id="mom" style="left:${50 - FS.mom / 2}%"></i></div>` : ""}
+    <div class="call" id="call">${e ? callLine(e) : '<span class="t">R1 5:00</span><span>The referee waves them in.</span>'}</div>
+    ${a ? `<div class="pbp" id="pbp">${FS.feed.slice(1, 4).map((x) => `<div>${x.txt}</div>`).join("")}</div>` : ""}
+    ${ctl}</div>`;
 }
-const pbpLine = (e) => { const el = 300 - (e.t + 1) * 25; return `<div class="ln ${e.side === 0 ? "l" : e.side === 1 ? "r" : ""}"><span class="t">R${e.rd} ${Math.floor(el / 60)}:${String(el % 60).padStart(2, "0")}</span><span>${e.txt}</span></div>`; };
+const posText = (FS) => (FS.pos === "ground" ? `On the ground · ${esc(last(FS.f[FS.top].name))} on top` : "Standing");
+const callLine = (e) => { const el = 300 - (e.t + 1) * 25; return `<span class="t">R${e.rd} ${Math.floor(el / 60)}:${String(el % 60).padStart(2, "0")}</span><span>${e.txt.replace(/<b>/g, `<b class="${e.side === 0 ? "l" : "r"}">`)}</span>`; };
 
-// Partial update after each exchange so animations stay smooth.
 export function updateLive(FS, ev) {
   const $ = (id) => document.getElementById(id);
   for (const i of [0, 1]) {
@@ -90,43 +81,32 @@ export function updateLive(FS, ev) {
     if ($("hp" + i)) { $("hp" + i).style.width = h + "%"; $("hp" + i).style.background = hpCol(h); }
     if ($("hpg" + i)) $("hpg" + i).style.width = h + "%";
     if ($("st" + i)) $("st" + i).style.width = FS.st[i] + "%";
-    if ($("ss" + i)) $("ss" + i).textContent = `Strikes ${FS.stats[i].str}/${FS.stats[i].att} · TD ${FS.stats[i].td}`;
+    if ($("ss" + i)) $("ss" + i).textContent = statLine(FS, i);
   }
   if ($("clk")) $("clk").textContent = clock(FS);
   if ($("mom")) $("mom").style.left = 50 - FS.mom / 2 + "%";
-  if ($("pos")) $("pos").innerHTML = FS.pos === "ground" ? `<span class="posbadge gr">Ground · ${esc(last(FS.f[FS.top].name))} on top</span>` : '<span class="posbadge">Standing</span>';
-  if ($("pbp")) $("pbp").innerHTML = FS.feed.slice(0, 5).map(pbpLine).join("");
-  if (ev.a >= 0 && /punch|kick|gnp|td/.test(ev.kind)) {
-    const pa = $("p" + ev.a);
-    if (pa) { pa.classList.remove("attack", "l", "r"); void pa.offsetWidth; pa.classList.add("attack", ev.a ? "r" : "l"); }
-  }
+  if ($("pos")) { $("pos").textContent = posText(FS); $("pos").className = "posb " + (FS.pos === "ground" ? "gr" : ""); }
+  if ($("call")) $("call").innerHTML = callLine(FS.feed[0]);
+  if ($("pbp")) $("pbp").innerHTML = FS.feed.slice(1, 4).map((x) => `<div>${x.txt}</div>`).join("");
+  if (ev.a >= 0 && /punch|kick|gnp|td/.test(ev.kind)) { const pa = $("p" + ev.a); if (pa) { pa.classList.remove("attack"); void pa.offsetWidth; pa.classList.add("attack"); } }
   if (ev.dmg && ev.d >= 0) {
     const pd = $("p" + ev.d);
     if (pd) {
       pd.classList.remove("hit"); void pd.offsetWidth; pd.classList.add("hit");
-      const n = document.createElement("div"); n.className = "dmgnum" + (ev.big ? " big" : ""); n.textContent = "-" + Math.round(ev.dmg);
-      pd.appendChild(n); setTimeout(() => n.remove(), 1000);
+      if (ev.big || analyst()) { const n = document.createElement("div"); n.className = "dmg" + (ev.big ? " big" : ""); n.textContent = ev.big ? (ev.ko ? "KO!" : "BIG SHOT") : "-" + Math.round(ev.dmg); pd.appendChild(n); setTimeout(() => n.remove(), 900); }
     }
   }
 }
 
 function endCard(FS) {
-  const r = FS.res, F = FS.f, W = F[r.w], fin = r.how === "KO/TKO" || r.how === "Submission";
-  const head = r.won ? (fin ? (r.how === "KO/TKO" ? "Knockout!" : "Submission!") : "Victory") : fin ? (r.how === "KO/TKO" ? "Knocked out" : "Tapped out") : "Defeat";
-  const rk = (x) => rankLabel(x);
-  return `<div class="card" style="margin-top:14px;text-align:center">
-    <div class="result-banner" style="color:${r.won ? "var(--green)" : "var(--red2)"}">${r.wasChamp ? "New champion!" : head}</div>
-    <h2 style="margin-top:8px">${esc(W.name)} wins by ${r.how.toLowerCase()}${r.detail && fin ? ` (${esc(r.detail)})` : ""}</h2>
-    <div class="mute">${fin ? `Round ${r.rdEnd} · ${r.at}` : `After 3 rounds · ${esc(r.detail)}`}</div>
-    <div class="grid g2" style="text-align:left;margin-top:16px">
-      <div><div class="kv"><span>Significant strikes</span><b>${FS.stats[0].str} – ${FS.stats[1].str}</b></div>
-        <div class="kv"><span>Takedowns</span><b>${FS.stats[0].td} – ${FS.stats[1].td}</b></div>
-        <div class="kv"><span>${esc(F[0].name)}'s record</span><b>${rec(F[0])}</b></div>
-        <div class="kv"><span>Ranking</span><b>${rk(FS.r0[0])} → ${rk(r.rk1[0])}</b></div></div>
-      <div><div class="kv"><span>Purse${r.won ? " + win bonus" : ""}</span><b>${money(r.pay)}</b></div>
-        <div class="kv"><span>Your commission (${F[0].ct.pct}%)</span><b class="warn" id="cu" data-v="${r.cut}">${money(r.cut)}</b></div>
-        ${r.wks ? `<div class="kv"><span>Injury</span><b class="bad">${r.wks} weeks out</b></div>` : '<div class="kv"><span>Injury</span><b class="good">None</b></div>'}
-        <div class="kv"><span>Reputation</span><b>${Math.round(G.rep)}</b></div></div>
-    </div>
-    <button class="btn primary lg" data-a="fdone" style="margin-top:18px">${UI.queue.length ? "Next fight" : "Back to the agency"}</button></div>`;
+  const r = FS.res, F = FS.f, W = F[r.w], fin = r.how === "KO/TKO" || r.how === "Submission", a = analyst();
+  const head = r.wasChamp ? "New champion" : r.won ? (fin ? (r.how === "KO/TKO" ? "Knockout" : "Submission") : "Victory") : fin ? (r.how === "KO/TKO" ? "Knocked out" : "Tapped out") : "Defeat";
+  return `<div class="panel result" style="margin-top:14px;border-top:4px solid ${r.won ? "var(--green)" : "var(--red)"}">
+    <div class="big" style="color:${r.won ? "#fff" : "var(--red2)"}">${head}</div>
+    <h2 style="margin-top:12px">${esc(W.name)} wins by ${r.how.toLowerCase()}${r.detail && fin ? ` (${esc(r.detail)})` : ""}</h2>
+    <div class="mute">${fin ? `Round ${r.rdEnd} · ${r.at}` : `After 3 rounds${a ? " · " + esc(r.detail) : ""}`}</div>
+    <div class="hero-strip" style="max-width:720px;margin:20px auto 0;text-align:left"><div><small>Your commission</small><b class="warn" id="cu" data-v="${r.cut}">${money(r.cut)}</b></div>
+      <div><small>Ranking</small><b>${rankLabel(r.rk1[0])}</b></div><div><small>${r.wks ? "Injury" : "Record"}</small><b class="${r.wks ? "bad" : ""}">${r.wks ? r.wks + " weeks" : rec(F[0])}</b></div></div>
+    ${a ? `<div class="small mute" style="margin-top:10px">Strikes ${FS.stats[0].str}–${FS.stats[1].str} · Takedowns ${FS.stats[0].td}–${FS.stats[1].td} · Purse ${money(r.pay)} · Rep ${Math.round(G.rep)}</div>` : ""}
+    <button class="btn red lg" data-a="fdone" style="margin-top:20px">${UI.queue.length ? "Next fight" : "Continue"}</button></div>`;
 }

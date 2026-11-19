@@ -5,22 +5,25 @@ Browser management game: run an MMA agency, sign/train/sell fighters, work the c
 ## Run
 - `npm install` once, then `npm run dev` → http://localhost:5173 (add `?mute` to silence it).
 - `npm test` → headless smoke test (Playwright). Plays weeks, a fight and a sale; screenshots in `test-results/`.
-- `npm run photos` → refreshes fighter headshots from Wikimedia Commons (slow; rate-limited).
+- `npm run ufc` → fetches fighter headshots + bio/stats from UFC.com athlete pages (15 s between requests, ~1.5 h; skips ones already fetched).
 - `npm run build` → static site in `dist/` (relative paths, works on GitHub Pages).
 
 ## Hard rules
-- No pixel art. Portraits are real free-licensed photos or the flat SVG avatar in `src/ui/avatar.js`.
-- Only free-licensed photos (CC / public domain) and every one is credited (Office › Credits, profile footer).
-- Rival agencies are fictional. No UFC logos or branding; keep the "unofficial fan game" notice.
+- No pixel art. Real fighters use their UFC.com cut-out headshot; made-up prospects use the dark silhouette.
+- Real fighters without a UFC.com headshot are left out of the game (filtered in `newGame`).
+- UFC.com images are stored in `public/fighters/` at the user's request (2026-11-20), knowing they're UFC's copyright in a public repo.
+- Rival agencies and sponsors are fictional. Broadcast-style look is fine; no UFC logos; keep the "unofficial fan game" notice.
+- Default screens stay uncluttered. Extra numbers go behind Analyst Mode (`SETTINGS.analyst`).
 - Plain JavaScript + Vite, no framework. Views return HTML strings; clicks are routed by `data-a` in `src/main.js`.
 - Game rules live in `src/sim/` and must not touch the DOM.
 - Test headlessly; never open the user's browser or play sound during tests.
 
 ## Layout
 - `src/state.js` career state, value/ask formulas, save/load.
-- `src/sim/world.js` weekly cycle, fight offers, training. `src/sim/market.js` signing, selling, bids, contracts. `src/sim/fight.js` fight engine.
-- `src/ui/views.js` screens, `src/ui/fightview.js` fight night, `src/ui/components.js` shared pieces, `src/ui/styles.css` look.
-- `src/data/` roster (Nov 2026), constants, photo credits.
+- `src/sim/world.js` weekly cycle, fight offers, training, auto-train. `src/sim/market.js` signing, selling, bids, contracts. `src/sim/fight.js` fight engine. `src/sim/events.js` random events. `src/sim/sponsors.js` brand deals.
+- `src/ui/views.js` screens, `src/ui/fightview.js` fight night, `src/ui/tour.js` first-run tutorial, `src/ui/components.js` shared pieces, `src/ui/styles.css` look.
+- `src/data/` roster (Nov 2026), constants (cities, emblems, brands), `ufc.json` (scraped bio/stats).
+- Saves: 3 slots in localStorage (`fightmanager_slot_N`); settings shared across slots.
 
 ## Out of scope (for now)
 Women's divisions, multiplayer, real money, a backend, mobile app wrappers, licensed UFC content.

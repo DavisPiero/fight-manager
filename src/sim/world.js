@@ -1,8 +1,10 @@
 // The weekly cycle: costs, recovery, AI fights, contracts, bids, fight offers and training.
-import { G, ovr, mine, rank, ranks, say, spend, weeklyCost, makeProspect, bumpRanks } from "../state.js";
+import { G, ovr, mine, rank, ranks, say, spend, weeklyCost, makeProspect, bumpRanks, city } from "../state.js";
 import { R, rnd, ri, cl, pk, round100 } from "../util.js";
-import { INTENSITY, ATTR_NAMES, ATTR_KEYS, WEEKS_IN_RED_LIMIT } from "../data/constants.js";
+import { INTENSITY, ATTR_NAMES, ATTR_KEYS, WEEKS_IN_RED_LIMIT, FOCUS } from "../data/constants.js";
 import { contractTick, weeklyBids } from "./market.js";
+import { sponsorWeek } from "./sponsors.js";
+import { rollEvent } from "./events.js";
 
 function aiWeek() {
   const by = {};
@@ -40,15 +42,18 @@ export function advance() {
   G.f.forEach((f) => { if (f.st !== "mine" && f.inj > 0) f.inj--; });
   if (G.wk % 52 === 0) G.f.forEach((f) => { f.age++; if (f.age > 30 && f.st === "mine") ATTR_KEYS.forEach((k) => (f.at[k] = Math.max(20, f.at[k] - ri(0, f.age > 34 ? 3 : 1)))); });
   // New prospects appear on the market now and then.
-  if (R() < 0.35) { const p = makeProspect(G.f.length, false); p.b = ovr(p) * 0.6 + p.pop * 0.15 - 6; G.f.push(p); say(`New prospect on the market: ${p.name}.`); }
+  if (R() < 0.35) { const p = makeProspect(G.f.length, false); G.f.push(p); say(`New prospect on the market: ${p.name}.`); }
   aiWeek();
   contractTick();
   weeklyBids();
+  sponsorWeek();
+  if (G.autotrain) autoTrain();
   G.offers = G.offers.filter((o) => o.exp > G.wk);
   G.ch.push(G.cash); if (G.ch.length > 200) G.ch.shift();
   G.red = G.cash < 0 ? G.red + 1 : 0;
   if (G.red === 1) say(`You're in the red. Get back above $0 within ${WEEKS_IN_RED_LIMIT} weeks or the agency folds.`, "bad");
   if (G.red >= WEEKS_IN_RED_LIMIT) G.over = true;
+  G.event = G.over ? null : rollEvent();
   const due = [];
   for (const b of G.bk.filter((b) => b.wk <= G.wk)) {
     const f = G.f[b.fid], o = G.f[b.oid];
@@ -96,10 +101,11 @@ export function train(f, key, int) {
   if (G.cash < I.cost) return { ok: false, msg: "Not enough cash." };
   spend(I.cost);
   f.sl--; f.en -= I.energy; f.prep = Math.min(100, f.prep + I.prep);
+  const bonus = (city().bonus.includes(key) ? 1.25 : 1) * (FOCUS[G.ag.focus]?.keys.includes(key) ? 1.15 : 1);
   const ageMul = f.age < 26 ? 1.2 : f.age < 32 ? 1 : 0.6;
   const cap = Math.min(96, (f.pot || 90) + 4);
   const room = Math.max(0, (cap - f.at[key]) / cap);
-  const gain = Math.max(0, Math.round(I.gain * (0.4 + R()) * (0.35 + room * 1.4) * ageMul * (f.pers === "Professional" ? 1.15 : 1)));
+  const gain = Math.max(0, Math.round(I.gain * (0.4 + R()) * (0.35 + room * 1.4) * ageMul * (f.pers === "Professional" ? 1.15 : 1) * bonus));
   f.at[key] = Math.min(cap, f.at[key] + gain);
   const risk = (f.en < 35 ? [0.05, 0.12, 0.3] : [0, 0.01, 0.05])[int] * (f.pers === "Professional" ? 0.5 : 1);
   if (R() < risk) {
@@ -108,4 +114,19 @@ export function train(f, key, int) {
     return { ok: true, gain, injured: true, msg: "Injured in training!" };
   }
   return { ok: true, gain, msg: gain ? `+${gain} ${ATTR_NAMES[ATTR_KEYS.indexOf(key)]}` : "No gain this time" };
+}
+
+// Each fresh fighter trains his weakest skill at Normal intensity, keeping a cash cushion.
+export const weakest = (f) => ATTR_KEYS.slice().sort((a, b) => f.at[a] - f.at[b])[0];
+export function autoTrain() {
+  let n = 0, hurt = [];
+  for (const f of mine()) {
+    while (f.sl > 0 && !f.inj && f.en >= 55 && G.cash >= 5000) {
+      const r = train(f, weakest(f), 1);
+      if (!r.ok) break;
+      n++;
+      if (r.injured) hurt.push(f.name);
+    }
+  }
+  return { n, hurt };
 }
