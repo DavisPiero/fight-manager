@@ -16,5 +16,5 @@
 ## Open with you
 - Guess: roster cap 8, 6-week no-sale window, 6 weeks in the red = game over. Confirm or change.
 - Guess: rival agency names are invented (Apex Sports Group, Iron Circle, etc.).
-- Do you want it hosted on GitHub Pages so a tester can play from a link?
+- Playable link: https://davispiero.github.io/fight-manager/ (deploys from `rebuild` and `main`).
 - 84 of 128 real fighters have a free photo; the other 44 (e.g. Volkanovski, O'Malley, Aspinall) use drawn avatars.
