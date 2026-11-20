@@ -26,15 +26,24 @@ function badges() {
 }
 export function shell(content) {
   const nb = badges(), c = city();
-  return `<header class="hdr"><div class="hdr-in">
-    <div class="mark">${emblem(G.ag)}<div><b>${esc(G.ag.name)}</b><small>${c.name} · Week ${G.wk}</small></div></div>
+  const mark = (cls) => `<button class="mark ${cls}" data-a="agency" title="Customize your agency">${emblem(G.ag)}<div><b>${esc(G.ag.name)}</b><small>${c.name}</small></div></button>`;
+  return `<div class="shell">
+  <aside class="side">
+    ${mark("side-mark")}
     <nav class="nav">${NAV.map(([k, n]) => `<a class="${UI.view === k ? "on" : ""}" data-a="go" data-i="${k}" data-tut="nav-${k}" tabindex="0">${icon(k)}<span>${n}</span>${nb[k] ? `<i class="dotb">${nb[k]}</i>` : ""}</a>`).join("")}</nav>
+    <button class="side-set" data-a="settings" data-tut="settings">${icon("gear")}<span>Settings</span></button>
+  </aside>
+  <div class="col">
+  <header class="hdr"><div class="hdr-in">
+    ${mark("top-mark")}
+    <div class="wkchip"><small>Week</small><b id="wknum">${G.wk}</b></div>
     <div class="hdr-r">
       <div class="money" data-tut="cash"><b id="cash" class="num ${G.cash < 0 ? "bad" : ""}">${kmoney(G.cash)}</b><small>${G.red ? `<span class="bad">Red ${G.red}/${WEEKS_IN_RED_LIMIT}</span>` : `Rep ${Math.round(G.rep)}`}</small></div>
       <button class="ib" data-a="inbox" aria-label="News">${icon("bell")}${G.unread ? `<i class="dotb">${Math.min(G.unread, 99)}</i>` : ""}</button>
+      <button class="ib top-set" data-a="settings" aria-label="Settings">${icon("gear")}</button>
       <button class="btn red sm adv-btn" data-a="adv" data-tut="next" title="Advance one week (N)"><span class="lbl">Next week</span><span class="kbd">N</span></button>
     </div></div></header>
-  <main class="${UI.view !== UI.last ? "view-in" : ""}">${content}</main>`;
+  <main class="${UI.view !== UI.last ? "view-in" : ""}">${content}</main></div></div>`;
 }
 
 // ---------- Menu / setup ----------
@@ -42,18 +51,28 @@ export function vMenu() {
   const champs = Object.entries(UFC_DATA).filter(([, d]) => (d.tags || []).some((t) => /title holder/i.test(t))).map(([, d]) => d.file);
   const pics = [...champs, ...Object.values(UFC_DATA).map((d) => d.file)].filter((v, i, a) => a.indexOf(v) === i).slice(0, 5);
   const order = [pics[3], pics[1], pics[0], pics[2], pics[4]].filter(Boolean);
-  const sl = slots();
-  return `<div class="menu"><div class="glow"></div>
-    <div class="lineup">${order.map((p) => `<img src="${import.meta.env.BASE_URL}fighters/${p}" alt="">`).join("")}</div><div class="fade"></div>
-    <div class="top"><div class="logo">Fight<br><span>Manager</span></div><div class="logo-sub">Build the camp · Work the corner · Sell the stars</div></div>
+  const lineup = `<div class="lineup">${order.map((p) => `<img src="${import.meta.env.BASE_URL}fighters/${p}" alt="">`).join("")}</div>`;
+  const legal = `<div class="legal">Unofficial fan game. Not affiliated with or endorsed by the UFC. Fighter images © their owners, from ufc.com. Records as of November 2026; skills are the game's own estimates.</div>`;
+  if (UI.menuPage !== "slots") return `<div class="menu"><div class="glow"></div>
+    <div class="top"><div class="logo">Fight<br><span>Manager</span></div></div>
+    <div class="stage">${lineup}<div class="fade"></div></div>
     <div class="bottom">
+      <div class="menu-btns"><button class="btn red lg" data-a="play">Play</button><button class="btn quiet lg" data-a="settings">Settings</button></div>
+      ${legal}
+    </div></div>`;
+  const sl = slots();
+  return `<div class="menu slots-page"><div class="glow"></div>
+    <div class="top"><div class="logo sm">Fight<br><span>Manager</span></div></div>
+    <div class="stage">${lineup}<div class="fade"></div></div>
+    <div class="bottom">
+      <div class="eyebrow">Choose a save</div>
       <div class="slots">${sl.map((s) => s.name ? `<button class="slot" data-a="loadslot" data-i="${s.slot}"><span class="sn">Slot ${s.slot}</span>
           <div class="row" style="gap:10px;margin-top:6px">${emblem(s)}<b style="margin:0">${esc(s.name)}</b></div>
           <div class="meta">${CITIES.find((c) => c.id === s.city)?.name || ""} · Week ${s.wk}</div>
           <div class="meta">${kmoney(s.cash)} · ${s.w}-${s.l}${s.titles ? ` · ${s.titles} title${s.titles > 1 ? "s" : ""}` : ""}${s.over ? ' · <span class="bad">Folded</span>' : ""}</div>
           <span class="del" data-a="delslot" data-i="${s.slot}" role="button" aria-label="Delete save">Delete</span></button>`
         : `<button class="slot empty" data-a="newslot" data-i="${s.slot}"><span class="sn">Slot ${s.slot}</span><b>+ New agency</b><span class="meta">Start a new career</span></button>`).join("")}</div>
-      <div class="legal">Unofficial fan game. Not affiliated with or endorsed by the UFC. Fighter images © their owners, from ufc.com. Records as of November 2026; skills are the game's own estimates.</div>
+      <button class="btn quiet" data-a="menuback">Back</button>
     </div></div>`;
 }
 export function vSetup() {
@@ -198,7 +217,7 @@ export function bidRow(b) {
 // ---------- Fights ----------
 export function vFights() {
   const m = mine(), a = analyst();
-  const any = m.some((f) => !f.inj && !G.bk.some((b) => b.fid === f.id) && !G.offers.some((o) => o.fid === f.id));
+  const any = m.some((f) => !f.inj && !G.bk.some((b) => b.fid === f.id));
   const rows = m.map((f) => {
     const bk = G.bk.find((b) => b.fid === f.id);
     let body;
@@ -210,14 +229,16 @@ export function vFights() {
     }
     return `<div class="panel">${card(f, { slim: 1 })}<div style="margin-top:10px">${body}</div></div>`;
   });
-  return shell(`${page("Fights", "Pick an opponent. Tougher fights pay more and build reputation. Fights happen two weeks after booking.", any ? '<button class="btn red" data-a="seekall" data-tut="seek">Find opponents for everyone</button>' : "")}
+  return shell(`${page("Fights", "Pick an opponent. Tougher fights pay more and build reputation. Fights happen two weeks after booking.", any ? '<button class="btn red" data-a="autobook" data-tut="seek" title="Books an even match for every free fighter">Auto book</button>' : "")}
     ${rows.join("") || '<div class="empty">Sign a fighter first.</div>'}`);
 }
 function offerRow(o, f, a) {
   const op = G.f[o.oid], i = G.offers.indexOf(o), cut = Math.round((o.purse + o.bonus) * f.ct.pct / 100);
   const c = o.title ? "var(--gold)" : o.lab === "Dangerous" ? "var(--red)" : o.lab === "Even" ? "#888" : "var(--green)";
-  return `<div class="task" style="--c:${c}"><span class="ic"></span>${avatar(op, 52, "round")}
-    <div class="t"><b>${esc(op.name)} <span class="pill" style="margin-left:6px">${o.title ? "Title shot" : o.lab}</span></b><span>${rankLabel(rank(op))} · ${rec(op)} · OVR ${ovr(op)}${a ? ` · ${op.style}` : ""} · you could earn ${kmoney(cut)}</span></div>
+  const d = ovr(op) - ovr(f);
+  return `<div class="task offer" style="--c:${c}"><span class="ic"></span>${avatar(op, 52, "round")}
+    <div class="t"><b>${esc(op.name)} <span class="pill" style="margin-left:6px">${o.title ? "Title shot" : o.lab}</span></b><span>${rankLabel(rank(op))} · ${rec(op)}${a ? ` · ${op.style}` : ""} · you could earn ${kmoney(cut)}</span></div>
+    <div class="opp-ovr" title="Opponent overall"><b style="color:${ovrCol(ovr(op))}">${ovr(op)}</b><small>OVR</small><i class="${d > 0 ? "bad" : d < 0 ? "good" : "mute"}">${d > 0 ? "+" + d : d < 0 ? d : "="} vs yours</i></div>
     <button class="btn red sm" data-a="acc" data-i="${i}">Accept</button>
     ${a ? `<button class="btn quiet sm" data-a="push" data-i="${i}" ${o.push ? "disabled" : ""} title="30% chance they pull the offer">+20%</button>` : ""}
     <button class="btn link" data-a="prof" data-i="${op.id}">Scout</button></div>`;
@@ -302,7 +323,7 @@ export function vRankings() {
 // ---------- Office ----------
 export function vOffice() {
   const t = UI.office;
-  const tabs = `<div class="seg">${[["set", "Settings"], ["fin", "Finances"], ["hist", "History"], ["agency", "Agency"]].map(([k, n]) => `<button class="${t === k ? "on" : ""}" data-a="oftab" data-i="${k}">${n}</button>`).join("")}</div>`;
+  const tabs = `<div class="seg">${[["agency", "Agency"], ["fin", "Finances"], ["hist", "History"]].map(([k, n]) => `<button class="${t === k ? "on" : ""}" data-a="oftab" data-i="${k}">${n}</button>`).join("")}</div>`;
   let body = "";
   if (t === "fin") {
     const f = G.fin;
@@ -319,7 +340,7 @@ export function vOffice() {
   } else if (t === "hist") {
     body = `<div class="grid g2"><div class="panel"><div class="panel-h"><h2>Results</h2></div>${G.res.map((r) => `<div class="kv"><span>WK ${r.wk} · ${esc(r.n)} vs ${esc(r.o)}</span><b class="${r.won ? "good" : "bad"}">${r.won ? "W" : "L"} · ${r.how}</b></div>`).join("") || '<div class="empty small">No fights yet.</div>'}</div>
       <div class="panel"><div class="panel-h"><h2>Activity</h2></div><div class="feed">${G.log.map(logItem).join("")}</div></div></div>`;
-  } else if (t === "agency") {
+  } else {
     const c = city();
     body = `<div class="panel" style="max-width:640px"><div class="preview" style="--c:${AGENCY_COLOURS[G.ag.col]};margin:-20px -20px 18px">${emblem(G.ag)}<div><b>${esc(G.ag.name)}</b><span class="mute">${esc(G.ag.manager || "")} · ${c.name}, ${c.country}</span></div></div>
       <div class="kv"><span>Home city</span><b>${c.name}</b></div><div class="kv"><span>City perk</span><b style="text-align:right">${c.note}</b></div>
@@ -327,15 +348,18 @@ export function vOffice() {
       <label class="f" for="ren">Rename agency</label><div class="row"><input id="ren" type="text" maxlength="26" value="${esc(G.ag.name)}" style="flex:1"><button class="btn quiet" data-a="rename">Save</button></div>
       <label class="f">Colour</label><div class="swatches">${AGENCY_COLOURS.map((k, i) => `<button class="swatch ${G.ag.col === i ? "on" : ""}" data-a="agcol" data-i="${i}" style="background:${k}"></button>`).join("")}</div>
       <label class="f">Emblem</label><div class="embs">${Object.entries(EMBLEMS).map(([k, p]) => `<button class="${G.ag.emblem === k ? "on" : ""}" data-a="agemb" data-i="${k}"><svg viewBox="0 0 24 24">${p}</svg></button>`).join("")}</div></div>`;
-  } else {
-    body = `<div class="panel" style="max-width:640px">
-      <div style="padding:6px 0 16px;border-bottom:1px solid var(--line)" data-tut="analyst">${toggle(SETTINGS.analyst, "analyst", "Analyst Mode", "Show every number: exact skills, radar charts, UFC career stats, stamina, strike counts, momentum and market maths.")}</div>
-      <div style="padding:16px 0;border-bottom:1px solid var(--line)">${toggle(SND.on, "snd", "Sound", "Button clicks, crowd and fight effects.")}
-        <label class="f">Volume <b>${Math.round(SND.vol * 100)}%</b></label><input type="range" id="vol" min="0" max="100" value="${SND.vol * 100}"></div>
-      <div class="row" style="padding-top:16px"><button class="btn quiet" data-a="tour">Replay tutorial</button><button class="btn quiet" data-a="menu">Save &amp; exit to menu</button><button class="btn link bad" data-a="abandon">Delete this career</button></div>
-      <p class="small dim" style="margin-top:18px">Saves automatically to slot ${G.slot}. Unofficial fan game, not affiliated with the UFC. Fighter images © their owners, from ufc.com.</p></div>`;
   }
   return shell(page("Office", "", tabs) + body);
+}
+// Settings pop-up: opens from the gear on every screen and from the main menu.
+export function mSettings() {
+  return modal(`${closeBtn()}<h2 style="font-size:30px;margin-bottom:6px">Settings</h2>
+    <div style="padding:6px 0 16px;border-bottom:1px solid var(--line)" data-tut="analyst">${toggle(SETTINGS.analyst, "analyst", "Analyst Mode", "Show every number: exact skills, radar charts, UFC career stats, stamina, strike counts, momentum and market maths.")}</div>
+    <div style="padding:16px 0;border-bottom:1px solid var(--line)">${toggle(SND.on, "snd", "Sound", "Button clicks, crowd and fight effects.")}
+      <label class="f">Volume <b id="v-vol">${Math.round(SND.vol * 100)}%</b></label><input type="range" id="vol" min="0" max="100" value="${SND.vol * 100}"></div>
+    ${G ? `<div class="row" style="padding-top:16px"><button class="btn quiet" data-a="tour">Replay tutorial</button><button class="btn quiet" data-a="menu">Save &amp; exit to menu</button><button class="btn link bad" data-a="abandon">Delete this career</button></div>
+    <p class="small dim" style="margin-top:14px">Saves automatically to slot ${G.slot}.</p>` : ""}
+    <p class="small dim" style="margin-top:${G ? 4 : 14}px">Unofficial fan game, not affiliated with the UFC. Fighter images © their owners, from ufc.com.</p>`);
 }
 
 // ---------- Modals ----------
@@ -393,8 +417,10 @@ export function mCounter(b) {
 }
 export const mConfirm = (title, text, action, id, btn = "Confirm") => modal(`<h2 style="font-size:28px">${title}</h2><p class="mute">${text}</p><div class="row" style="justify-content:flex-end"><button class="btn link" data-a="mclose">Cancel</button><button class="btn red" data-a="${action}" data-i="${id}">${btn}</button></div>`);
 export const mInbox = () => modal(`${closeBtn()}<h2 style="font-size:28px;margin-bottom:10px">News</h2><div class="feed">${G.log.slice(0, 20).map(logItem).join("")}</div>`, true);
-export function mWeek(sum) {
-  return modal(`<div class="eyebrow">Week ${G.wk}</div><h2 style="font-size:30px;margin-bottom:8px">What happened</h2><div class="feed">${sum.map(logItem).join("") || '<div class="empty small">A quiet week.</div>'}</div>
+export function mWeek(sum, d = 0) {
+  return modal(`<div class="row spread" style="align-items:flex-end;margin-bottom:10px"><div><div class="eyebrow">Week ${G.wk}</div><h2 style="font-size:30px">What happened</h2></div>
+      <div class="wk-delta ${d < 0 ? "bad" : "good"}"><small>Cash this week</small><b>${d < 0 ? "−" : "+"}${kmoney(Math.abs(d))}</b></div></div>
+    <div class="feed stagger">${sum.map(logItem).join("") || '<div class="empty small">A quiet week.</div>'}</div>
     <div class="row" style="justify-content:flex-end;margin-top:14px">${G.bids.length ? '<button class="btn quiet" data-a="go" data-i="market" data-x="desk">See offers</button>' : ""}<button class="btn red" data-a="weekok">Continue</button></div>`, true);
 }
 export function mEvent() {

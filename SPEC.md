@@ -24,9 +24,12 @@ Check To-do → book fights / answer bids → train → Next week → fight nigh
 - **Agency setup:** name, manager, colour, emblem, home city (cost, starting rep, local prospects, faster-training skills), gym focus (+15% in an area). 3 save slots.
 - **Events:** ~40% of weeks from week 3: short-notice fight, contract talk, viral clip, night out, sparring scare, rival poaching, media day, local sponsor, scout's tip, gym repairs, fan meet.
 - **Sponsors:** fictional brands offer weekly pay to fighters with popularity 25+; you take your cut. Some deals end after two straight losses. Pitching costs $2,500.
-- **Auto-train:** a Gym switch; each Next week, fighters with 55+ energy train their weakest skill at Normal.
+- **Auto-train:** a Gym switch; each Next week, fighters with 55+ energy train their weakest skill at Normal (paused under $5k cash). One news line reports what it did.
+- **Auto book:** one button on Fights books the Even match for every free fighter.
+- **Settings:** gear button on every screen and the main menu: Analyst Mode, sound, tutorial, exit, delete.
 - **Analyst Mode:** Settings switch, off by default. Shows exact skills, radar, UFC stats, stamina, momentum, judges, value maths.
 - **Tutorial:** 9-step spotlight tour on a new career; replay from Settings.
+- **Feel:** left sidebar nav; loading sting; Next week plays a fast-forward and a summary with the cash change.
 
 ## Not building
 Women's divisions, 5-round main events, managers' staff/coaches, multiplayer, online saves, UFC branding.

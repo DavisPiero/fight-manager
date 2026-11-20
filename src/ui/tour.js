@@ -10,7 +10,7 @@ export const STEPS = [
   { view: "fights", sel: '[data-tut="seek"]', title: "Book fights", text: "Fights earn you a cut of the purse. Ask for opponents, then accept the one you like. Harder opponents pay more." },
   { view: "gym", sel: '[data-tut="autotrain"]', title: "Training", text: "Pick a skill and train it, or switch on auto-train and the gym works each fighter's weakest skill every week." },
   { view: "market", sel: '[data-tut="market-tabs"]', title: "The market", text: "Sign free agents, buy fighters from rival agencies, and under Sell, list your own fighters. Rivals send offers each week." },
-  { view: "office", office: "set", sel: '[data-tut="analyst"]', title: "Analyst Mode", text: "Want every number? Switch on Analyst Mode here for exact skills, UFC stats, stamina, momentum and market maths." },
+  { view: "home", sel: '[data-tut="settings"]', title: "Settings", text: "Sound, the tutorial and Analyst Mode live here. Want every number? Switch on Analyst Mode for exact skills, UFC stats, stamina and market maths." },
   { view: "home", sel: '[data-tut="next"]', title: "Next week", text: "When you're done for the week, press Next week (or the N key). Fights happen on their booked week. Good luck." },
 ];
 

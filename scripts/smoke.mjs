@@ -52,10 +52,30 @@ try {
   };
 
   await page.addInitScript(() => addEventListener("unhandledrejection", (e) => (window.__rej = String(e.reason && e.reason.stack || e.reason))));
+  // Menu faces must not be cut off (by the window edge, the logo or the buttons) at common sizes.
+  const facesOk = () => fm(() => {
+    const logo = document.querySelector(".menu .logo").getBoundingClientRect(), btm = document.querySelector(".menu .bottom").getBoundingClientRect();
+    return [...document.querySelectorAll(".menu .lineup img")].filter((i) => getComputedStyle(i).display !== "none").every((i) => {
+      const r = i.getBoundingClientRect(), face = r.top + r.height * 0.45;
+      return r.height > 80 && r.top >= logo.bottom - r.height * 0.15 && face <= btm.top;
+    });
+  });
   await page.goto("http://localhost:5199/?mute");
-  await page.waitForSelector(".slots");
+  await page.waitForSelector(".boot");
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: `${SHOTS}/00-loading.png` });
+  await page.waitForSelector(".boot", { state: "detached" });
   await page.waitForTimeout(900);
   await shot("01-menu");
+  const faces = [await facesOk()];
+  for (const [w, h] of [[1280, 720], [390, 844]]) { await page.setViewportSize({ width: w, height: h }); await page.waitForTimeout(200); faces.push(await facesOk()); await shot(`01-menu-${w}`); }
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await click('[data-a="settings"]');
+  await shot("01-menu-settings");
+  await click('[data-a="mclose"]');
+  await click('[data-a="play"]');
+  await page.waitForSelector(".slots");
+  await shot("01-slots");
   await click('[data-a="newslot"][data-i="1"]');
   await page.fill("#an", "Smoke Test MMA");
   await page.fill("#mn", "Sam Tester");
@@ -72,9 +92,11 @@ try {
   await shot("05-home");
 
   await click('[data-a="go"][data-i="fights"]');
-  await click('[data-a="seekall"]');
+  await click('[data-a="seek"]');
   await shot("06-fights");
-  for (let i = 0; i < 3; i++) { if (!(await page.$('[data-a="acc"]'))) break; await click('[data-a="acc"]'); }
+  await click('[data-a="autobook"]');
+  const booked = await fm(() => window.__fm.G.bk.length);
+  await shot("06b-auto-booked");
 
   await click('[data-a="go"][data-i="gym"]');
   await click('[data-a="autotoggle"]');
@@ -91,7 +113,10 @@ try {
   let fought = 0;
   for (let w = 0; w < 14 && fought < 2; w++) {
     await settle();
-    if ((await fm(() => window.__fm.UI.view)) !== "fight") await fm(() => window.__fm.nextWeek());
+    if ((await fm(() => window.__fm.UI.view)) !== "fight") {
+      await fm(() => window.__fm.nextWeek());
+      if (w === 0) { await page.waitForTimeout(500); await page.screenshot({ path: `${SHOTS}/06c-fast-forward.png` }); await page.waitForTimeout(1100); await shot("06d-week-summary"); }
+    }
     while ((await fm(() => window.__fm.UI.view)) === "fight") { await fightThrough(fought === 0); fought++; }
   }
   await settle();
@@ -121,15 +146,21 @@ try {
 
   await fm(() => { window.__fm.UI.rk = 4; window.__fm.go("rankings"); }); await shot("17-rankings");
   await fm(() => { const fm = window.__fm; fm.UI.pid = fm.G.f.find((f) => f.real).id; fm.UI.view = "prof"; fm.render(); }); await shot("18-profile-star");
-  await fm(() => { window.__fm.UI.office = "set"; window.__fm.go("office"); });
+  await fm(() => window.__fm.go("home"));
+  await click('[data-a="settings"]');
   await click('[data-a="analyst"]');
   await shot("19-settings-analyst");
+  await click('[data-a="mclose"]');
   await fm(() => { const fm = window.__fm; fm.UI.pid = fm.G.f.find((f) => f.real).id; fm.UI.view = "prof"; fm.render(); }); await shot("20-profile-analyst");
-  await fm(() => { const fm = window.__fm; fm.UI.view = "fight"; }).catch(() => {});
-  await fm(() => { window.__fm.UI.office = "set"; window.__fm.go("office"); }); await click('[data-a="analyst"]');
+  await fm(() => window.__fm.go("home")); await click('[data-a="settings"]'); await click('[data-a="analyst"]');
+  await click('[data-a="mclose"]');
+  await click('[data-a="agency"]');
+  const agencyTab = await fm(() => window.__fm.UI.view === "office" && !!document.getElementById("ren"));
+  await shot("19b-office-agency");
 
   // Back to menu: slot should show the career.
-  await click('[data-a="menu"]');
+  await click('[data-a="settings"]');
+  await click('.modal [data-a="menu"]');
   await page.waitForSelector('[data-a="loadslot"][data-i="1"]');
   await shot("21-menu-with-save");
 
@@ -139,8 +170,11 @@ try {
   const overflow = await fm(() => document.documentElement.scrollWidth > innerWidth + 1);
   await fm(() => window.__fm.go("fighters")); await shot("23-mobile-fighters");
 
-  console.log(`fights: ${fought}, bids: ${bids}, sold: ${sold}, sponsor income: ${spons}, events: ${log.length}, mobile overflow: ${overflow}`);
-  ok = errors.length === 0 && fought > 0 && !overflow;
+  await fm(() => window.__fm.go("fights")); await shot("24-mobile-fights");
+  const auto = await fm(() => window.__fm.G.log.filter((l) => l.t.startsWith("Auto-train:")).map((l) => l.t));
+  console.log(`fights: ${fought}, booked: ${booked}, bids: ${bids}, sold: ${sold}, sponsor income: ${spons}, events: ${log.length}, mobile overflow: ${overflow}`);
+  console.log(`menu faces visible: ${faces.join("/")}, agency click: ${agencyTab}, auto-train lines: ${auto.length} (latest: ${auto[0]})`);
+  ok = errors.length === 0 && fought > 0 && !overflow && booked > 0 && faces.every(Boolean) && agencyTab && auto.length > 0;
 } catch (e) {
   try { const pg = browser.contexts()[0].pages()[0]; await pg.screenshot({ path: SHOTS + "/zz-fail.png" }); console.log("STATE", await pg.evaluate(() => JSON.stringify({ v: window.__fm.UI.view, m: window.__fm.UI.modal, ev: window.__fm.G?.event }))); } catch (x) {}
   errors.push("TEST: " + e.message.split("\n").slice(0, 6).join(" | "));

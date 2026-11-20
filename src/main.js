@@ -7,7 +7,7 @@ import { vFight, updateLive } from "./ui/fightview.js";
 import { toast, stamp, confetti } from "./ui/components.js";
 import { drawTour, STEPS } from "./ui/tour.js";
 import { SND, saveSnd, sfx } from "./audio.js";
-import { advance, offersFor, train } from "./sim/world.js";
+import { advance, offersFor, train, autoBook } from "./sim/world.js";
 import { trySign, release, list, unlist, sell, rejectBid, counter, tryRenew, canSell } from "./sim/market.js";
 import { acceptSponsor, declineSponsor, pitch } from "./sim/sponsors.js";
 import { resolveEvent } from "./sim/events.js";
@@ -24,7 +24,7 @@ function render() {
   else if (G?.over) h = V.vGameOver();
   else if (v === "fight") h = vFight();
   else h = ({ home: V.vHome, fighters: V.vFighters, prof: V.vProfile, fights: V.vFights, gym: V.vGym, market: V.vMarket, rankings: V.vRankings, office: V.vOffice }[v] || V.vHome)();
-  if (UI.modal && v !== "fight") h += modalHtml();
+  if (UI.modal && (v !== "fight" || UI.modal.kind === "settings")) h += modalHtml();
   app.innerHTML = h;
   UI.last = v;
   if (UI.modal?.kind === "neg" || UI.modal?.kind === "renew") V.negUpdate();
@@ -43,7 +43,8 @@ function modalHtml() {
     case "abandon": return V.mConfirm("Delete this career?", `Slot ${G.slot} will be wiped. This can't be undone.`, "doabandon", 0, "Delete");
     case "delslot": return V.mConfirm(`Delete slot ${m.slot}?`, "This career will be wiped. This can't be undone.", "dodelslot", m.slot, "Delete");
     case "inbox": return V.mInbox();
-    case "week": return V.mWeek(m.sum);
+    case "week": return V.mWeek(m.sum, m.d);
+    case "settings": return V.mSettings();
     case "event": return V.mEvent();
     case "evres": return V.mEventResult(m.msg);
   }
@@ -72,23 +73,41 @@ const commit = () => { save(); render(); };
 // ---------- Week / fights ----------
 function nextWeek() {
   if (UI.view === "fight" || G.over) return;
-  const before = G.log[0];
+  const before = G.log[0], cash0 = G.cash, wk0 = G.wk;
   const due = advance();
   save();
+  fastForward(wk0, G.wk, due.length);
   if (G.over) { render(); return; }
   sfx("whoosh");
   const idx = G.log.indexOf(before);
   UI.pendingSum = G.log.slice(0, idx < 0 ? 8 : idx).slice(0, 10);
+  UI.pendingDelta = G.cash - cash0;
   if (due.length) { UI.queue = due.slice(1); startFight(due[0]); return; }
   afterWeek();
 }
 // After fights: event first (if any), then the summary.
 function afterWeek() {
   if (G.event) { UI.modal = { kind: "event" }; }
-  else if (UI.pendingSum?.length) { UI.modal = { kind: "week", sum: UI.pendingSum }; UI.pendingSum = null; }
+  else if (UI.pendingSum?.length) { UI.modal = { kind: "week", sum: UI.pendingSum, d: UI.pendingDelta || 0 }; UI.pendingSum = null; }
   else UI.modal = null;
   if (UI.view === "fight") UI.view = "home";
   render();
+}
+// Week fast-forward: a one-second overlay that sweeps the calendar and rolls the week number.
+// Purely visual: the new week is already drawn underneath and clicks pass straight through.
+function fastForward(a, b, fights) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  document.querySelector(".ff")?.remove();
+  const e = document.createElement("div");
+  e.className = "ff";
+  const cells = Array.from({ length: 13 }, (_, i) => a - 6 + i).map((w) => `<span class="${w === a ? "from" : w === b ? "to" : ""}">${w > 0 ? w : ""}</span>`).join("");
+  e.innerHTML = `<div class="ff-band"><div class="ff-tl">${cells}</div>
+    <div class="ff-mid"><span class="ff-arrows"><svg viewBox="0 0 24 24"><path d="M3 5l8 7-8 7zM13 5l8 7-8 7z"/></svg></span>
+    <div class="ff-wk"><small>Week</small><b><i>${a}</i><i>${b}</i></b></div>
+    ${fights ? `<span class="ff-tag">Fight night</span>` : ""}</div></div>`;
+  document.body.appendChild(e);
+  setTimeout(() => { e.classList.add("out"); document.getElementById("wknum")?.classList.add("tick"); }, 950);
+  setTimeout(() => e.remove(), 1350);
 }
 function startFight(b) {
   UI.FS = newFight(b);
@@ -147,7 +166,17 @@ const setupVals = () => { const a = document.getElementById("an"), m = document.
 // ---------- Actions ----------
 const A = {
   go: (i, t) => go(i, t.dataset.x),
-  menu: () => { save(); setG(null); go("menu"); },
+  menu: () => { save(); setG(null); UI.menuPage = "slots"; go("menu"); },
+  play: () => { UI.menuPage = "slots"; render(); },
+  menuback: () => { UI.menuPage = "main"; render(); },
+  settings: () => { UI.modal = { kind: "settings" }; render(); },
+  agency: () => { UI.office = "agency"; go("office"); },
+  autobook: () => {
+    const done = autoBook();
+    if (!done.length) { toast("No opponents available", "warn"); return commit(); }
+    toast(`Booked ${done.length} even fight${done.length > 1 ? "s" : ""}`); sfx("sign"); stamp("Booked", "var(--red)");
+    commit();
+  },
   newslot: (i) => { UI.setup = { slot: +i, name: "", manager: "", col: 0, diff: "Normal", city: "vegas", focus: "strike", emblem: "fist" }; go("setup"); },
   loadslot: (i) => { const g = load(+i); if (!g) return; setG(g); lastCash = null; go("home"); },
   delslot: (i) => { UI.modal = { kind: "delslot", slot: +i }; render(); },
@@ -190,7 +219,6 @@ const A = {
   },
   // fights
   seek: (i) => { const o = offersFor(G.f[+i]); G.offers.push(...o); if (!o.length) toast("No opponents available", "warn"); commit(); },
-  seekall: () => { mine().filter((f) => !f.inj && !G.bk.some((b) => b.fid === f.id) && !G.offers.some((o) => o.fid === f.id)).forEach((f) => G.offers.push(...offersFor(f))); commit(); },
   push: (i) => {
     const o = G.offers[+i]; o.push = 1;
     if (Math.random() < 0.3) { G.offers.splice(+i, 1); toast("They pulled the offer", "bad"); }
@@ -260,7 +288,7 @@ const A = {
   agcol: (i) => { G.ag.col = +i; commit(); },
   agemb: (i) => { G.ag.emblem = i; commit(); },
   abandon: () => { UI.modal = { kind: "abandon" }; render(); },
-  doabandon: () => { wipe(G.slot); setG(null); UI.modal = null; go("menu"); },
+  doabandon: () => { wipe(G.slot); setG(null); UI.modal = null; UI.menuPage = "slots"; go("menu"); },
   // fight night
   plan: (i) => { UI.FS.plan[0] = i; if (UI.FS.ph !== "run") render(); else document.querySelectorAll('[data-a="plan"]').forEach((b) => b.classList.toggle("on", b.dataset.i === i)); },
   fstart: () => { startRound(UI.FS); runRound(); },
@@ -291,7 +319,7 @@ document.addEventListener("keydown", (e) => {
 });
 document.addEventListener("input", (e) => {
   const id = e.target.id, v = +e.target.value, m = UI.modal;
-  if (id === "vol") { SND.vol = v / 100; saveSnd(); return; }
+  if (id === "vol") { SND.vol = v / 100; saveSnd(); const l = document.getElementById("v-vol"); if (l) l.textContent = v + "%"; return; }
   if (id === "an") { const p = document.getElementById("pv-name"); if (p) p.textContent = e.target.value || "Your Agency"; return; }
   if (id === "mkq") { UI.mk.q = e.target.value; const pos = e.target.selectionStart; render(); const q = document.getElementById("mkq"); q.focus(); q.setSelectionRange(pos, pos); return; }
   if (!m) return;
@@ -306,4 +334,17 @@ addEventListener("resize", () => drawTour());
 // Debug/test hook (used by the smoke test).
 window.__fm = { get G() { return G; }, UI, go, render, nextWeek, afterWeek };
 
-render();
+// Loading sting: logo slams in behind a red sweep while the menu fighters load. Click to skip.
+function boot() {
+  render();
+  const e = document.createElement("div");
+  e.className = "boot";
+  e.innerHTML = `<div class="boot-bar"></div><div class="logo">Fight<br><span>Manager</span></div><div class="boot-load"><i></i></div>`;
+  document.body.appendChild(e);
+  const imgs = [...document.querySelectorAll(".menu img")].map((i) => (i.complete ? null : new Promise((r) => { i.onload = i.onerror = r; }))).filter(Boolean);
+  let gone = false;
+  const done = () => { if (gone) return; gone = true; e.classList.add("out"); setTimeout(() => e.remove(), 450); };
+  e.addEventListener("click", done);
+  Promise.all([Promise.race([Promise.all(imgs), sleep(2500)]), sleep(1400)]).then(done);
+}
+boot();

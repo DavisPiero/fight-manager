@@ -19,3 +19,12 @@
 - 2026-11-20 Home city changes costs, starting rep, local prospects and which skills train 25% faster.
 - 2026-11-20 Auto-train only runs on fighters with 55+ energy, to stay out of the injury zone.
 - 2026-11-20 Events ~40% of weeks from week 3, never the same event twice in a row.
+- 2026-11-21 Nav moved back to a left sidebar (user's taste; supersedes "top nav like ufc.com"). Phones keep the bottom bar.
+- 2026-11-21 Settings is its own pop-up (gear on every screen and on the main menu), out of the Office.
+- 2026-11-21 First screen is Play / Settings only; save slots are one click in. Tagline removed. Short loading sting, click to skip.
+- 2026-11-21 Menu line-up sized to the space between logo and buttons (not the window); smoke test fails if a face is cut off at 1440, 1280 or 390 wide.
+- 2026-11-21 Next week plays a ~1 s fast-forward overlay; the week summary shows the cash change and slides lines in.
+- 2026-11-21 Auto-train posts one news line every week (sessions, skill gained, who was skipped and why). It was working but silent.
+- 2026-11-21 "Find opponents for everyone" replaced by Auto book: every free fighter takes the Even match.
+- 2026-11-21 Fight offers show the opponent's overall as a big number, with the gap to your fighter.
+- 2026-11-21 Triage plan accepted as recommended: fight night = fewer, bigger moments; phone replies are picked, not typed; free agents ~45–62 vs stars 72–90; phone starts with ~150 content items and grows.

@@ -47,7 +47,7 @@ export function advance() {
   contractTick();
   weeklyBids();
   sponsorWeek();
-  if (G.autotrain) autoTrain();
+  G.auto = G.autotrain ? autoReport(autoTrain()) : null;
   G.offers = G.offers.filter((o) => o.exp > G.wk);
   G.ch.push(G.cash); if (G.ch.length > 200) G.ch.shift();
   G.red = G.cash < 0 ? G.red + 1 : 0;
@@ -92,6 +92,22 @@ export function offersFor(f) {
   return out;
 }
 
+// Auto book: every fit, unbooked fighter takes the "Even" match (closest offer if there is no even one).
+export function autoBook() {
+  const done = [];
+  for (const f of mine()) {
+    if (f.inj > 0 || G.bk.some((b) => b.fid === f.id)) continue;
+    const list = offersFor(f);
+    const o = list.find((x) => x.lab === "Even") || list.filter((x) => !x.title).sort((a, b) => Math.abs(ovr(G.f[a.oid]) - ovr(f)) - Math.abs(ovr(G.f[b.oid]) - ovr(f)))[0];
+    if (!o) continue;
+    G.bk.push(o);
+    G.offers = G.offers.filter((x) => x.fid !== f.id);
+    say(`${f.name} booked vs ${G.f[o.oid].name} for week ${o.wk}.`, "good");
+    done.push(o);
+  }
+  return done;
+}
+
 // Train one fighter. Returns {ok, msg, gain, injured}.
 export function train(f, key, int) {
   const I = INTENSITY[int];
@@ -118,15 +134,29 @@ export function train(f, key, int) {
 
 // Each fresh fighter trains his weakest skill at Normal intensity, keeping a cash cushion.
 export const weakest = (f) => ATTR_KEYS.slice().sort((a, b) => f.at[a] - f.at[b])[0];
+export const AUTO_MIN_ENERGY = 55, AUTO_MIN_CASH = 5000;
 export function autoTrain() {
-  let n = 0, hurt = [];
+  let n = 0, gain = 0;
+  const hurt = [], tired = [], broke = G.cash < AUTO_MIN_CASH;
   for (const f of mine()) {
-    while (f.sl > 0 && !f.inj && f.en >= 55 && G.cash >= 5000) {
+    if (f.inj > 0) continue;
+    if (f.en < AUTO_MIN_ENERGY) { tired.push(f.name); continue; }
+    while (f.sl > 0 && !f.inj && f.en >= AUTO_MIN_ENERGY && G.cash >= AUTO_MIN_CASH) {
       const r = train(f, weakest(f), 1);
       if (!r.ok) break;
-      n++;
+      n++; gain += r.gain || 0;
       if (r.injured) hurt.push(f.name);
     }
   }
-  return { n, hurt };
+  return { n, gain, hurt, tired, broke };
+}
+// One news line per week, so the player can see auto-train ran.
+function autoReport(r) {
+  const parts = [];
+  if (r.n) parts.push(`${r.n} session${r.n > 1 ? "s" : ""}, +${r.gain} skill`);
+  if (r.tired.length) parts.push(`${r.tired.length} skipped (tired)`);
+  if (r.broke) parts.push(`paused (under $${AUTO_MIN_CASH / 1000}k cash)`);
+  if (r.hurt.length) parts.push(`${r.hurt.join(", ")} hurt in training`);
+  say(`Auto-train: ${parts.join(" · ") || "nobody fit to train"}.`, r.hurt.length ? "bad" : r.n ? "good" : "warn");
+  return r;
 }
