@@ -105,7 +105,19 @@ try {
 
   await click('[data-a="go"][data-i="market"]');
   await shot("12-market");
-  await click('[data-a="neg"]');
+  await click('[data-a="mktab"][data-i="other"]');
+  await shot("12b-market-rivals");
+  await click('[data-a="mquick"]');
+  await page.waitForSelector(".modal .quick");
+  await shot("12c-quick-look");
+  await click('[data-a="mclose"]');
+  await click('.repbar [data-a="rephelp"]');
+  await page.waitForSelector(".rep-reach");
+  await shot("12d-rep-help");
+  await click('[data-a="mclose"]');
+  await click('[data-a="mktab"][data-i="free"]');
+  await click('[data-a="mquick"]');
+  await click('.modal [data-a="neg"]');
   await page.waitForSelector(".modal");
   await shot("13-negotiate");
   await click('[data-a="mclose"]');
@@ -130,7 +142,8 @@ try {
   await fm(() => { const g = window.__fm.G, f = g.f[g.ro[0]]; f.ct.signed = -50; f.pop = 60; g.spons.push({ id: 4242, fid: f.id, brand: "Redline Energy", col: "#ff3b3b", weekly: 2400, weeks: 20, exp: g.wk + 2 }); window.__fm.UI.pid = f.id; window.__fm.UI.view = "prof"; window.__fm.render(); });
   await shot("15-profile-mine");
   await click('[data-a="spok"]');
-  await click('[data-a="list"]');
+  await click('[data-a="more"]');
+  await click('.modal [data-a="list"]');
   await page.waitForSelector(".modal");
   await click('[data-a="dolist"]');
   let bids = 0;
@@ -154,6 +167,14 @@ try {
   await fm(() => { const fm = window.__fm; fm.UI.pid = fm.G.f.find((f) => f.real).id; fm.UI.view = "prof"; fm.render(); }); await shot("20-profile-analyst");
   await fm(() => window.__fm.go("home")); await click('[data-a="settings"]'); await click('[data-a="analyst"]');
   await click('[data-a="mclose"]');
+  await fm(() => window.__fm.go("fighters"));
+  await click('[data-a="more"]');
+  await page.waitForSelector(".more-list");
+  await shot("19c-more");
+  await click('[data-a="mclose"]');
+  await fm(() => { window.__fm.UI.office = "sponsors"; window.__fm.go("office"); });
+  const sponsorsTab = await fm(() => !!document.querySelector(".hero-strip") && /pitch a fighter/i.test(document.body.innerText));
+  await shot("19d-office-sponsors");
   await click('[data-a="agency"]');
   const agencyTab = await fm(() => window.__fm.UI.view === "office" && !!document.getElementById("ren"));
   await shot("19b-office-agency");
@@ -171,10 +192,12 @@ try {
   await fm(() => window.__fm.go("fighters")); await shot("23-mobile-fighters");
 
   await fm(() => window.__fm.go("fights")); await shot("24-mobile-fights");
+  await fm(() => window.__fm.go("market", "free")); await shot("25-mobile-market");
+  const overflow2 = await fm(() => document.documentElement.scrollWidth > innerWidth + 1);
   const auto = await fm(() => window.__fm.G.log.filter((l) => l.t.startsWith("Auto-train:")).map((l) => l.t));
   console.log(`fights: ${fought}, booked: ${booked}, bids: ${bids}, sold: ${sold}, sponsor income: ${spons}, events: ${log.length}, mobile overflow: ${overflow}`);
-  console.log(`menu faces visible: ${faces.join("/")}, agency click: ${agencyTab}, auto-train lines: ${auto.length} (latest: ${auto[0]})`);
-  ok = errors.length === 0 && fought > 0 && !overflow && booked > 0 && faces.every(Boolean) && agencyTab && auto.length > 0;
+  console.log(`menu faces visible: ${faces.join("/")}, agency click: ${agencyTab}, sponsors tab: ${sponsorsTab}, market overflow: ${overflow2}, auto-train lines: ${auto.length} (latest: ${auto[0]})`);
+  ok = errors.length === 0 && fought > 0 && !overflow && booked > 0 && faces.every(Boolean) && agencyTab && auto.length > 0 && sponsorsTab && !overflow2;
 } catch (e) {
   try { const pg = browser.contexts()[0].pages()[0]; await pg.screenshot({ path: SHOTS + "/zz-fail.png" }); console.log("STATE", await pg.evaluate(() => JSON.stringify({ v: window.__fm.UI.view, m: window.__fm.UI.modal, ev: window.__fm.G?.event }))); } catch (x) {}
   errors.push("TEST: " + e.message.split("\n").slice(0, 6).join(" | "));

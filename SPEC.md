@@ -26,6 +26,7 @@ Check To-do → book fights / answer bids → train → Next week → fight nigh
 - **Sponsors:** fictional brands offer weekly pay to fighters with popularity 25+; you take your cut. Some deals end after two straight losses. Pitching costs $2,500.
 - **Auto-train:** a Gym switch; each Next week, fighters with 55+ energy train their weakest skill at Normal (paused under $5k cash). One news line reports what it did.
 - **Auto book:** one button on Fights books the Even match for every free fighter.
+- **Reputation:** 0–100. Each fighter wants a minimum (better fighters more, real UFC names +15); below it they rarely sign. Shown on the Market and explained in a pop-up.
 - **Settings:** gear button on every screen and the main menu: Analyst Mode, sound, tutorial, exit, delete.
 - **Analyst Mode:** Settings switch, off by default. Shows exact skills, radar, UFC stats, stamina, momentum, judges, value maths.
 - **Tutorial:** 9-step spotlight tour on a new career; replay from Settings.

@@ -14,6 +14,7 @@ Browser management game: run an MMA agency, sign/train/sell fighters, work the c
 - UFC.com images are stored in `public/fighters/` at the user's request (2026-11-20), knowing they're UFC's copyright in a public repo.
 - Rival agencies and sponsors are fictional. Broadcast-style look is fine; no UFC logos; keep the "unofficial fan game" notice.
 - Default screens stay uncluttered. Extra numbers go behind Analyst Mode (`SETTINGS.analyst`).
+- **Screen rule:** each screen (and each card or pop-up) has one main action (red or gold) and at most two secondary ones. Everything else goes in a pop-up or the "More" menu. Three text sizes only: page title, section/number, body. Check every new screen against this before adding a button.
 - Plain JavaScript + Vite, no framework. Views return HTML strings; clicks are routed by `data-a` in `src/main.js`.
 - Game rules live in `src/sim/` and must not touch the DOM.
 - Test headlessly; never open the user's browser or play sound during tests.

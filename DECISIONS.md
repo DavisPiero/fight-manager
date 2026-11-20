@@ -28,3 +28,9 @@
 - 2026-11-21 "Find opponents for everyone" replaced by Auto book: every free fighter takes the Even match.
 - 2026-11-21 Fight offers show the opponent's overall as a big number, with the gap to your fighter.
 - 2026-11-21 Triage plan accepted as recommended: fight night = fewer, bigger moments; phone replies are picked, not typed; free agents ~45–62 vs stars 72–90; phone starts with ~150 content items and grows.
+- 2026-11-21 Screen rule written into CLAUDE.md (one main action, two secondary, rest in pop-ups) to fix clutter at the cause, after the second clutter note.
+- 2026-11-21 Market: three big tabs, one row list, division as a dropdown; clicking a fighter opens a quick-look pop-up with Negotiate. "Only fighters who'll talk to me" filter.
+- 2026-11-21 Reputation explained: a bar on the Market, a "?" pop-up (what, why, how it moves), "Will talk / Needs rep N" on every market fighter.
+- 2026-11-21 Office opens on a Sponsors tab: offers, running deals (pay, your cut, weeks left, condition), pitching. Sponsor to-dos link there.
+- 2026-11-21 Fighter cards and profile: one main action chosen by what he needs (renew / see offers / book), the rest under More.
+- 2026-11-21 Bug fix: selling or releasing a fighter now also clears his pending sponsor offers.

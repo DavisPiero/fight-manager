@@ -38,7 +38,7 @@ export function shell(content) {
     ${mark("top-mark")}
     <div class="wkchip"><small>Week</small><b id="wknum">${G.wk}</b></div>
     <div class="hdr-r">
-      <div class="money" data-tut="cash"><b id="cash" class="num ${G.cash < 0 ? "bad" : ""}">${kmoney(G.cash)}</b><small>${G.red ? `<span class="bad">Red ${G.red}/${WEEKS_IN_RED_LIMIT}</span>` : `Rep ${Math.round(G.rep)}`}</small></div>
+      <div class="money" data-tut="cash"><b id="cash" class="num ${G.cash < 0 ? "bad" : ""}">${kmoney(G.cash)}</b><small>${G.red ? `<span class="bad">Red ${G.red}/${WEEKS_IN_RED_LIMIT}</span>` : `<a class="rep-link" data-a="rephelp" title="What is reputation?">Rep ${Math.round(G.rep)} <i>?</i></a>`}</small></div>
       <button class="ib" data-a="inbox" aria-label="News">${icon("bell")}${G.unread ? `<i class="dotb">${Math.min(G.unread, 99)}</i>` : ""}</button>
       <button class="ib top-set" data-a="settings" aria-label="Settings">${icon("gear")}</button>
       <button class="btn red sm adv-btn" data-a="adv" data-tut="next" title="Advance one week (N)"><span class="lbl">Next week</span><span class="kbd">N</span></button>
@@ -110,7 +110,7 @@ function tasks() {
   const m = mine(), out = [];
   if (G.event) out.push(["var(--gold)", EVENTS[G.event.id].title, "Something came up. Your call.", "Decide", "event", 0]);
   if (G.bids.length) out.push(["var(--green)", `${G.bids.length} offer${G.bids.length > 1 ? "s" : ""} to buy your fighters`, "Rival agencies are bidding. Offers expire.", "Review", "go", "market", "desk"]);
-  G.spons.forEach((o) => out.push([o.col, `${o.brand} wants ${esc(G.f[o.fid].name)}`, `${money(o.weekly)}/week for ${o.weeks} weeks. You take ${G.f[o.fid].ct.pct}%.`, "View", "prof", o.fid]));
+  G.spons.forEach((o) => out.push([o.col, `${o.brand} wants ${esc(G.f[o.fid].name)}`, `${money(o.weekly)}/week for ${o.weeks} weeks. You take ${G.f[o.fid].ct.pct}%.`, "View", "go", "office", "sponsors"]));
   m.filter((f) => f.ct.wks <= 12).forEach((f) => out.push(["var(--red)", `${esc(f.name)}'s contract ends in ${f.ct.wks} weeks`, "Renew him, or sell before he walks for free.", "Renew", "renew", f.id]));
   const idle = m.filter((f) => !f.inj && !G.bk.some((b) => b.fid === f.id));
   if (idle.length) out.push(["var(--red)", `${idle.length} fighter${idle.length > 1 ? "s need" : " needs"} a fight`, idle.map((f) => esc(f.name)).join(", "), "Find fights", "go", "fights"]);
@@ -123,7 +123,7 @@ export function vHome() {
   return shell(`${page(`Week ${G.wk}`, G.ag.manager ? `Welcome back, ${esc(G.ag.manager)}.` : "")}
     <div class="hero-strip"><div><small>Cash</small><b class="${G.cash < 0 ? "bad" : ""}">${kmoney(G.cash)}</b>${a ? `<div class="small mute">−${kmoney(weeklyCost())}/week</div>` : ""}</div>
       <div><small>Record</small><b>${G.hist.w}-${G.hist.l}</b>${G.hist.titles ? `<div class="small warn">${G.hist.titles} title${G.hist.titles > 1 ? "s" : ""}</div>` : ""}</div>
-      <div><small>Reputation</small><b>${Math.round(G.rep)}</b>${a ? `<div class="small mute">Roster value ${kmoney(mine().reduce((s, f) => s + value(f), 0))}</div>` : ""}</div></div>
+      <div><small>Reputation <a class="rep-link" data-a="rephelp" title="What is reputation?"><i>?</i></a></small><b>${Math.round(G.rep)}</b>${a ? `<div class="small mute">Roster value ${kmoney(mine().reduce((s, f) => s + value(f), 0))}</div>` : ""}</div></div>
     <div class="grid side-split">
       <div class="panel" data-tut="todo"><div class="panel-h"><h2>This week</h2></div>
         ${t.map(([c, h, s, btn, act, i, x]) => `<div class="task" style="--c:${c}"><span class="ic"></span><div class="t"><b>${h}</b><span>${s}</span></div><button class="btn sm quiet" data-a="${act}" data-i="${i}" ${x ? `data-x="${x}"` : ""}>${btn}</button></div>`).join("") || '<div class="empty">All set. Press <b>Next week</b>.</div>'}
@@ -144,16 +144,38 @@ export function vFighters() {
   const m = mine();
   const items = m.map((f) => {
     const l = listing(f), bk = G.bk.find((b) => b.fid === f.id);
+    const main = mainAction(f);
     return `<div class="unit">${card(f, { value: 1 })}
       <div class="card-actions">
-        <span class="small mute" style="flex:1;align-self:center">${bk ? `Fights ${esc(G.f[bk.oid].name)} · wk ${bk.wk}` : f.inj ? `Out ${f.inj} weeks` : "No fight booked"}${dealsOf(f).length ? ` · ${dealsOf(f).length} sponsor${dealsOf(f).length > 1 ? "s" : ""}` : ""}</span>
-        ${!bk && !f.inj ? `<button class="btn sm quiet" data-a="go" data-i="fights">Book</button>` : ""}
-        <button class="btn sm quiet" data-a="list" data-i="${f.id}" ${canSell(f) ? "" : "disabled"}>${l ? "Listed" : "Sell"}</button>
-        ${f.ct.wks <= 26 ? `<button class="btn sm gold" data-a="renew" data-i="${f.id}">Renew</button>` : ""}
+        <span class="small mute" style="flex:1;align-self:center">${bk ? `Fights ${esc(G.f[bk.oid].name)} · wk ${bk.wk}` : f.inj ? `Out ${f.inj} weeks` : "No fight booked"}${l ? " · for sale" : ""}${dealsOf(f).length ? ` · ${dealsOf(f).length} sponsor${dealsOf(f).length > 1 ? "s" : ""}` : ""}</span>
+        ${main ? `<button class="btn sm ${main[2]}" data-a="${main[0]}" data-i="${main[3] ?? f.id}" ${main[4] ? `data-x="${main[4]}"` : ""}>${main[1]}</button>` : ""}
+        <button class="btn sm quiet more" data-a="more" data-i="${f.id}" aria-label="More actions">More</button>
       </div></div>`;
   });
   return shell(`${page("Your fighters", `${m.length} of ${ROSTER_MAX} roster spots.`, `<button class="btn quiet" data-a="go" data-i="market">Sign fighters</button>`)}
     <div class="cards" data-tut="roster">${items.join("") || '<div class="empty">No fighters. Head to the Market.</div>'}</div>`);
+}
+
+// The one thing this fighter most needs from you right now: [action, label, style, i, x].
+function mainAction(f) {
+  if (f.ct.wks <= 12) return ["renew", "Renew contract", "gold"];
+  if (bidsFor(f).length) return ["go", "See offers", "gold", "market", "desk"];
+  if (!f.inj && !G.bk.some((b) => b.fid === f.id)) return ["go", "Book a fight", "red", "fights"];
+  return null;
+}
+// Everything else you can do with your fighter, in one pop-up.
+export function mMore(f) {
+  const l = listing(f), bk = G.bk.some((b) => b.fid === f.id);
+  const row = (a, t, s, opt = "") => `<button class="more-row" data-a="${a}" data-i="${f.id}" ${opt}><b>${t}</b><span>${s}</span></button>`;
+  return modal(`${closeBtn()}<div class="row" style="gap:14px;margin-bottom:12px">${avatar(f, 56, "round")}<div><div class="eyebrow">Manage</div><h2 style="font-size:28px">${esc(f.name)}</h2></div></div>
+    <div class="more-list">
+      ${row("prof", "Profile", "Skills, sponsors, contract and timeline")}
+      ${row("gymf", "Train", f.inj ? "Injured right now" : `${f.sl}/2 sessions left this week`, f.inj ? "disabled" : "")}
+      ${!bk && !f.inj ? `<button class="more-row" data-a="go" data-i="fights"><b>Book a fight</b><span>See this week's opponents</span></button>` : ""}
+      ${row("list", l ? "Change sale price" : "Sell", canSell(f) ? (l ? `Listed at ${kmoney(l.ask)}` : "Rivals bid each week") : `Not before week ${f.ct.signed + NO_SALE_WEEKS}`, canSell(f) ? "" : "disabled")}
+      ${row("renew", "Renew contract", `${f.ct.wks} weeks left · your cut ${f.ct.pct}%`)}
+      ${row("release", "Release", "He leaves for free. −2 reputation", 'style="--c:var(--red2)"')}
+    </div>`);
 }
 
 // ---------- Profile ----------
@@ -162,13 +184,12 @@ export function vProfile() {
   const U = UFC_DATA[f.name];
   let actions;
   if (isMine) {
-    const l = listing(f), bk = G.bk.find((b) => b.fid === f.id);
-    actions = `${!bk && !f.inj ? `<button class="btn red" data-a="go" data-i="fights">Book a fight</button>` : ""}
+    const main = mainAction(f);
+    actions = `${main ? `<button class="btn ${main[2]}" data-a="${main[0]}" data-i="${main[3] ?? f.id}" ${main[4] ? `data-x="${main[4]}"` : ""}>${main[1]}</button>` : ""}
       <button class="btn quiet" data-a="gymf" data-i="${f.id}">Train</button>
-      <button class="btn quiet" data-a="list" data-i="${f.id}" ${canSell(f) ? "" : "disabled"}>${l ? "Edit sale" : "Sell"}</button>
-      <button class="btn quiet" data-a="renew" data-i="${f.id}">Renew</button>
-      <button class="btn link" data-a="release" data-i="${f.id}">Release</button>`;
-  } else actions = `<button class="btn red" data-a="neg" data-i="${f.id}" ${f.lock > G.wk ? "disabled" : ""}>${f.lock > G.wk ? `Won't talk until week ${f.lock}` : f.st === "other" ? "Make transfer offer" : "Offer contract"}</button>`;
+      <button class="btn quiet" data-a="more" data-i="${f.id}">More</button>`;
+  } else actions = `<button class="btn red" data-a="neg" data-i="${f.id}" ${f.lock > G.wk ? "disabled" : ""}>${f.lock > G.wk ? `Won't talk until week ${f.lock}` : f.st === "other" ? "Make transfer offer" : "Offer contract"}</button>
+      <span class="small" style="align-self:center">${repTag(f)} <a class="btn link" data-a="rephelp" style="padding:0 6px">?</a></span>`;
   const bids = isMine ? bidsFor(f) : [], spons = isMine ? sponsorOffers(f) : [];
   const facts = [["Record", rec(f)], ["Age", f.age], ["Division", DIVISIONS[f.wc].replace(" ", "<br>")]];
   if (f.ht) facts.push(["Height", `${Math.floor(f.ht / 12)}'${Math.round(f.ht % 12)}"`]);
@@ -277,25 +298,60 @@ export function vGym() {
 
 // ---------- Market ----------
 export const price = (f) => (f.st === "other" ? transferFee(f) + askOf(f) * 0.5 : askOf(f));
+// Highest overall that will still take your calls at a given reputation (inverse of repNeeded).
+export const reachOvr = (rep, real) => Math.floor(48 + Math.max(0, rep - (real ? 15 : 0)) / 1.1);
+export const repTag = (f) => G.rep >= repNeeded(f) ? '<span class="rtag ok">Will talk</span>' : `<span class="rtag no">Needs rep ${repNeeded(f)}</span>`;
 export function vMarket() {
-  const k = UI.mk, a = analyst();
-  const tabs = `<div class="seg" data-tut="market-tabs">${[["free", "Free agents"], ["other", "Rival fighters"], ["desk", `Sell${G.bids.length ? ` (${G.bids.length})` : ""}`]].map(([t, n]) => `<button class="${k.tab === t ? "on" : ""}" data-a="mktab" data-i="${t}">${n}</button>`).join("")}</div>`;
-  const sub = k.tab === "desk" ? "List fighters for sale. Rival agencies bid each week." : k.tab === "free" ? "Unsigned fighters. Pay a signing bonus and take a cut of their purses." : "Fighters signed to rival agencies. Pay their agency a transfer fee to bring them over.";
-  if (k.tab === "desk") return shell(page("Market", sub, tabs) + vDesk());
-  let l = G.f.filter((f) => f.st === k.tab && !f.retired && (k.div < 0 || f.wc === k.div) && (!k.q || f.name.toLowerCase().includes(k.q.toLowerCase())));
+  const k = UI.mk;
+  const count = (st) => G.f.filter((f) => f.st === st && !f.retired).length;
+  const tabs = `<div class="bigtabs" data-tut="market-tabs">${[["free", "Free agents", `${count("free")} unsigned`], ["other", "Rival fighters", `${count("other")} at rival agencies`], ["desk", "Sell", G.bids.length ? `<span class="good">${G.bids.length} offer${G.bids.length > 1 ? "s" : ""} waiting</span>` : "Your fighters"]]
+    .map(([t, n, s]) => `<button class="${k.tab === t ? "on" : ""}" data-a="mktab" data-i="${t}"><b>${n}</b><small>${s}</small></button>`).join("")}</div>`;
+  const sub = k.tab === "desk" ? "List fighters for sale. Rival agencies bid each week." : k.tab === "free" ? "Unsigned fighters. Pay a signing bonus, then take a cut of every purse." : "Fighters signed to rival agencies. Pay their agency a transfer fee to bring them over.";
+  if (k.tab === "desk") return shell(page("Market", `Roster ${G.ro.length}/${ROSTER_MAX}.`) + tabs + `<p class="mute tab-sub">${sub}</p>` + vDesk());
+  let l = G.f.filter((f) => f.st === k.tab && !f.retired && (k.div < 0 || f.wc === k.div) && (!k.q || f.name.toLowerCase().includes(k.q.toLowerCase())) && (!k.reach || G.rep >= repNeeded(f)));
   const sorts = { ovr: (x, y) => ovr(y) - ovr(x), cheap: (x, y) => price(x) - price(y), age: (x, y) => x.age - y.age };
-  l.sort(sorts[k.sort] || sorts.ovr); l = l.slice(0, 36);
-  const filt = `<div class="row" style="margin-bottom:18px"><div class="chips"><button class="chip ${k.div < 0 ? "on" : ""}" data-a="mkdiv" data-i="-1">All</button>${DIV_SHORT.map((d, i) => `<button class="chip ${k.div === i ? "on" : ""}" data-a="mkdiv" data-i="${i}">${d}</button>`).join("")}</div>
-    <input class="search" id="mkq" type="search" placeholder="Search" value="${esc(k.q)}" style="width:180px">
-    <select id="mksort" aria-label="Sort">${[["ovr", "Best"], ["cheap", "Cheapest"], ["age", "Youngest"]].map(([s, n]) => `<option value="${s}" ${k.sort === s ? "selected" : ""}>${n}</option>`).join("")}</select></div>`;
-  const items = l.map((f) => {
-    const ok = G.rep >= repNeeded(f), locked = f.lock > G.wk;
-    return `<div class="unit">${card(f)}<div class="card-actions" style="align-items:center">
-      <b style="font:800 24px var(--display);flex:1">${kmoney(price(f))}<span class="small mute" style="font:500 12px var(--body);margin-left:8px">${f.st === "other" ? "fee + bonus" : "signing bonus"}</span></b>
-      ${!ok ? `<span class="small bad" title="Reputation he wants">Needs rep ${repNeeded(f)}</span>` : ""}
-      <button class="btn ${ok ? "red" : "quiet"} sm" data-a="neg" data-i="${f.id}" ${locked ? "disabled" : ""}>${locked ? "Wk " + f.lock : "Negotiate"}</button></div></div>`;
-  });
-  return shell(`${page("Market", `${sub} Roster ${G.ro.length}/${ROSTER_MAX}.`, tabs)}${filt}<div class="cards">${items.join("") || '<div class="empty">Nobody matches.</div>'}</div>`);
+  l.sort(sorts[k.sort] || sorts.ovr); l = l.slice(0, 40);
+  const filt = `<div class="filters">
+    <select id="mkdiv" aria-label="Division"><option value="-1">All divisions</option>${DIVISIONS.map((d, i) => `<option value="${i}" ${k.div === i ? "selected" : ""}>${d}</option>`).join("")}</select>
+    <select id="mksort" aria-label="Sort">${[["ovr", "Best first"], ["cheap", "Cheapest first"], ["age", "Youngest first"]].map(([s, n]) => `<option value="${s}" ${k.sort === s ? "selected" : ""}>${n}</option>`).join("")}</select>
+    <input class="search" id="mkq" type="search" placeholder="Search name" value="${esc(k.q)}">
+    <button class="chip ${k.reach ? "on" : ""}" data-a="mkreach">Only fighters who'll talk to me</button></div>`;
+  const repbar = `<div class="repbar"><div class="rb-n"><small>Your reputation</small><b>${Math.round(G.rep)}</b></div>
+    <p>Better fighters only sign with agencies that have a name. Right now prospects up to about <b>${reachOvr(G.rep)} OVR</b>${reachOvr(G.rep, 1) > 48 ? ` and UFC names up to <b>${reachOvr(G.rep, 1)} OVR</b>` : ""} will take your calls.</p>
+    <button class="btn link" data-a="rephelp">What is reputation?</button></div>`;
+  const rows = l.map((f) => `<button class="mrow" data-a="mquick" data-i="${f.id}">${avatar(f, 56, "round")}
+      <span class="mr-n"><b>${esc(f.name)}</b><small>${DIV_SHORT[f.wc]} · ${rec(f)} · ${f.age}y${rank(f) >= 0 && rank(f) <= 15 ? ` · <span class="warn">${rankLabel(rank(f))}</span>` : ""}</small></span>
+      <span class="mr-o" style="color:${ovrCol(ovr(f))}">${ovr(f)}<small>OVR</small></span>
+      <span class="mr-p">${kmoney(price(f))}<small>${f.st === "other" ? "fee + bonus" : "signing bonus"}</small></span>
+      <span class="mr-r">${f.lock > G.wk ? `<span class="rtag">Busy till wk ${f.lock}</span>` : repTag(f)}</span></button>`);
+  return shell(`${page("Market", `Roster ${G.ro.length}/${ROSTER_MAX}.`)}${tabs}<p class="mute tab-sub">${sub}</p>${repbar}${filt}
+    <div class="mlist">${rows.join("") || '<div class="empty">Nobody matches.</div>'}</div>`);
+}
+// Quick look at a market fighter: one main action (Negotiate), one secondary (full profile).
+export function mQuick(f) {
+  const need = repNeeded(f), ok = G.rep >= need, locked = f.lock > G.wk, full = G.ro.length >= ROSTER_MAX, ag = agencyOf(f);
+  return modal(`${closeBtn()}<div class="quick">${avatar(f, 150)}
+    <div><div class="eyebrow">${f.st === "other" ? esc(ag?.name || "Rival agency") : "Free agent"} · ${DIVISIONS[f.wc]}</div><h2 style="font-size:36px;margin:4px 0">${esc(f.name)}</h2>
+      <div class="mute">${summary(f)} · ${rec(f)} · ${f.age} years old</div>
+      <div class="q-grades">${AREAS.map(([n, k]) => { const v = areaVal(f, k); return `<div><b style="color:${ovrCol(v)}">${grade(v)}</b><small>${n}</small></div>`; }).join("")}</div></div>
+    <div class="q-ovr"><b style="color:${ovrCol(ovr(f))}">${ovr(f)}</b><small>OVR</small></div></div>
+    <div class="q-deal"><div><small>${f.st === "other" ? "Transfer fee + bonus" : "Signing bonus"}</small><b>${kmoney(price(f))}</b></div>
+      <div><small>Reputation he wants</small><b class="${ok ? "good" : "bad"}">${need}</b><span class="small mute">You have ${Math.round(G.rep)}</span></div></div>
+    ${ok ? "" : `<p class="small mute" style="margin:0 0 14px">Below ${need} he is much less likely to say yes. Win fights to raise your reputation. <a class="btn link" data-a="rephelp" style="padding:0">How?</a></p>`}
+    <div class="row" style="justify-content:flex-end"><button class="btn quiet" data-a="prof" data-i="${f.id}">Full profile</button>
+      <button class="btn red" data-a="neg" data-i="${f.id}" ${locked || full ? "disabled" : ""}>${locked ? `Won't talk until week ${f.lock}` : full ? "Roster full" : f.st === "other" ? "Make transfer offer" : "Negotiate"}</button></div>`, true);
+}
+// What reputation is, and why you need more.
+export function mRep() {
+  const r = Math.round(G.rep);
+  return modal(`${closeBtn()}<div class="eyebrow">Reputation</div><h2 style="font-size:32px;margin-bottom:10px">Your name in the sport: ${r}</h2>
+    <p>Reputation is how seriously fighters, promoters and rival agencies take your agency. It runs from 0 to 100.</p>
+    <p><b>Why it matters:</b> every fighter wants a manager with a big enough name before he'll sign. The better the fighter, the more he wants. Real UFC names want 15 more than a prospect of the same level. You can still offer below that, but he is much less likely to say yes.</p>
+    <div class="rep-reach"><div><small>Prospects who'll talk now</small><b>up to ${reachOvr(r)} OVR</b></div><div><small>UFC names who'll talk now</small><b>${reachOvr(r, 1) > 48 ? `up to ${reachOvr(r, 1)} OVR` : "none yet"}</b></div><div><small>If you reach rep ${Math.min(100, r + 20)}</small><b>${reachOvr(r + 20)} prospects · ${reachOvr(r + 20, 1) > 48 ? reachOvr(r + 20, 1) : "no"} UFC</b></div></div>
+    <div class="grid g2" style="margin-top:14px"><div><div class="eyebrow good" style="color:var(--green)">Goes up</div><ul class="small">
+      <li>Winning fights (+2, more for upsets)</li><li>Winning a title (+8)</li><li>Signing a fighter (+1)</li><li>Some event choices</li></ul></div>
+      <div><div class="eyebrow">Goes down</div><ul class="small"><li>Losing fights (−1)</li><li>Releasing a fighter (−2)</li><li>Your fighter pulling out injured (−2)</li><li>Some event choices</li></ul></div></div>
+    <div class="row" style="justify-content:flex-end"><button class="btn red" data-a="mclose">Got it</button></div>`);
 }
 function vDesk() {
   const rows = mine().map((f) => {
@@ -323,9 +379,10 @@ export function vRankings() {
 // ---------- Office ----------
 export function vOffice() {
   const t = UI.office;
-  const tabs = `<div class="seg">${[["agency", "Agency"], ["fin", "Finances"], ["hist", "History"]].map(([k, n]) => `<button class="${t === k ? "on" : ""}" data-a="oftab" data-i="${k}">${n}</button>`).join("")}</div>`;
+  const tabs = `<div class="seg">${[["sponsors", `Sponsors${G.spons.length ? ` (${G.spons.length})` : ""}`], ["fin", "Finances"], ["hist", "History"], ["agency", "Agency"]].map(([k, n]) => `<button class="${t === k ? "on" : ""}" data-a="oftab" data-i="${k}">${n}</button>`).join("")}</div>`;
   let body = "";
-  if (t === "fin") {
+  if (t === "sponsors") body = vSponsors();
+  else if (t === "fin") {
     const f = G.fin;
     body = `<div class="grid g2"><div class="panel"><div class="panel-h"><h2>Cash</h2></div>${sparkline(G.ch, "var(--green)", kmoney)}</div>
       <div class="panel"><div class="panel-h"><h2>Ledger</h2></div>
@@ -350,6 +407,23 @@ export function vOffice() {
       <label class="f">Emblem</label><div class="embs">${Object.entries(EMBLEMS).map(([k, p]) => `<button class="${G.ag.emblem === k ? "on" : ""}" data-a="agemb" data-i="${k}"><svg viewBox="0 0 24 24">${p}</svg></button>`).join("")}</div></div>`;
   }
   return shell(page("Office", "", tabs) + body);
+}
+// Every sponsorship in one place: offers waiting, running deals, and who brands could want next.
+function vSponsors() {
+  const m = mine(), deals = m.flatMap((f) => dealsOf(f).map((d) => ({ f, d })));
+  const weekly = deals.reduce((s, { f, d }) => s + Math.round(d.weekly * f.ct.pct / 100), 0);
+  const offers = G.spons.map((o) => { const f = G.f[o.fid]; return `<div class="task" style="--c:${o.col}"><span class="ic"></span><div class="sp-brand" style="--c:${o.col}">${esc(o.brand.split(" ").map((w) => w[0]).join("").slice(0, 2))}</div>
+    <div class="t"><b>${esc(o.brand)} wants ${esc(f.name)}</b><span>${money(o.weekly)}/week for ${o.weeks} weeks · you take ${f.ct.pct}% (${money(Math.round(o.weekly * f.ct.pct / 100))}/wk)${o.perf ? " · ends after 2 losses in a row" : ""} · answer by week ${o.exp}</span></div>
+    <button class="btn gold sm" data-a="spok" data-i="${o.id}">Sign deal</button><button class="btn link" data-a="spno" data-i="${o.id}">Decline</button></div>`; }).join("");
+  const running = deals.sort((a, b) => b.d.weekly - a.d.weekly).map(({ f, d }) => `<tr><td><span class="sp-dot" style="background:${d.col}"></span><b>${esc(d.brand)}</b></td><td><a data-a="prof" data-i="${f.id}">${esc(f.name)}</a></td>
+    <td class="num">${money(d.weekly)}</td><td class="num good">${money(Math.round(d.weekly * f.ct.pct / 100))}</td><td class="num">${d.left} wks ${bar(Math.min(100, d.left * 2.5), d.left <= 4 ? "var(--red2)" : "#555", 3)}</td><td class="small mute">${d.perf ? "Ends after 2 losses in a row" : "Safe until it runs out"}</td></tr>`).join("");
+  const pitchRows = m.map((f) => { const n = dealsOf(f).length, can = n < 3 && f.pitched !== G.wk; return `<div class="task" style="--c:${f.pop >= 25 ? "var(--green)" : "#444"}"><span class="ic"></span>${avatar(f, 44, "round")}
+    <div class="t"><b>${esc(f.name)}</b><span>Popularity ${f.pop}${f.pop < 25 ? " · brands start calling at 25" : " · brands may call on their own"} · ${n}/3 deals</span></div>
+    <button class="btn sm quiet" data-a="pitch" data-i="${f.id}" ${can ? "" : "disabled"}>${f.pitched === G.wk ? "Pitched" : n >= 3 ? "Full" : "Pitch"}</button></div>`; }).join("");
+  return `<div class="hero-strip"><div><small>Running deals</small><b>${deals.length}</b></div><div><small>Your cut per week</small><b class="good">${money(weekly)}</b></div><div><small>Earned from sponsors</small><b>${kmoney(G.fin.spons || 0)}</b></div></div>
+    ${offers ? `<div class="panel" style="border-left:4px solid var(--gold)"><div class="panel-h"><h2>Offers waiting</h2></div>${offers}</div>` : ""}
+    <div class="panel"><div class="panel-h"><h2>Running deals</h2></div>${running ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Brand</th><th>Fighter</th><th>Pays</th><th>Your cut</th><th>Left</th><th>Condition</th></tr></thead><tbody>${running}</tbody></table></div>` : '<div class="empty small">No deals yet. Brands call popular fighters (25+ popularity), or you can pitch one below.</div>'}</div>
+    <div class="panel"><div class="panel-h"><h2>Pitch a fighter</h2><span class="small mute">Costs ${money(PITCH_COST)} · once a week per fighter</span></div>${pitchRows || '<div class="empty small">Sign a fighter first.</div>'}</div>`;
 }
 // Settings pop-up: opens from the gear on every screen and from the main menu.
 export function mSettings() {

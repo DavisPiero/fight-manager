@@ -22,6 +22,7 @@ function leaveRoster(f) {
   G.offers = G.offers.filter((o) => o.fid !== f.id);
   G.listings = G.listings.filter((l) => l.fid !== f.id);
   G.bids = G.bids.filter((b) => b.fid !== f.id);
+  G.spons = G.spons.filter((o) => o.fid !== f.id);
   f.hist = []; f.prep = 0;
 }
 

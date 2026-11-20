@@ -45,6 +45,9 @@ function modalHtml() {
     case "inbox": return V.mInbox();
     case "week": return V.mWeek(m.sum, m.d);
     case "settings": return V.mSettings();
+    case "quick": return V.mQuick(f);
+    case "more": return V.mMore(f);
+    case "rep": return V.mRep();
     case "event": return V.mEvent();
     case "evres": return V.mEventResult(m.msg);
   }
@@ -64,6 +67,7 @@ function go(v, extra) {
   if (v !== "prof" && v !== "fight") UI.back = v;
   UI.view = v;
   if (v === "market" && extra) UI.mk.tab = extra;
+  if (v === "office" && extra) UI.office = extra;
   UI.modal = null;
   render();
   scrollTo(0, 0);
@@ -233,7 +237,10 @@ const A = {
   },
   // market
   mktab: (i) => { UI.mk.tab = i; render(); },
-  mkdiv: (i) => { UI.mk.div = +i; render(); },
+  mkreach: () => { UI.mk.reach = !UI.mk.reach; render(); },
+  mquick: (i) => { UI.modal = { kind: "quick", fid: +i }; render(); },
+  more: (i) => { UI.modal = { kind: "more", fid: +i }; render(); },
+  rephelp: () => { UI.modal = { kind: "rep" }; render(); },
   neg: (i) => { UI.modal = { kind: "neg", fid: +i }; render(); },
   nyears: (i) => { UI.modal.years = +i; render(); },
   offer: (i, t) => {
@@ -328,7 +335,10 @@ document.addEventListener("input", (e) => {
   else if (m.kind === "counter") document.getElementById("v-amt").textContent = money(m.amt);
   else V.negUpdate();
 });
-document.addEventListener("change", (e) => { if (e.target.id === "mksort") { UI.mk.sort = e.target.value; render(); } });
+document.addEventListener("change", (e) => {
+  if (e.target.id === "mksort") { UI.mk.sort = e.target.value; render(); }
+  if (e.target.id === "mkdiv") { UI.mk.div = +e.target.value; render(); }
+});
 addEventListener("resize", () => drawTour());
 
 // Debug/test hook (used by the smoke test).
