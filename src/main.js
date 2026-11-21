@@ -82,7 +82,7 @@ const scrollMsgs = () => { const m = document.getElementById("phmsgs"); if (m) m
 
 // ---------- Week / fights ----------
 function nextWeek() {
-  if (UI.view === "fight" || G.over) return;
+  if (UI.view === "fight" || G.over || UI.ffBusy) return;
   const before = G.log[0], cash0 = G.cash, wk0 = G.wk;
   const due = advance();
   save();
@@ -92,7 +92,13 @@ function nextWeek() {
   const idx = G.log.indexOf(before);
   UI.pendingSum = G.log.slice(0, idx < 0 ? 8 : idx).slice(0, 10);
   UI.pendingDelta = G.cash - cash0;
-  if (due.length) { UI.queue = due.slice(1); startFight(due[0]); return; }
+  if (due.length) {
+    UI.queue = due.slice(1);
+    // Let the week fast-forward finish ("Fight night" tag) before cutting to the walk-out.
+    if (UI.instant || matchMedia("(prefers-reduced-motion: reduce)").matches) { startFight(due[0]); return; }
+    UI.ffBusy = true; UI.modal = null; render();
+    return new Promise((done) => setTimeout(() => { UI.ffBusy = false; startFight(due[0]); done(); }, 1300));
+  }
   afterWeek();
 }
 // After fights: event first (if any), then the summary.
@@ -206,8 +212,8 @@ const setupVals = () => { const a = document.getElementById("an"), m = document.
 // ---------- Actions ----------
 const A = {
   go: (i, t) => go(i, t.dataset.x),
-  menu: () => { save(); setG(null); UI.menuPage = "slots"; go("menu"); },
-  play: () => { UI.menuPage = "slots"; render(); },
+  menu: () => { save(); setG(null); UI.menuPage = "slots"; UI.slotHero = null; UI.phone.open = false; document.getElementById("ph-banners")?.remove(); go("menu"); },
+  play: () => { UI.menuPage = "slots"; UI.slotHero = null; render(); },
   menuback: () => { UI.menuPage = "main"; render(); },
   settings: () => { UI.modal = { kind: "settings" }; render(); },
   agency: () => { UI.office = "agency"; go("office"); },

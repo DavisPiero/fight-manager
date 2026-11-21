@@ -134,7 +134,7 @@ try {
   for (let w = 0; w < 14 && fought < 2; w++) {
     await settle();
     if ((await fm(() => window.__fm.UI.view)) !== "fight") {
-      await fm(() => window.__fm.nextWeek());
+      await fm((first) => { const p = window.__fm.nextWeek(); return first ? null : p; }, w === 0);
       if (w === 0) { await page.waitForTimeout(500); await page.screenshot({ path: `${SHOTS}/06c-fast-forward.png` }); await page.waitForTimeout(1100); await shot("06d-week-summary"); }
     }
     while ((await fm(() => window.__fm.UI.view)) === "fight") { await fightThrough(fought === 0); fought++; }
@@ -156,7 +156,7 @@ try {
   await click('[data-a="dolist"]');
   let bids = 0;
   for (let w = 0; w < 12 && !bids; w++) {
-    await fm(() => { const fm = window.__fm; fm.UI.FS = null; fm.UI.queue = []; fm.UI.modal = null; fm.G.event = null; fm.UI.view = "home"; fm.nextWeek(); fm.UI.FS = null; fm.UI.queue = []; });
+    await fm(() => { const fm = window.__fm; fm.UI.FS = null; fm.UI.queue = []; fm.UI.modal = null; fm.G.event = null; fm.UI.view = "home"; fm.UI.instant = true; fm.nextWeek(); fm.UI.instant = false; fm.UI.FS = null; fm.UI.queue = []; });
     bids = await fm(() => window.__fm.G.bids.length);
   }
   await fm(() => { const fm = window.__fm; fm.UI.modal = null; fm.G.event = null; fm.go("market", "desk"); });

@@ -44,3 +44,4 @@
 - 2026-11-21 Fighter mood added: affects renewal chance (±20%) and fight form (±4%).
 - 2026-11-21 Notifications: critical always pop up, important optional, social never; badges on background apps stay quiet.
 - 2026-11-21 Rest weeks after fights not added (user said no for now).
+- 2026-11-21 Fight weeks: the walk-out starts after the week fast-forward finishes (1.3 s). Save screen redesigned: one random star (not from the menu line-up), red slash, drifting cage lines, slots in a column.
