@@ -62,11 +62,9 @@ export function vMenu() {
       ${legal}
     </div></div>`;
   const sl = slots();
-  // Save screen: a different look. One star (not from the front line-up, new each visit) under a red slash, cage lines behind.
-  UI.slotHero ??= all[5 + Math.floor(Math.random() * Math.min(15, Math.max(1, all.length - 5)))] || pics[0];
+  // Save screen: a different look from the front menu. Red slash and cage lines, no fighter.
   return `<div class="menu slots-page">
     <div class="sl-cage"></div><div class="sl-slash"></div><div class="sl-slash two"></div>
-    <img class="sl-hero" src="${import.meta.env.BASE_URL}fighters/${UI.slotHero}" alt="">
     <div class="sl-col">
       <div class="logo sm">Fight<br><span>Manager</span></div>
       <div class="sl-head"><span class="eyebrow">Career mode</span><h1>Choose a save</h1></div>

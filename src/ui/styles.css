@@ -607,7 +607,8 @@ label.f b { float: right; color: #fff; letter-spacing: 0; font-size: 14px; }
 .mo-res em { color: var(--gold2); font-style: normal; font-weight: 800; }
 
 /* ---------- Walk-out intro ---------- */
-.intro { position: fixed; inset: 0; z-index: 85; background: #040404; overflow: hidden; cursor: pointer; animation: intro-out .45s 5.4s forwards; }
+.intro { position: fixed; inset: 0; z-index: 85; background: #040404; overflow: hidden; cursor: pointer; animation: intro-in .45s ease-out backwards, intro-out .45s 5.4s forwards; }
+@keyframes intro-in { from { opacity: 0; } }
 .intro.gone { opacity: 0; transition: opacity .3s; pointer-events: none; }
 @keyframes intro-out { to { opacity: 0; visibility: hidden; } }
 .intro .spots { position: absolute; inset: 0; background: conic-gradient(from 150deg at 20% -20%, transparent 0 10deg, #ffffff14 10deg 22deg, transparent 22deg), conic-gradient(from 188deg at 80% -20%, transparent 0 10deg, #ffffff14 10deg 22deg, transparent 22deg); animation: spots 2.6s ease-in-out infinite alternate; }
@@ -774,7 +775,7 @@ body.phone-open #toasts { right: 412px; }
 .slots-page { flex-direction: row; align-items: center; background: radial-gradient(ellipse 60% 80% at 80% 60%, #d20a0a2e, transparent 70%), #050505; }
 .sl-cage { position: absolute; inset: 0; background: repeating-linear-gradient(55deg, #ffffff07 0 1px, transparent 1px 26px), repeating-linear-gradient(-55deg, #ffffff07 0 1px, transparent 1px 26px); -webkit-mask-image: radial-gradient(ellipse 70% 90% at 75% 50%, #000, transparent 75%); mask-image: radial-gradient(ellipse 70% 90% at 75% 50%, #000, transparent 75%); animation: cage-drift 30s linear infinite; }
 @keyframes cage-drift { to { background-position: 260px 0, -260px 0; } }
-.sl-slash { position: absolute; right: 8%; top: -10%; width: 34vw; height: 130%; background: linear-gradient(180deg, var(--red), #6a0505); transform: skewX(-16deg); box-shadow: 0 0 80px #d20a0a55; animation: slash-in .7s cubic-bezier(.2, .9, .3, 1) backwards; }
+.sl-slash { position: absolute; right: 14%; top: -10%; width: 34vw; height: 130%; background: linear-gradient(180deg, var(--red), #6a0505); transform: skewX(-16deg); box-shadow: 0 0 80px #d20a0a55; animation: slash-in .7s cubic-bezier(.2, .9, .3, 1) backwards; }
 .sl-slash.two { right: 2%; width: 4vw; background: #fff; opacity: .9; animation-delay: .1s; box-shadow: none; }
 @keyframes slash-in { from { transform: skewX(-16deg) translateY(-110%); } }
 .sl-hero { position: absolute; right: 4%; bottom: 0; height: min(88vh, 860px); width: auto; z-index: 1; filter: drop-shadow(-30px 0 50px #000) contrast(1.08); -webkit-mask-image: linear-gradient(#000 75%, transparent); mask-image: linear-gradient(#000 75%, transparent); animation: hero-in .9s .15s cubic-bezier(.2, .9, .3, 1) backwards; }

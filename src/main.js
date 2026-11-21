@@ -97,7 +97,7 @@ function nextWeek() {
     // Let the week fast-forward finish ("Fight night" tag) before cutting to the walk-out.
     if (UI.instant || matchMedia("(prefers-reduced-motion: reduce)").matches) { startFight(due[0]); return; }
     UI.ffBusy = true; UI.modal = null; render();
-    return new Promise((done) => setTimeout(() => { UI.ffBusy = false; startFight(due[0]); done(); }, 1300));
+    return new Promise((done) => setTimeout(() => { UI.ffBusy = false; startFight(due[0]); done(); }, 950)); // starts as the overlay fades, intro fades in over it
   }
   afterWeek();
 }
