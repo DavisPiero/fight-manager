@@ -171,7 +171,7 @@ async function runRound() {
       if (!UI.skip) {
         FV.playMoment(FS, res); FV.resultBanner(res.txt);
         sfx(res.ko ? "big" : res.ok ? "hit" : "bad"); if (res.ko || res.anim === "big") sfx("crowd");
-        await sleep(res.ko ? 1300 : 1800);
+        await sleep(res.ko ? 1300 : 1500);
         if (gone()) { running = false; return; }
       }
     }
@@ -388,6 +388,7 @@ document.addEventListener("click", (e) => {
 });
 document.addEventListener("keydown", (e) => {
   if (e.target.matches("input, select")) return;
+  if (UI.mpick && /^[1-3]$/.test(e.key)) { UI.mpick(+e.key - 1); return; }
   if ((e.key === "n" || e.key === "N") && G && !UI.modal && !["menu", "setup", "fight"].includes(UI.view)) nextWeek();
   if (e.key === "Escape" && UI.phone.open && !UI.modal) { UI.phone.open = false; render(); return; }
   if ((e.key === "p" || e.key === "P") && G && !UI.modal && !["menu", "setup", "fight"].includes(UI.view)) A.phone();

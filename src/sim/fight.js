@@ -116,40 +116,65 @@ export function step(FS) {
 const MAX_MOMENTS = 2;
 function cueMoment(FS, ev) {
   if (FS.cue || (FS.moc || 0) >= MAX_MOMENTS || FS.ex - (FS.lastMo ?? -9) < 3 || FS.ex >= 12) return;
+  const stand = FS.pos === "stand";
   let c = null;
   if (ev.dmg && ev.a === 0 && (ev.kd || (ev.big && FS.hp[1] < 62))) c = { id: "hurtOpp", kd: ev.kd };
   else if (ev.dmg && ev.a === 1 && (ev.kd || (ev.big && FS.hp[0] < 62))) c = { id: "hurtMe", kd: ev.kd };
   else if (ev.kind === "td") c = { id: ev.a === 0 ? "top" : "bottom" };
-  else if (FS.pos === "stand" && FS.ex >= 9 && Math.abs(FS.dm[0] - FS.dm[1]) < 7 && !FS.moc) c = { id: "late" };
-  else if (FS.pos === "stand" && FS.ex >= 3 && FS.ex <= 7 && !FS.moc && R() < 0.4) c = { id: "open", v: ri(0, 2) };
+  else if (stand && FS.ex >= 9 && Math.abs(FS.dm[0] - FS.dm[1]) < 7 && !FS.moc) c = { id: "late" };
+  else if (stand && FS.ex >= 2 && FS.ex <= 9 && ev.a === 1 && /punch|kick|miss/.test(ev.kind) && !ev.big && R() < 0.18) c = { id: "incoming" };
+  else if (stand && FS.ex >= 2 && FS.ex <= 9 && ev.a === 0 && ev.dmg && !ev.big && FS.hp[1] <= FS.hp[0] && R() < 0.3) c = { id: "back" };
+  else if (stand && FS.ex >= 3 && FS.ex <= 7 && !FS.moc && R() < 0.4) c = { id: "open", v: pk([0, 1]) };
   if (c) FS.cue = c;
 }
-const OPEN = [
-  { title: "He drops his hands after the jab", c: [["Overhand right", "Big power, risky"], ["Shoot a double", "Wrestling vs his defence"], ["Keep it tight", "Small, safe points"]] },
-  { title: "He's backing onto the fence", c: [["Pin him and wrestle", "Grind him on the cage"], ["Unload a combination", "Damage, costs stamina"], ["Reset to the centre", "Safe"]] },
-  { title: "His lead leg is red from kicks", c: [["Chop the leg", "Slows him down"], ["Fake low, kick high", "Head kick: huge or nothing"], ["Back to boxing", "Safe"]] },
-];
+// Which skill each style is built on, so a choice that plays to it can say so.
+const STYLE_SK = { Boxer: "box", Kickboxer: "kick", "Muay Thai": "thai", Wrestler: "wres", Grappler: "bjj" };
+const SK_WORD = { box: "Boxing", kick: "Kicks", thai: "Clinch", wres: "Wrestling", bjj: "Jiu-jitsu", tdd: "Defence", cardio: "Cardio", dur: "Chin", iq: "Fight IQ" };
+// Each moment: a short title, who and where to highlight, and 3 choices [label, icon, skill it leans on, fit score].
+function momentDef(FS, c) {
+  const [me, op] = FS.f, A = me.at, B = op.at, pw = [power(FS, 0).str, power(FS, 1).str], n = (i) => last(FS.f[i].name);
+  switch (c.id) {
+    case "hurtOpp": return { tone: "good", title: c.kd ? `${n(1)} is down!` : `${n(1)} is hurt!`, focus: 1, target: c.kd ? null : "head",
+      c: [["Pursue", "pursue", "box", 45 + (pw[0] - B.dur) / 2 + (FS.st[0] - 50) / 4], ["Head", "head", "box", 45 + (A.box - B.iq) / 2], ["Takedown", "takedown", "wres", 45 + (A.wres - B.tdd) / 2]] };
+    case "hurtMe": return { tone: "bad", title: c.kd ? `${n(0)} is down!` : `${n(0)} is rocked!`, focus: 0, target: null,
+      c: [["Clinch", "clinch", "wres", 45 + (A.wres - B.wres) / 2], ["Fire back", "counter", "box", 40 + (pw[0] - pw[1]) / 2 + (A.dur - 60) / 4], ["Circle out", "circle", "cardio", 45 + (A.cardio + A.iq - B.cardio - B.iq) / 4]] };
+    case "top": return { tone: "good", title: `${n(0)} on top`, focus: 1, target: null,
+      c: [["Pound", "pound", "wres", 45 + (A.wres - 60) / 2], ["Submit", "submit", "bjj", 45 + (A.bjj - B.bjj) / 2], ["Hold", "hold", "wres", 50]] };
+    case "bottom": return { tone: "bad", title: `${n(0)} taken down`, focus: 0, target: null,
+      c: [["Get up", "getup", "wres", 45 + (A.wres - B.wres) / 2 + (FS.st[0] - 50) / 4], ["Submit", "submit", "bjj", 40 + (A.bjj - B.bjj) / 2], ["Tie up", "clinch", "wres", 48]] };
+    case "late": return { tone: "info", title: "Close round · 0:30", focus: 1, target: null,
+      c: [["Flurry", "flurry", "box", 45 + (pw[0] - pw[1]) / 2], ["Takedown", "takedown", "wres", 45 + (A.wres - B.tdd) / 2], ["Stay safe", "block", "iq", 48]] };
+    case "incoming": return { tone: "bad", title: "Incoming!", focus: 0, target: null,
+      c: [["Block", "block", "dur", 45 + (A.dur - B.box) / 2], ["Slip", "slip", "iq", 45 + (A.iq - B.box) / 2 + (A.box - 60) / 4], ["Counter", "counter", "box", 40 + (A.box - B.iq) / 2 + (A.iq - 60) / 4]] };
+    case "back": return { tone: "good", title: `${n(1)} backs off`, focus: 1, target: "body",
+      c: [["Pressure", "pressure", "cardio", 45 + (A.cardio - B.cardio) / 2], ["Cut off", "cutoff", A.wres > Math.max(A.box, A.kick) ? "wres" : "iq", 45 + (A.iq - B.iq) / 2 + (Math.max(A.wres, A.box) - 60) / 4], ["Body", "body", A.kick > A.box ? "kick" : "box", 45 + ((A.box + A.kick) / 2 - B.dur) / 2]] };
+    case "open": return c.v ? { tone: "info", title: "His lead leg is hurt", focus: 1, target: "legs",
+      c: [["Leg kick", "legkick", "kick", 45 + (A.kick - 60) / 2], ["Head kick", "headkick", "kick", 40 + (A.kick - B.iq) / 2], ["Box", "head", "box", 45 + (A.box - B.box) / 2]] }
+      : { tone: "info", title: "His hands are low", focus: 1, target: "head",
+      c: [["Overhand", "head", "box", 45 + (A.box - B.iq) / 2], ["Shoot", "takedown", "wres", 45 + (A.wres - B.tdd) / 2], ["Stay tight", "block", "iq", 48]] };
+  }
+}
 export function pendingMoment(FS) {
   const c = FS.cue; if (!c) return null;
   FS.cue = null; FS.moc = (FS.moc || 0) + 1; FS.lastMo = FS.ex;
-  const n = (i) => last(FS.f[i].name);
-  const M = {
-    hurtOpp: { tone: "good", title: c.kd ? `${n(1)} is down!` : `${n(1)} is hurt!`, sub: "Finish it, or make sure of it?", c: [["Swarm him", "Go for the finish, burns stamina"], ["Pick your shots", "Steady damage"], ["Take him down", "Finish it on the ground"]] },
-    hurtMe: { tone: "bad", title: c.kd ? `${n(0)} is down!` : `${n(0)} is rocked!`, sub: "Survive this and he's back in it.", c: [["Tie him up", "Clinch and recover"], ["Fire back", "Win or lose it right here"], ["Circle away", "Footwork and cardio"]] },
-    top: { tone: "good", title: `${n(0)} is on top`, sub: "What now?", c: [["Ground and pound", "Damage, can stop it"], ["Hunt the submission", "Jiu-jitsu vs his defence"], ["Hold him down", "Bank the round"]] },
-    bottom: { tone: "bad", title: `${n(0)} is taken down`, sub: "Get out of there.", c: [["Explode back up", "Wrestling and cardio"], ["Attack from guard", "Submission, or eat punches"], ["Tie him up", "Stall it out"]] },
-    late: { tone: "info", title: "Close round · 30 seconds left", sub: "The judges are watching.", c: [["Steal it with a flurry", "Points, costs stamina"], ["Late takedown", "Wrestling for the round"], ["Don't get caught", "Safe"]] },
-    open: { tone: "info", title: OPEN[c.v ?? 0].title, sub: "Your corner sees an opening.", c: OPEN[c.v ?? 0].c },
-  }[c.id];
-  return { ...c, ...M, choices: M.c.map(([label, hint]) => ({ label, hint })) };
+  const M = momentDef(FS, c), me = FS.f[0];
+  const choices = M.c.map(([label, icon, sk, fit]) => ({ label, icon, sk, fit }));
+  // A soft hint: glow on the choice that clearly suits this fighter in this matchup.
+  const order = choices.map((x, i) => i).sort((x, y) => choices[y].fit - choices[x].fit);
+  const best = choices[order[0]], gap = best.fit - choices[order[1]].fit;
+  const hint = best.fit >= 50 && gap >= 6 ? order[0] : -1;
+  const why = hint < 0 ? "" : STYLE_SK[me.style] === best.sk ? me.style : SK_WORD[best.sk];
+  return { ...c, tone: M.tone, title: M.title, focus: M.focus, target: M.target, choices, hint, why };
 }
 // What the fighter does if the corner doesn't call it: his personality decides.
 export function autoChoice(FS, m) {
-  const p = FS.f[0].pers;
+  const p = FS.f[0].pers, A = FS.f[0].at, B = FS.f[1].at;
   if (m.id === "hurtOpp") return FS.st[0] > 40 || p === "Hotheaded" ? 0 : 1;
-  if (m.id === "hurtMe") return p === "Hotheaded" ? 1 : FS.f[0].at.wres > FS.f[1].at.wres ? 0 : 2;
-  if (m.id === "top") return FS.f[0].at.bjj > FS.f[1].at.bjj + 8 ? 1 : 0;
-  if (m.id === "bottom") return FS.f[0].at.bjj > FS.f[1].at.bjj + 10 ? 1 : 0;
+  if (m.id === "hurtMe") return p === "Hotheaded" ? 1 : A.wres > B.wres ? 0 : 2;
+  if (m.id === "top") return A.bjj > B.bjj + 8 ? 1 : 0;
+  if (m.id === "bottom") return A.bjj > B.bjj + 10 ? 1 : 0;
+  // Reacting on instinct: he does what he's best at (a hothead always swings back).
+  if (m.id === "incoming" || m.id === "back") return p === "Hotheaded" ? (m.id === "incoming" ? 2 : 0) : m.choices.reduce((b, c, i) => (c.fit > m.choices[b].fit ? i : b), 0);
   return p === "Hotheaded" ? 0 : 2;
 }
 // Apply damage from a moment. Returns true if it ended the fight.
@@ -167,7 +192,7 @@ export function resolveMoment(FS, m, i) {
   let txt = "", anim = "", ok = false, ko = false;
   const tdIn = (a, bonus) => { if (roll(0.35 + bonus + (FS.f[a].at.wres - FS.f[1 - a].at.tdd) / 140)) { FS.pos = "ground"; FS.top = a; FS.stats[a].td++; FS.dm[a] += 4; return true; } return false; };
   const subIn = (a, bonus) => { const d = 1 - a; if (roll(0.12 + bonus + (FS.f[a].at.bjj - FS.f[d].at.bjj * 0.9 - FS.f[d].at.dur * 0.15) / 160)) { FS.fin = { w: a, how: "Submission", detail: pk(["rear-naked choke", "guillotine", "arm-triangle", "armbar", "kimura", "triangle choke"]) }; return true; } return false; };
-  switch (m.id + i) {
+  switch (m.id + (m.v || "") + i) {
     case "hurtOpp0": ok = roll(0.24 + (pw[0] - B.dur) / 110 + (60 - FS.hp[1]) / 90 + (m.kd ? 0.15 : 0)); FS.st[0] = Math.max(5, FS.st[0] - 22);
       if (ok) { FS.fin = { w: 0, how: "KO/TKO", detail: m.kd ? "punches on the ground" : "a flurry of strikes" }; ko = true; anim = "swarm"; txt = `${n(0)} swarms — the referee jumps in! <em>It's stopped!</em>`; }
       else if (roll(0.35)) { ko = land(FS, 1, 0, rnd(6, 11), "a counter"); anim = "counter"; txt = `${n(1)} survives and catches ${n(0)} coming in!`; }
@@ -197,12 +222,24 @@ export function resolveMoment(FS, m, i) {
       else { ko = land(FS, 1, 0, rnd(5, 9), "a counter"); txt = `${n(1)} saw it coming and counters!`; } break;
     case "open1": ok = tdIn(0, 0.1); anim = ok ? "td" : "tdx"; txt = ok ? `${n(0)} changes levels and dumps him.` : `${n(1)} sprawls on the shot.`; break;
     case "open2": anim = "flurry"; ok = true; land(FS, 0, 1, rnd(2, 4)); FS.dm[0] += 3; txt = `${n(0)} keeps it tight and wins the exchange.`; break;
-    case "open10": ok = tdIn(0, 0.2); anim = ok ? "td" : "tdx"; txt = ok ? `${n(0)} pins him on the cage and drags him down.` : `${n(1)} pummels free.`; break;
-    case "open11": ok = roll(0.5 + (pw[0] - pw[1]) / 120); FS.st[0] = Math.max(5, FS.st[0] - 12); anim = ok ? "flurry" : "counter";
-      if (ok) { ko = land(FS, 0, 1, rnd(7, 12), "a combination on the fence"); txt = ko ? `${n(0)} unloads on the fence — <em>stoppage!</em>` : `${n(0)} unloads a combination on the fence!`; } else { land(FS, 1, 0, rnd(4, 7)); txt = `${n(1)} spins off and lands on the way out.`; } break;
-    case "open12": anim = "escape"; ok = true; txt = `${n(0)} resets to the centre.`; break;
-    case "open20": anim = "kick"; ok = true; land(FS, 0, 1, rnd(4, 7)); FS.boost[1] *= 0.93; txt = `${n(0)} chops the leg again. ${last(op.name)} is limping.`; break;
-    case "open21": ok = roll(0.25 + (A.kick - B.iq) / 120); anim = ok ? "big" : "counter";
+    case "open12": anim = "flurry"; ok = true; land(FS, 0, 1, rnd(2, 5)); FS.dm[0] += 3; txt = `${n(0)} goes back to boxing and wins the exchange.`; break;
+    case "incoming0": ok = roll(0.65 + (A.dur - B.box) / 150 + (A.iq - 60) / 300); anim = "block";
+      if (ok) { FS.dm[0] += 2; FS.st[0] = Math.min(100, FS.st[0] + 4); txt = `${n(0)} catches it on the gloves.`; } else { ko = land(FS, 1, 0, rnd(2, 5), "strikes"); txt = `${n(1)} gets it through the guard.`; } break;
+    case "incoming1": ok = roll(0.5 + (A.iq - B.box) / 130 + (A.box - 60) / 300); anim = ok ? "slip" : "eat";
+      if (ok) { land(FS, 0, 1, rnd(3, 6)); txt = `${n(0)} slips it and touches him on the way out.`; } else { ko = land(FS, 1, 0, rnd(4, 7), "strikes"); txt = `${n(0)} slips the wrong way and eats it.`; } break;
+    case "incoming2": ok = roll(0.35 + (A.box - B.iq) / 120 + (pw[0] - pw[1]) / 150); anim = ok ? "counter" : "eat";
+      if (ok) { ko = land(FS, 0, 1, rnd(8, 14), "a counter"); txt = ko ? `${n(0)} times the counter — <em>out cold!</em>` : `${n(0)} times the counter — <em>flush!</em>`; }
+      else { ko = land(FS, 1, 0, rnd(6, 10), "strikes"); txt = `${n(1)} beats him to it.`; } break;
+    case "back0": ok = roll(0.5 + (A.cardio - B.cardio) / 150 + (pw[0] - pw[1]) / 200); FS.st[0] = Math.max(5, FS.st[0] - 8); anim = ok ? "flurry" : "counter";
+      if (ok) { ko = land(FS, 0, 1, rnd(4, 8), "strikes"); txt = `${n(0)} walks him down and keeps landing.`; } else { ko = land(FS, 1, 0, rnd(4, 7), "a counter"); txt = `${n(1)} catches him charging in.`; } break;
+    case "back1": ok = roll(0.45 + (A.iq - B.iq) / 120);
+      if (!ok) { anim = "escape"; txt = `${n(1)} circles out along the fence.`; }
+      else if (A.wres > Math.max(A.box, A.kick)) { FS.dm[0] += 3; const t = tdIn(0, 0.15); anim = t ? "td" : "tdx"; txt = t ? `${n(0)} traps him on the fence and drags him down.` : `${n(0)} pins him on the fence; ${n(1)} pummels free.`; }
+      else { FS.dm[0] += 3; anim = "flurry"; ko = land(FS, 0, 1, rnd(6, 10), "strikes against the fence"); txt = ko ? `${n(0)} traps him on the fence — <em>stoppage!</em>` : `${n(0)} traps him on the fence and unloads.`; } break;
+    case "back2": ok = roll(0.55 + ((A.box + A.kick) / 2 - B.dur) / 150); anim = ok ? "kick" : "escape";
+      if (ok) { ko = land(FS, 0, 1, rnd(3, 6), "body shots"); FS.st[1] = Math.max(5, FS.st[1] - 14); txt = `${n(0)} digs to the body. ${last(op.name)} is breathing hard.`; } else txt = `${n(1)} covers the body and resets.`; break;
+    case "open10": anim = "kick"; ok = true; land(FS, 0, 1, rnd(4, 7)); FS.boost[1] *= 0.93; txt = `${n(0)} chops the leg again. ${last(op.name)} is limping.`; break;
+    case "open11": ok = roll(0.25 + (A.kick - B.iq) / 120); anim = ok ? "big" : "counter";
       if (ok) { FS.stats[0].kd++; ko = land(FS, 0, 1, rnd(12, 20), "a head kick"); txt = ko ? `Fake low, kick high — <em>${n(0)} knocks him out with a head kick!</em>` : `${n(0)} lands a head kick and drops him!`; }
       else { ko = land(FS, 1, 0, rnd(5, 9), "a counter"); txt = `${n(1)} catches the kick and punishes him.`; } break;
     default: anim = "escape"; ok = true; txt = `${n(0)} stays patient.`;
