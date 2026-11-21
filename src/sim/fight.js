@@ -60,7 +60,7 @@ export function step(FS) {
       if (ok) { FS.stats[a].td++; FS.pos = "ground"; FS.top = a; FS.dm[a] += 3; ev.txt = `${ln(a)} drives through and takes ${ln(d)} down!`; }
       else ev.txt = `${ln(d)} stuffs the takedown.`;
     } else {
-      const mv = pk(["jab", "cross", "hook", "leg kick", "body kick", "head kick", "knee", "overhand", "uppercut", "elbow"]);
+      const mv = styled(F[a].style, pk(["jab", "cross", "hook", "leg kick", "body kick", "head kick", "knee", "overhand", "uppercut", "elbow"]), FS.stats[a].att);
       const kk = /kick|knee/.test(mv), heavy = /head kick|hook|overhand|uppercut|elbow/.test(mv);
       FS.stats[a].att++;
       const land = R() < cl(0.5 + (A.str - (D.a.iq * 0.3 + D.str * 0.7)) / 150, 0.22, 0.85);
@@ -127,6 +127,17 @@ function cueMoment(FS, ev) {
   else if (stand && FS.ex >= 3 && FS.ex <= 7 && !FS.moc && R() < 0.4) c = { id: "open", v: pk([0, 1]) };
   if (c) FS.cue = c;
 }
+// Each style swaps a strike for one of the same weight it prefers (heavy punch for heavy punch, light kick
+// for light kick). Damage only depends on the weight, so style changes the look, never the balance or the dice.
+const WEIGHT = { jab: "LP", cross: "LP", hook: "HP", overhand: "HP", uppercut: "HP", elbow: "HP", "leg kick": "LK", "body kick": "LK", knee: "LK", "head kick": "HK" };
+const STYLE_PREF = {
+  Boxer: { LP: ["jab", "cross", "jab"], HP: ["hook", "uppercut", "hook", "overhand"], LK: ["leg kick"] },
+  Kickboxer: { LK: ["body kick", "leg kick", "body kick"], HP: ["hook", "overhand", "uppercut"] },
+  "Muay Thai": { LK: ["knee", "leg kick", "body kick", "knee"], HP: ["elbow", "elbow", "hook"] },
+  Wrestler: { HP: ["overhand", "overhand", "hook"], LK: ["leg kick", "knee"] },
+  Grappler: { HP: ["overhand", "hook", "uppercut"], LK: ["leg kick", "body kick"] },
+};
+const styled = (style, mv, n) => { const p = STYLE_PREF[style]?.[WEIGHT[mv]]; return p ? p[n % p.length] : mv; };
 // Which skill each style is built on, so a choice that plays to it can say so.
 const STYLE_SK = { Boxer: "box", Kickboxer: "kick", "Muay Thai": "thai", Wrestler: "wres", Grappler: "bjj" };
 const SK_WORD = { box: "Boxing", kick: "Kicks", thai: "Clinch", wres: "Wrestling", bjj: "Jiu-jitsu", tdd: "Defence", cardio: "Cardio", dur: "Chin", iq: "Fight IQ" };

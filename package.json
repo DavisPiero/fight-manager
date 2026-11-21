@@ -10,7 +10,9 @@
     "test": "node scripts/smoke.mjs",
     "bot": "node scripts/bot.mjs",
     "ufc": "node scripts/fetch-ufc.mjs",
-    "shots": "node scripts/fightshots.mjs"
+    "shots": "node scripts/fightshots.mjs",
+    "poses": "node scripts/poses.mjs test-results/arena",
+    "skin": "node scripts/skintones.mjs"
   },
   "devDependencies": {
     "playwright": "^1.49.1",

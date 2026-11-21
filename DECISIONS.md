@@ -54,3 +54,9 @@
 - 2026-11-21 Bug fix: tale-of-the-tape photos shared a class with the phone nav bar and were pinned to the bottom of the screen on phones; photos also no longer stretch.
 - 2026-11-21 `npm run shots` added: headless screenshots of the intro, tale of the tape and each corner call.
 
+- 2026-11-21 Open questions answered "go with your recommendations": vector body parts you can later replace with painted ones; drawn heads, not headshots, in the octagon; skin tone sampled from headshots and checked on a contact sheet; PULSE owner is "Cageside Media"; session-1 guesses (5 s timer, hint tags, incoming 18%) kept.
+- 2026-11-21 Octagon is one canvas (crowd, lights, fence, mat, fighters) instead of photo cut-outs; effects (bursts, ring, round cards) stay as HTML on top.
+- 2026-11-21 Fighters rigged from parts (torso, arms, legs, gloves, head, hair, beard, shorts); poses are joint angles, so painted parts can replace the drawn ones later without new animation.
+- 2026-11-21 Build by division (width) and UFC.com height; skin from headshot (5 hand-fixed where hair or beard fooled the sampler); prospects get a tone by country; hair/beard/trim seeded from the name, so each fighter always looks the same.
+- 2026-11-21 Style-specific strikes swap a move for one of the same weight (heavy punch, light kick...), not more kicks or punches: a first try that changed how often each style kicks dropped bot win rate 60% → 56%. Now identical to before.
+- 2026-11-21 Floor line sits just above the scorebug on any screen, so legs and feet are never hidden on phones.
