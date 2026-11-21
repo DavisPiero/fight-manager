@@ -39,3 +39,8 @@
 - 2026-11-21 Fight night rebuilt: walk-out intro, moving fighters with poses (knockdown, ground top/bottom, KO), impact bursts, camera shake/zoom, round cards, "It's all over" / "To the judges", injury stamp.
 - 2026-11-21 Corner calls replace constant tactic-switching as the main decision: max 2 per round, 8 s timer, auto-pick by personality. Knockdowns added (can finish). Result: KO 28% / sub 14% / dec 57%, close to the real UFC.
 - 2026-11-21 Kept UFC.com headshots for the fight (no drawn sprites): they can lean, lunge, fall and lie down, but not throw visible kicks. Full-body art would be the next step up.
+- 2026-11-21 Phone built (sessions 5+6 merged). Starter content only (~30 news, ~35 social, 12 rumours, ~30 messages, 6 business offers) to save time; growing it is a TODO.
+- 2026-11-21 Phone replaces the old bell/news inbox: one place for alerts.
+- 2026-11-21 Fighter mood added: affects renewal chance (±20%) and fight form (±4%).
+- 2026-11-21 Notifications: critical always pop up, important optional, social never; badges on background apps stay quiet.
+- 2026-11-21 Rest weeks after fights not added (user said no for now).

@@ -17,6 +17,7 @@ const P = {
   mute: '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/>',
   close: '<path d="M6 6l12 12M18 6L6 18"/>',
   arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  phone: '<rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M10.5 18.5h3"/>',
   gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
   ff: '<path d="M3 5l8 7-8 7zM13 5l8 7-8 7z"/>',
 };

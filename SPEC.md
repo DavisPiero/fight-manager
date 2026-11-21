@@ -34,5 +34,15 @@ Check To-do → book fights / answer bids → train → Next week → fight nigh
 - **Tutorial:** 9-step spotlight tour on a new career; replay from Settings.
 - **Feel:** left sidebar nav; loading sting; Next week plays a fast-forward and a summary with the cash change.
 
+## Phone
+- Opens from the top bar (or P). Apps: Messages, Contacts, Deals, News, Social, Rumours, Alerts, Settings.
+- Contacts are earned: your fighters, plus people you meet (matchmaker, reporter, podcast host, gym owner, brand rep, scout).
+- Fighters have a mood (0–100). They message you about injuries, idle spells, contracts, wins, losses, pay and personal things; you pick a reply. Mood changes renewals and fight form. You can message them about training, fights, goals and money.
+- Business offers (podcast, commercial, promoter fight, gym partnership, fighter wants to sign, buy-out): accept, counter once, or decline. Deadlines, real money and bookings.
+- News, Social and Rumours come from real game events. Rumours carry credibility and resolve 2–3 weeks later: true, partly true or false, and change the world when true (bids, injuries, releases, retirements).
+- Rivalry chain: a win draws a callout, a reply, a rumour, then a promoter offer.
+- Alerts: critical (always pops up), important (pops up if allowed), ordinary (never pops up). Max 3 banners at a time.
+- Content is a small starter set; add more later (see phone-content.js header).
+
 ## Not building
 Women's divisions, 5-round main events, managers' staff/coaches, multiplayer, online saves, UFC branding.

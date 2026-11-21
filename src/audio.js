@@ -46,6 +46,10 @@ const FX = {
   bad() { tone(220, 0.4, "triangle", 0.08, 0, 140); tone(165, 0.5, "triangle", 0.07, 0.15, 110); },
   cash() { tone(1318, 0.12, "triangle", 0.06); tone(1760, 0.25, "triangle", 0.06, 0.07); noise(0.05, "highpass", 5000, 0.04, 0.0); },
   sign() { tone(392, 0.12, "triangle", 0.07); tone(587, 0.3, "triangle", 0.07, 0.1); },
+  // Phone notifications: ordinary / important / critical.
+  ping() { tone(1568, 0.09, "sine", 0.04); },
+  ping2() { tone(1175, 0.1, "sine", 0.05); tone(1568, 0.16, "sine", 0.05, 0.1); },
+  alarm() { [0, 0.16, 0.32].forEach((w) => tone(988, 0.11, "square", 0.035, w)); },
 };
 export function sfx(k) {
   if (!SND.on || !SND.vol || !FX[k]) return;

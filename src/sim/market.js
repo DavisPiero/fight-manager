@@ -128,7 +128,7 @@ function addBid(f, a, amount, unsolicited) {
 export const renewalAsk = (f) => round100(askOf(f) * 0.6);
 export function renewChance(f, cut, bonus, years) {
   let p = acceptChance(f, cut, bonus, years, renewalAsk(f));
-  p += 0.1 + cl(f.streak || 0, -2, 3) * 0.03; // fighters you've treated well like to stay
+  p += 0.1 + cl(f.streak || 0, -2, 3) * 0.03 + ((f.mood ?? 60) - 60) / 200; // happy fighters stay, unhappy ones look around
   if (f.pers === "Loyal") p += 0.1;
   return cl(p, 0.03, 0.98);
 }

@@ -21,6 +21,7 @@ Browser management game: run an MMA agency, sign/train/sell fighters, work the c
 - Test headlessly; never open the user's browser or play sound during tests.
 
 ## Layout
+- `src/sim/phone.js` phone: contacts, moods, messages, offers, news/social/rumours, notifications. `src/ui/phone.js` phone screens. Content in `src/data/phone-content.js` (starter set — add lines there).
 - `src/state.js` career state, value/ask formulas, save/load.
 - `src/sim/world.js` weekly cycle, fight offers, training, auto-train. `src/sim/market.js` signing, selling, bids, contracts. `src/sim/fight.js` fight engine. `src/sim/events.js` random events. `src/sim/sponsors.js` brand deals.
 - `src/ui/views.js` screens, `src/ui/fightview.js` fight night, `src/ui/tour.js` first-run tutorial, `src/ui/components.js` shared pieces, `src/ui/styles.css` look.

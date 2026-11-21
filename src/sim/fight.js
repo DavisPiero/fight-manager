@@ -1,6 +1,7 @@
 // Fight simulation. One round = 12 exchanges (25 seconds each). The UI calls step() on a timer.
 import { R, rnd, ri, cl, pk, last } from "../util.js";
 import { G, ovr, rank, say, earn, bumpRanks } from "../state.js";
+import { onFight } from "./phone.js";
 
 export const PLANS = {
   norm: { name: "Balanced", tip: "Even approach", corner: "Keep it up" },
@@ -18,7 +19,7 @@ const agg = (p) => (p === "agg" ? 1.25 : p === "safe" ? 0.8 : 1);
 
 export function newFight(b) {
   const me = G.f[b.fid], op = G.f[b.oid];
-  const form = (f) => (f.pers === "Inconsistent" ? rnd(0.9, 1.1) : 1);
+  const form = (f) => (f.pers === "Inconsistent" ? rnd(0.9, 1.1) : 1) * (1 + ((f.mood ?? 60) - 60) / 1000);
   return {
     b, f: [me, op], hp: [100, 100], st: [100, 100], pos: "stand", top: null,
     plan: ["norm", "norm"], rd: 1, ex: 0, dm: [0, 0], cards: [[], [], []],
@@ -265,6 +266,7 @@ export function finish(FS) {
   me.tl.push({ w: G.wk, t: `${won ? "Beat" : "Lost to"} ${F[1].name} (${short})${wasChamp ? " — new champion" : ""}` });
   if (wks) me.tl.push({ w: G.wk, t: `Injured for ${wks} weeks` });
   FS.res = { won, w, how, detail, cut, pay, wks, rk1, wasChamp, rdEnd: FS.rd, at: clock(FS) };
+  onFight(FS, FS.res);
   FS.ph = "end";
   return FS.res;
 }

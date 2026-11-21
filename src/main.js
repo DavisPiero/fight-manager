@@ -7,6 +7,8 @@ import { vFight, updateLive } from "./ui/fightview.js";
 import * as FV from "./ui/fightview.js";
 import { toast, stamp, confetti } from "./ui/components.js";
 import { drawTour, STEPS } from "./ui/tour.js";
+import * as PH from "./ui/phone.js";
+import * as PS from "./sim/phone.js";
 import { SND, saveSnd, sfx } from "./audio.js";
 import { advance, offersFor, train, autoBook } from "./sim/world.js";
 import { trySign, release, list, unlist, sell, rejectBid, counter, tryRenew, canSell } from "./sim/market.js";
@@ -26,7 +28,9 @@ function render() {
   else if (v === "fight") h = vFight();
   else h = ({ home: V.vHome, fighters: V.vFighters, prof: V.vProfile, fights: V.vFights, gym: V.vGym, market: V.vMarket, rankings: V.vRankings, office: V.vOffice }[v] || V.vHome)();
   if (UI.modal && (v !== "fight" || UI.modal.kind === "settings")) h += modalHtml();
+  else if (UI.phone.open && G && !["menu", "setup", "fight"].includes(v)) h += PH.phoneHtml();
   app.innerHTML = h;
+  document.body.classList.toggle("phone-open", !!(UI.phone.open && G));
   UI.last = v;
   if (UI.modal?.kind === "neg" || UI.modal?.kind === "renew") V.negUpdate();
   if (UI.modal?.kind === "list") V.listUpdate();
@@ -74,6 +78,7 @@ function go(v, extra) {
   scrollTo(0, 0);
 }
 const commit = () => { save(); render(); };
+const scrollMsgs = () => { const m = document.getElementById("phmsgs"); if (m) m.scrollTop = m.scrollHeight; };
 
 // ---------- Week / fights ----------
 function nextWeek() {
@@ -97,7 +102,16 @@ function afterWeek() {
   else UI.modal = null;
   if (UI.view === "fight") UI.view = "home";
   render();
+  if (!UI.modal) flushBanners();
 }
+// Phone pop-ups for anything new since the last time we showed them (critical / important only).
+function flushBanners() {
+  if (!G || UI.view === "fight") return;
+  const ph = PS.P(), list = PS.popups(UI.noteMark ?? ph.id);
+  UI.noteMark = ph.id;
+  PH.banners(list, sfx);
+}
+const phoneGo = (app, key) => { UI.phone.open = true; UI.phone.app = app; UI.phone.key = key || null; if (key) { const t = PS.thread(key); t.unread = 0; PS.P().notes.forEach((n) => { if (n.key === key) n.read = 1; }); } else if (app !== "home" && app !== "alerts") PS.markRead(app); };
 // Week fast-forward: a one-second overlay that sweeps the calendar and rolls the week number.
 // Purely visual: the new week is already drawn underneath and clicks pass straight through.
 function fastForward(a, b, fights) {
@@ -218,7 +232,31 @@ const A = {
     setG(newGame(UI.setup)); save(); lastCash = null; sfx("sign"); go("home");
   },
   adv: () => nextWeek(),
-  weekok: () => { UI.modal = null; render(); },
+  weekok: () => { UI.modal = null; render(); flushBanners(); },
+  // phone
+  phone: () => { if (UI.phone.open) UI.phone.open = false; else { phoneGo("home"); UI.phone.anim = 1; } render(); UI.phone.anim = 0; },
+  pclosebg: (i, t, e) => { if (e.target === t) { UI.phone.open = false; render(); } },
+  phome: () => { phoneGo("home"); render(); },
+  pback: () => { if (UI.phone.key) phoneGo(UI.phone.app === "home" ? "messages" : UI.phone.app); else phoneGo("home"); render(); },
+  papp: (i) => { phoneGo(i); render(); },
+  pthread: (i) => { phoneGo(UI.phone.app === "home" || UI.phone.app === "alerts" ? "messages" : UI.phone.app, i); render(); scrollMsgs(); },
+  pnote: (i) => {
+    const n = PS.P().notes.find((x) => x.id === +i); if (!n) return;
+    n.read = 1; document.getElementById("ph-banners")?.replaceChildren();
+    if (n.key === "sell") { UI.phone.open = false; go("market", "desk"); return; }
+    if (n.key?.startsWith("f:") || n.key?.startsWith("npc:")) phoneGo("messages", n.key); else phoneGo(n.app);
+    render(); scrollMsgs();
+  },
+  preply: (i) => {
+    const key = UI.phone.key, r = PS.reply(key, +i);
+    if (r === "renew") { UI.phone.open = false; save(); UI.modal = { kind: "renew", fid: +key.slice(2) }; render(); return; }
+    if (r) toast(r); commit(); scrollMsgs();
+  },
+  pask: (i) => { PS.ask(UI.phone.key, i); commit(); scrollMsgs(); },
+  pdeal: (i, t) => { const r = PS.dealAct(+i, t.dataset.x); toast(r, /gone|enough|walked|isn't|full/i.test(r) ? "warn" : t.dataset.x === "yes" ? "money" : ""); if (t.dataset.x === "yes") sfx("cash"); commit(); },
+  pfilter: (i) => { UI.phone.filter = i; render(); },
+  pclear: () => { PS.P().notes = []; commit(); },
+  ppref: (i) => { const p = PS.P().prefs; p[i] = p[i] ? 0 : 1; commit(); },
   inbox: () => { G.unread = 0; UI.modal = { kind: "inbox" }; commit(); },
   snd: () => { SND.on = SND.on ? 0 : 1; saveSnd(); render(); },
   analyst: () => { SETTINGS.analyst = !SETTINGS.analyst; saveSettings(); render(); },
@@ -330,7 +368,7 @@ const A = {
   fdone: () => { UI.FS = null; if (UI.queue.length) { startFight(UI.queue.shift()); return; } afterWeek(); },
 };
 const QUIET = new Set(["mbg", "skip", "speed", "introskip"]);
-const TABS = new Set(["go", "mktab", "oftab", "rkdiv", "mkdiv", "gsel", "gkey", "gint", "plan", "corner", "scol", "semb", "scity", "sfocus", "sdiff", "nyears"]);
+const TABS = new Set(["papp", "pthread", "pback", "phome", "pfilter", "go", "mktab", "oftab", "rkdiv", "mkdiv", "gsel", "gkey", "gint", "plan", "corner", "scol", "semb", "scity", "sfocus", "sdiff", "nyears"]);
 
 document.addEventListener("click", (e) => {
   const t = e.target.closest("[data-a]");
@@ -345,6 +383,8 @@ document.addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => {
   if (e.target.matches("input, select")) return;
   if ((e.key === "n" || e.key === "N") && G && !UI.modal && !["menu", "setup", "fight"].includes(UI.view)) nextWeek();
+  if (e.key === "Escape" && UI.phone.open && !UI.modal) { UI.phone.open = false; render(); return; }
+  if ((e.key === "p" || e.key === "P") && G && !UI.modal && !["menu", "setup", "fight"].includes(UI.view)) A.phone();
   if (e.key === "Escape" && UI.modal && !["event", "week"].includes(UI.modal.kind)) A.mclose();
   if (e.key === "Enter" && e.target.matches(".ac[data-a]")) e.target.click();
 });
@@ -366,7 +406,7 @@ document.addEventListener("change", (e) => {
 addEventListener("resize", () => drawTour());
 
 // Debug/test hook (used by the smoke test).
-window.__fm = { get G() { return G; }, UI, go, render, nextWeek, afterWeek, startFight };
+window.__fm = { get G() { return G; }, UI, go, render, nextWeek, afterWeek, startFight, PS, flushBanners };
 
 // Loading sting: logo slams in behind a red sweep while the menu fighters load. Click to skip.
 function boot() {

@@ -5,8 +5,10 @@ import { INTENSITY, ATTR_NAMES, ATTR_KEYS, WEEKS_IN_RED_LIMIT, FOCUS } from "../
 import { contractTick, weeklyBids } from "./market.js";
 import { sponsorWeek } from "./sponsors.js";
 import { rollEvent } from "./events.js";
+import { phoneWeek } from "./phone.js";
 
 function aiWeek() {
+  G.wkAI = [];
   const by = {};
   G.f.forEach((f) => { if (f.st !== "mine" && f.inj <= 0) (by[f.wc] ||= []).push(f); });
   for (let i = 0; i < 8; i++) {
@@ -15,6 +17,7 @@ function aiWeek() {
     const a = pk(l), b = pk(l);
     if (a === b) continue;
     const w = ovr(a) + rnd(-14, 14) > ovr(b) ? a : b, x = w === a ? b : a;
+    G.wkAI.push({ w: w.id, l: x.id, ko: R() < 0.3, title: rank(x) === 0 });
     w.w++; x.l++; w.pop = Math.min(100, w.pop + 1);
     w.streak = Math.max(1, (w.streak || 0) + 1); x.streak = Math.min(-1, (x.streak || 0) - 1);
     if (R() < 0.25) x.inj = ri(1, 6);
@@ -48,6 +51,7 @@ export function advance() {
   weeklyBids();
   sponsorWeek();
   G.auto = G.autotrain ? autoReport(autoTrain()) : null;
+  phoneWeek();
   G.offers = G.offers.filter((o) => o.exp > G.wk);
   G.ch.push(G.cash); if (G.ch.length > 200) G.ch.shift();
   G.red = G.cash < 0 ? G.red + 1 : 0;

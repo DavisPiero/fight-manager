@@ -165,6 +165,20 @@ try {
   const sold = await fm(() => window.__fm.G.hist.sold);
   const spons = await fm(() => window.__fm.G.fin.spons || 0);
 
+  // Phone: home, a business offer, messages, media apps, alerts and a pop-up banner.
+  await fm(() => { const fm = window.__fm; fm.UI.modal = null; fm.G.event = null; fm.go("home"); fm.PS.debugDeal("media"); fm.PS.debugDeal("gym"); });
+  await click('[data-a="phone"]'); await page.waitForSelector(".phone"); await shot("30-phone-home");
+  await click('[data-a="papp"][data-i="deals"]'); await shot("31-phone-deals");
+  const cash0 = await fm(() => window.__fm.G.cash);
+  await click('[data-a="pdeal"][data-x="yes"]'); await page.waitForTimeout(200);
+  const dealPaid = (await fm(() => window.__fm.G.cash)) !== cash0;
+  await click('[data-a="phome"]'); await click('[data-a="papp"][data-i="messages"]'); await shot("32-phone-messages");
+  if (await page.$('.ph-row[data-a="pthread"]')) { await click('.ph-row[data-a="pthread"]'); await shot("33-phone-thread"); if (await page.$('[data-a="preply"]')) { await click('[data-a="preply"]'); await shot("33b-phone-replied"); } }
+  for (const app of ["news", "social", "rumours", "alerts", "contacts"]) { await click('[data-a="phome"]'); await click(`[data-a="papp"][data-i="${app}"]`); await shot(`34-phone-${app}`); }
+  const phoneCounts = await fm(() => { const p = window.__fm.G.ph; return { news: p.news.length, social: p.social.length, rumours: p.rumours.length, deals: p.deals.length, threads: Object.keys(p.threads).length, contacts: p.npcs.length }; });
+  await page.keyboard.press("Escape");
+  await fm(() => { const fm = window.__fm; fm.UI.noteMark = fm.PS.P().id; fm.PS.notify("crit", "deals", "Offer expires next week", "Marco Vitale: fight offer for your fighter."); fm.PS.notify("imp", "messages", "A fighter", "Any news on my next fight?"); fm.flushBanners(); });
+  await page.waitForTimeout(700); await page.screenshot({ path: `${SHOTS}/35-phone-banners.png` });
   // A fight between two real UFC fighters, to see headshots in the arena.
   await fm(() => { const fm = window.__fm, g = fm.G, rs = g.f.filter((f) => f.real && f.wc === 4), A = rs[1], B = rs[2]; A.st = "mine"; A.ct = { pct: 20, wks: 50, signed: 0 }; fm.UI.queue = []; fm.UI.modal = null; fm.startFight({ fid: A.id, oid: B.id, purse: 50000, bonus: 50000, wk: g.wk, lab: "Even" }); });
   await page.waitForTimeout(4300); await page.screenshot({ path: `${SHOTS}/26a-star-faceoff.png` });
@@ -216,11 +230,13 @@ try {
 
   await fm(() => window.__fm.go("fights")); await shot("24-mobile-fights");
   await fm(() => window.__fm.go("market", "free")); await shot("25-mobile-market");
+  await click('[data-a="phone"]'); await shot("36-mobile-phone"); await page.keyboard.press("Escape");
   const overflow2 = await fm(() => document.documentElement.scrollWidth > innerWidth + 1);
   const auto = await fm(() => window.__fm.G.log.filter((l) => l.t.startsWith("Auto-train:")).map((l) => l.t));
   console.log(`fights: ${fought}, booked: ${booked}, bids: ${bids}, sold: ${sold}, sponsor income: ${spons}, events: ${log.length}, mobile overflow: ${overflow}`);
   console.log(`menu faces visible: ${faces.join("/")}, agency click: ${agencyTab}, sponsors tab: ${sponsorsTab}, market overflow: ${overflow2}, auto-train lines: ${auto.length} (latest: ${auto[0]}), corner call seen: ${moments}`);
-  ok = errors.length === 0 && fought > 0 && !overflow && booked > 0 && faces.every(Boolean) && agencyTab && auto.length > 0 && sponsorsTab && !overflow2;
+  console.log(`phone: ${JSON.stringify(phoneCounts)}, deal paid: ${dealPaid}`);
+  ok = phoneCounts.news > 0 && phoneCounts.social > 0 && dealPaid && errors.length === 0 && fought > 0 && !overflow && booked > 0 && faces.every(Boolean) && agencyTab && auto.length > 0 && sponsorsTab && !overflow2;
 } catch (e) {
   try { const pg = browser.contexts()[0].pages()[0]; await pg.screenshot({ path: SHOTS + "/zz-fail.png" }); console.log("STATE", await pg.evaluate(() => JSON.stringify({ v: window.__fm.UI.view, m: window.__fm.UI.modal, ev: window.__fm.G?.event }))); } catch (x) {}
   errors.push("TEST: " + e.message.split("\n").slice(0, 6).join(" | "));
