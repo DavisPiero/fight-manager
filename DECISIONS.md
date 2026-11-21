@@ -1,0 +1,46 @@
+# Decisions
+
+- 2026-11-20 Renamed Fight Camp → Fight Manager; new save key, old saves not migrated (prototype only).
+- 2026-11-20 Plain JS + Vite instead of one minified HTML file: readable, one-command run, still static hosting.
+- 2026-11-20 (superseded) Photos from Wikimedia Commons only; others get flat SVG avatars.
+- 2026-11-20 Replaced canvas stick-figure arena with broadcast-style portraits, bars and commentary (no pixel art).
+- 2026-11-20 Six fictional rival agencies own the real roster; they bid on your fighters and sell theirs.
+- 2026-11-20 Free agents ask 60% of value; bids land at ~68–102% of value. Flipping pays, developing pays more.
+- 2026-11-20 No-sale window of 6 weeks after signing, to stop instant flips.
+- 2026-11-20 Roster cap raised 6 → 8 to make room for a buy/sell squad.
+- 2026-11-20 Bankruptcy after 6 straight weeks in the red, so cash matters.
+- 2026-11-20 Public GitHub repo (user's choice).
+- 2026-11-20 Fighter images and stats from UFC.com, copies stored in the repo (user's choice, copyright risk explained). Real fighters without a headshot removed.
+- 2026-11-20 Made-up prospects kept, with a dark silhouette like UFC.com uses. Removing them would break the buy-low loop.
+- 2026-11-20 UFC.com stats shape skill strengths/weaknesses but are centred so they don't inflate overall.
+- 2026-11-20 Broadcast look: black/white/red/gold, condensed caps, square edges, top nav like ufc.com. No UFC logos.
+- 2026-11-20 Analyst Mode off by default; default screens show grades (A+..D) instead of nine numbers.
+- 2026-11-20 Three save slots; settings (Analyst Mode, sound) shared across slots. Old v1 saves are not carried over.
+- 2026-11-20 Home city changes costs, starting rep, local prospects and which skills train 25% faster.
+- 2026-11-20 Auto-train only runs on fighters with 55+ energy, to stay out of the injury zone.
+- 2026-11-20 Events ~40% of weeks from week 3, never the same event twice in a row.
+- 2026-11-21 Nav moved back to a left sidebar (user's taste; supersedes "top nav like ufc.com"). Phones keep the bottom bar.
+- 2026-11-21 Settings is its own pop-up (gear on every screen and on the main menu), out of the Office.
+- 2026-11-21 First screen is Play / Settings only; save slots are one click in. Tagline removed. Short loading sting, click to skip.
+- 2026-11-21 Menu line-up sized to the space between logo and buttons (not the window); smoke test fails if a face is cut off at 1440, 1280 or 390 wide.
+- 2026-11-21 Next week plays a ~1 s fast-forward overlay; the week summary shows the cash change and slides lines in.
+- 2026-11-21 Auto-train posts one news line every week (sessions, skill gained, who was skipped and why). It was working but silent.
+- 2026-11-21 "Find opponents for everyone" replaced by Auto book: every free fighter takes the Even match.
+- 2026-11-21 Fight offers show the opponent's overall as a big number, with the gap to your fighter.
+- 2026-11-21 Triage plan accepted as recommended: fight night = fewer, bigger moments; phone replies are picked, not typed; free agents ~45–62 vs stars 72–90; phone starts with ~150 content items and grows.
+- 2026-11-21 Screen rule written into CLAUDE.md (one main action, two secondary, rest in pop-ups) to fix clutter at the cause, after the second clutter note.
+- 2026-11-21 Market: three big tabs, one row list, division as a dropdown; clicking a fighter opens a quick-look pop-up with Negotiate. "Only fighters who'll talk to me" filter.
+- 2026-11-21 Reputation explained: a bar on the Market, a "?" pop-up (what, why, how it moves), "Will talk / Needs rep N" on every market fighter.
+- 2026-11-21 Office opens on a Sponsors tab: offers, running deals (pay, your cut, weeks left, condition), pitching. Sponsor to-dos link there.
+- 2026-11-21 Fighter cards and profile: one main action chosen by what he needs (renew / see offers / book), the rest under More.
+- 2026-11-21 Bug fix: selling or releasing a fighter now also clears his pending sponsor offers.
+- 2026-11-21 Balance bot added (`npm run bot`, 20 seeded one-year careers). Baseline before this session: free agents 59 avg / 76 max OVR, 5.4 real fighters at 92+, KO 2% / sub 14% / dec 84%.
+- 2026-11-21 Real fighters' overall from ranking + win rate + UFC.com strike/takedown numbers (champions ~89, #15 ~73). Free agents now 50 avg / 58 max. Young prospects priced partly on potential.
+- 2026-11-21 Fight night rebuilt: walk-out intro, moving fighters with poses (knockdown, ground top/bottom, KO), impact bursts, camera shake/zoom, round cards, "It's all over" / "To the judges", injury stamp.
+- 2026-11-21 Corner calls replace constant tactic-switching as the main decision: max 2 per round, 8 s timer, auto-pick by personality. Knockdowns added (can finish). Result: KO 28% / sub 14% / dec 57%, close to the real UFC.
+- 2026-11-21 Kept UFC.com headshots for the fight (no drawn sprites): they can lean, lunge, fall and lie down, but not throw visible kicks. Full-body art would be the next step up.
+- 2026-11-21 Phone built (sessions 5+6 merged). Starter content only (~30 news, ~35 social, 12 rumours, ~30 messages, 6 business offers) to save time; growing it is a TODO.
+- 2026-11-21 Phone replaces the old bell/news inbox: one place for alerts.
+- 2026-11-21 Fighter mood added: affects renewal chance (±20%) and fight form (±4%).
+- 2026-11-21 Notifications: critical always pop up, important optional, social never; badges on background apps stay quiet.
+- 2026-11-21 Rest weeks after fights not added (user said no for now).

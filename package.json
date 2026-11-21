@@ -1,0 +1,19 @@
+{
+  "name": "fight-manager",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node scripts/smoke.mjs",
+    "bot": "node scripts/bot.mjs",
+    "ufc": "node scripts/fetch-ufc.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.1",
+    "sharp": "^0.33.5",
+    "vite": "^5.4.11"
+  }
+}
