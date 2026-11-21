@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "node scripts/smoke.mjs",
+    "bot": "node scripts/bot.mjs",
     "ufc": "node scripts/fetch-ufc.mjs"
   },
   "devDependencies": {

@@ -4,6 +4,7 @@ import { sleep, money } from "./util.js";
 import { UI } from "./ui/uistate.js";
 import * as V from "./ui/views.js";
 import { vFight, updateLive } from "./ui/fightview.js";
+import * as FV from "./ui/fightview.js";
 import { toast, stamp, confetti } from "./ui/components.js";
 import { drawTour, STEPS } from "./ui/tour.js";
 import { SND, saveSnd, sfx } from "./audio.js";
@@ -11,7 +12,7 @@ import { advance, offersFor, train, autoBook } from "./sim/world.js";
 import { trySign, release, list, unlist, sell, rejectBid, counter, tryRenew, canSell } from "./sim/market.js";
 import { acceptSponsor, declineSponsor, pitch } from "./sim/sponsors.js";
 import { resolveEvent } from "./sim/events.js";
-import { newFight, step, roundOver, endRound, startRound, finish, aiPlan } from "./sim/fight.js";
+import { newFight, step, roundOver, endRound, startRound, finish, aiPlan, pendingMoment, resolveMoment, autoChoice } from "./sim/fight.js";
 
 const app = document.getElementById("app");
 
@@ -128,33 +129,54 @@ async function runRound() {
   sfx("bell");
   FS.ph = "run";
   render();
+  if (!UI.skip) { FV.card(`Round ${FS.rd}`, FS.rd === 1 ? "Fight!" : FS.rd === 3 ? "Final round" : "", 1100, "round"); await sleep(1150); }
+  const gone = () => UI.FS !== FS;
   while (!FS.fin && !roundOver(FS)) {
     if (FS.ex && FS.ex % 4 === 0) FS.plan[1] = aiPlan(FS);
     const ev = step(FS);
     if (!UI.skip) {
       updateLive(FS, ev);
       if (ev.dmg) sfx(ev.big ? "big" : "hit");
-      if (ev.ko || ev.kind === "sub") {
-        sfx("crowd");
-        document.body.insertAdjacentHTML("beforeend", '<div class="ko-flash"></div>');
-        setTimeout(() => document.querySelector(".ko-flash")?.remove(), 700);
-      }
-      await sleep(ev.ko ? 900 : 950 / UI.speed);
+      if (ev.kd) sfx("crowd");
+      await sleep(ev.ko ? 700 : ev.kd ? 1100 : ev.big ? 850 : 650 / UI.speed);
+      if (gone()) { running = false; return; }
     }
-    if (UI.FS !== FS) { running = false; return; }
+    // Key moment: the fight pauses for your corner's call.
+    const m = !FS.fin && pendingMoment(FS);
+    if (m) {
+      const auto = autoChoice(FS, m);
+      let i = auto;
+      if (!UI.skip) { sfx("tab"); i = await FV.askMoment(FS, m, auto); if (gone()) { running = false; return; } }
+      const res = resolveMoment(FS, m, i);
+      if (!UI.skip) {
+        FV.playMoment(FS, res); FV.resultBanner(res.txt);
+        sfx(res.ko ? "big" : res.ok ? "hit" : "bad"); if (res.ko || res.anim === "big") sfx("crowd");
+        await sleep(res.ko ? 1300 : 1800);
+        if (gone()) { running = false; return; }
+      }
+    }
   }
   running = false;
   if (FS.fin || FS.rd >= 3) {
-    if (!FS.fin) endRound(FS);
+    const fin = !!FS.fin;
+    if (!fin) endRound(FS);
     const r = finish(FS);
+    if (!UI.skip) {
+      FS.ph = "run"; updateLive(FS); // loser drops, winner stands tall
+      if (fin) { sfx("crowd"); FV.card("It's all over", `${r.how}${r.detail ? " · " + r.detail : ""}`, 1700, "over"); await sleep(1800); }
+      else { sfx("bell"); FV.card("To the judges", "After three rounds", 1400); await sleep(1500); }
+      FS.ph = "end";
+    }
     UI.skip = false;
     save();
     render();
     if (r.won) { confetti(r.wasChamp ? 220 : 110); sfx("win"); sfx("crowd"); stamp(r.wasChamp ? "Champion" : "Winner", r.wasChamp ? "var(--gold)" : "var(--red)"); } else sfx("bad");
+    if (r.wks) setTimeout(() => { stamp(`Injured · ${r.wks} wks`, "#7a0d0d"); sfx("bad"); }, r.won ? 1500 : 900);
     countUp();
     return;
   }
   endRound(FS);
+  if (!UI.skip) { sfx("bell"); FV.card(`End of round ${FS.rd}`, "", 1000); await sleep(1050); if (gone()) return; }
   UI.skip = false;
   FS.ph = "corner";
   UI.corner = null;
@@ -302,10 +324,12 @@ const A = {
   corner: (i) => { UI.corner = i; render(); },
   nextround: () => { startRound(UI.FS, UI.corner); runRound(); },
   speed: (i) => { UI.speed = +i; document.querySelectorAll('[data-a="speed"]').forEach((b) => b.classList.toggle("on", b.dataset.i === i)); },
-  skip: () => { UI.skip = true; },
+  skip: () => { UI.skip = true; UI.mpick?.(-1); },
+  mpick: (i) => { UI.mpick?.(+i); },
+  introskip: () => { const e = document.getElementById("intro"); if (e) { e.classList.add("gone"); setTimeout(() => e.remove(), 300); } },
   fdone: () => { UI.FS = null; if (UI.queue.length) { startFight(UI.queue.shift()); return; } afterWeek(); },
 };
-const QUIET = new Set(["mbg", "skip", "speed"]);
+const QUIET = new Set(["mbg", "skip", "speed", "introskip"]);
 const TABS = new Set(["go", "mktab", "oftab", "rkdiv", "mkdiv", "gsel", "gkey", "gint", "plan", "corner", "scol", "semb", "scity", "sfocus", "sdiff", "nyears"]);
 
 document.addEventListener("click", (e) => {
@@ -342,7 +366,7 @@ document.addEventListener("change", (e) => {
 addEventListener("resize", () => drawTour());
 
 // Debug/test hook (used by the smoke test).
-window.__fm = { get G() { return G; }, UI, go, render, nextWeek, afterWeek };
+window.__fm = { get G() { return G; }, UI, go, render, nextWeek, afterWeek, startFight };
 
 // Loading sting: logo slams in behind a red sweep while the menu fighters load. Click to skip.
 function boot() {

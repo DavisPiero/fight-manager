@@ -13,12 +13,14 @@
 Check To-do → book fights / answer bids → train → Next week → fight night if booked → results, value changes.
 
 ## Systems
-- **Fighters:** 9 skills, overall = average. Age, personality, potential, popularity, win streak.
+- **Fighters:** 9 skills, overall = average. Real fighters ~73 (#15) to ~89 (champion), from ranking, win rate and UFC.com stats. Free agents ~40–60; prospects are bought for potential. Age, personality, potential, popularity, win streak.
 - **Value:** skill^2.3, popularity, ranking (champ/top 5/top 15), youth, streak, contract length, injury.
 - **Signing:** free agents ask a bonus (60% of value). Buy-outs: transfer fee to the rival agency + bonus. Acceptance depends on reputation, bonus, cut, contract length and personality.
 - **Selling:** list at an asking price; rival agencies bid weekly (style affects price). Accept, counter or reject. Hot unlisted fighters draw unsolicited bids. No selling within 6 weeks of signing.
 - **Contracts:** 1–3 years, count down weekly, warning at 8 weeks, fighter walks for free at 0. Renew via negotiation.
-- **Fights:** 3 rounds × 12 exchanges. Live tactics (Balanced / Pressure / Counter / Wrestle), corner calls (water / cutman / fire up), speed 1–4× and skip. AI corner adapts.
+- **Fight night:** walk-out intro (title card, both fighters with name plates, face-off), tale of the tape, then 3 rounds × 12 exchanges in a live arena: fighters move, lunge, get rocked, drop, go to the ground; impact bursts, camera shake and zoom. Knockdowns can end it.
+- **Corner calls:** up to 2 key moments a round (he is hurt / you are rocked / on top / on bottom / an opening / close round). Three choices, 8 seconds; no call and the fighter follows his personality. Outcomes come from skills. Between rounds: water / cutman / fire up, and a new plan. Speed 1–4× and skip.
+- **Finishes (bot):** ~28% KO, ~14% submission, ~57% decision.
 - **Money:** commission (your % of purse + win bonus), sales; costs are bonuses, fees, gym sessions, $1,200 + $350/fighter weekly.
 - **Roster:** max 8.
 - **Agency setup:** name, manager, colour, emblem, home city (cost, starting rep, local prospects, faster-training skills), gym focus (+15% in an area). 3 save slots.

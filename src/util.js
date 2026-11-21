@@ -1,4 +1,6 @@
-export const R = Math.random;
+// Random source. Swappable so the balance bot can replay the same careers (seed()).
+export let R = Math.random;
+export function seed(s) { R = () => { s = (s + 0x6d2b79f5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 export const rnd = (a, b) => a + R() * (b - a);
 export const ri = (a, b) => Math.floor(rnd(a, b + 1));
 export const cl = (v, a, b) => Math.max(a, Math.min(b, v));

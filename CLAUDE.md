@@ -6,6 +6,7 @@ Browser management game: run an MMA agency, sign/train/sell fighters, work the c
 - `npm install` once, then `npm run dev` → http://localhost:5173 (add `?mute` to silence it).
 - `npm test` → headless smoke test (Playwright). Plays weeks, a fight and a sale; screenshots in `test-results/`.
 - `npm run ufc` → fetches fighter headshots + bio/stats from UFC.com athlete pages (15 s between requests, ~1.5 h; skips ones already fetched).
+- `npm run bot` → balance bot: 20 seeded one-year careers, compared with `scripts/bot-baseline.json` (`-- --save` to re-baseline). Run it after any rule or data change.
 - `npm run build` → static site in `dist/` (relative paths, works on GitHub Pages).
 
 ## Hard rules

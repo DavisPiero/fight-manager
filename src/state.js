@@ -32,6 +32,8 @@ export function value(f) {
   let v = Math.pow(Math.max(0, o - 40), 2.3) * 25 + Math.pow(f.pop, 2) * 25;
   v += r === 0 ? 600000 : r > 0 && r <= 5 ? 250000 : r > 0 && r <= 15 ? 80000 : 0;
   v *= f.age < 24 ? 1.3 : f.age < 28 ? 1.15 : f.age < 32 ? 1 : f.age < 35 ? 0.75 : 0.5;
+  // Young prospects are priced on what they could become, not only what they are.
+  if (!f.real && f.age < 27 && f.pot > o) v += Math.pow(f.pot - o, 1.8) * 40 * (27 - f.age) / 8;
   v *= 1 + cl(f.streak || 0, -3, 5) * 0.06;
   if (f.ct) v *= cl(0.45 + f.ct.wks / 150, 0.5, 1.2);
   if (f.inj > 0) v *= 0.8;
@@ -87,7 +89,8 @@ export function makeProspect(id, own, nat) {
   nat ||= R() < 0.5 && G ? city().nat : pk(Object.keys(NAMES));
   if (!NAMES[nat]) nat = pk(Object.keys(NAMES));
   const [fn, ln] = NAMES[nat], style = pk(Object.keys(STYLES));
-  const a = ri(19, 30), base = (own ? 42 : 38) + R() * (own ? 14 : 30) + Math.min(a - 19, 8);
+  // Prospects land ~40–60 overall: well below UFC regulars (72+). Their upside is potential, not current skill.
+  const a = ri(19, 30), base = (own ? 42 : 39) + R() * (own ? 10 : 13) + Math.min(a - 19, 8) * 0.7;
   const w = ri(0, Math.max(1, a - 18));
   const f = {
     id, real: 0, name: pk(fn.split(" ")) + " " + pk(ln.split(" ")), nat, wc: ri(0, 7), age: a,
@@ -107,7 +110,9 @@ export function newGame({ name, manager, col, diff, city: cityId, focus, emblem,
   ROSTER.forEach((div, d) => {
     div.filter(([nm]) => UFC[nm]).forEach(([nm, w, l], r) => {
       const U = UFC[nm];
-      const T = cl(92 - r * 1.4 + (w / (w + l) - 0.75) * 12, 60, 93), H = HAND_TUNED[nm];
+      // Overall target from real data: ranking (champion ~88, #15 ~73), win rate, and UFC.com strike/takedown numbers.
+      const S = U.stats || {}, edge = cl(((S.slpm ?? 4) - (S.sapm ?? 4)) * 0.9 + ((S.tddef ?? 65) - 65) / 15 + ((S.stracc ?? 48) - 48) / 12, -2.5, 2.5);
+      const T = cl(87.5 - r * 1.0 + (w / (w + l) - 0.75) * 10 + edge, 70, 91), H = HAND_TUNED[nm];
       const style = styleFrom(U.style) || pk(Object.keys(STYLES));
       let at;
       if (H) { const sh = T - H.reduce((x, y) => x + y) / 9; at = {}; ATTR_KEYS.forEach((k, i) => (at[k] = cl(Math.round(H[i] + sh), 30, 97))); }

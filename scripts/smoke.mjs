@@ -13,6 +13,7 @@ const browser = await chromium.launch({ headless: true });
 const errors = [];
 let ok = false;
 const log = [];
+let moments = 0;
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   page.on("pageerror", (e) => errors.push(e.message));
@@ -31,11 +32,17 @@ try {
   };
   const fightThrough = async (first) => {
     console.log("FIGHT", await fm(() => JSON.stringify({ v: window.__fm.UI.view, ph: window.__fm.UI.FS?.ph, q: window.__fm.UI.queue.length, wk: window.__fm.G.wk })));
+    if (first) { await page.waitForTimeout(1900); await page.screenshot({ path: `${SHOTS}/08a-intro-walkout.png` }); await page.waitForTimeout(2300); await page.screenshot({ path: `${SHOTS}/08b-intro-faceoff.png` }); }
+    if (await page.$("#intro")) { await click("#intro"); await page.waitForTimeout(400); }
     if (first) await shot("08-tale-of-tape");
     await click('[data-a="fstart"]');
-    await page.waitForTimeout(2600);
-    if (first) await shot("09-fight-live");
-    await fm(() => (window.__fm.UI.skip = true));
+    if (first) {
+      await page.waitForTimeout(500); await page.screenshot({ path: `${SHOTS}/09a-round-card.png` });
+      await page.waitForTimeout(2500); await shot("09-fight-live");
+      const mo = await page.waitForSelector("#mo .moment", { timeout: 20000 }).catch(() => null);
+      if (mo) { await page.screenshot({ path: `${SHOTS}/09b-corner-call.png` }); await click('[data-a="mpick"]'); await page.waitForTimeout(700); await page.screenshot({ path: `${SHOTS}/09c-call-result.png` }); moments++; }
+    }
+    await fm(() => { window.__fm.UI.skip = true; window.__fm.UI.mpick?.(-1); });
     for (let k = 0; k < 8; k++) {
       await page.waitForFunction(() => ["end", "corner"].includes(window.__fm.UI.FS?.ph), null, { timeout: 15000 }).catch(async (e) => { console.log("STUCK", await fm(() => { const F = window.__fm.UI.FS; return F && { ph: F.ph, ex: F.ex, rd: F.rd, fin: F.fin, skip: window.__fm.UI.skip, view: window.__fm.UI.view, rej: window.__rej }; })); throw e; });
       console.log("  ph", await fm(() => window.__fm.UI.FS?.ph));
@@ -43,8 +50,9 @@ try {
       if (first && k === 0) await shot("10-corner");
       await click('[data-a="corner"][data-i="water"]');
       await click('[data-a="nextround"]');
-      await fm(() => (window.__fm.UI.skip = true));
+      await fm(() => { window.__fm.UI.skip = true; window.__fm.UI.mpick?.(-1); });
     }
+    await page.waitForFunction(() => window.__fm.UI.FS?.ph === "end" && document.querySelector('[data-a="fdone"]'), null, { timeout: 15000 });
     await page.waitForTimeout(700);
     if (first) await shot("11-result");
     await click('[data-a="fdone"]');
@@ -157,6 +165,21 @@ try {
   const sold = await fm(() => window.__fm.G.hist.sold);
   const spons = await fm(() => window.__fm.G.fin.spons || 0);
 
+  // A fight between two real UFC fighters, to see headshots in the arena.
+  await fm(() => { const fm = window.__fm, g = fm.G, rs = g.f.filter((f) => f.real && f.wc === 4), A = rs[1], B = rs[2]; A.st = "mine"; A.ct = { pct: 20, wks: 50, signed: 0 }; fm.UI.queue = []; fm.UI.modal = null; fm.startFight({ fid: A.id, oid: B.id, purse: 50000, bonus: 50000, wk: g.wk, lab: "Even" }); });
+  await page.waitForTimeout(4300); await page.screenshot({ path: `${SHOTS}/26a-star-faceoff.png` });
+  await click("#intro"); await page.waitForTimeout(400);
+  await click('[data-a="fstart"]'); await page.waitForTimeout(1400);
+  // Catch a landed shot mid-animation: wait for a hit class, then grab a frame.
+  for (let k = 0; k < 3; k++) { await page.waitForSelector(".ftr.hit, .ftr.bighit, .ftr.kd, .moment", { timeout: 15000 }).catch(() => {}); await page.waitForTimeout(90); await page.screenshot({ path: `${SHOTS}/26b-star-live-${k}.png` }); if (await page.$(".moment")) { await click('[data-a="mpick"]'); await page.waitForTimeout(450); await page.screenshot({ path: `${SHOTS}/26b-star-call-${k}.png` }); } await page.waitForTimeout(700); }
+  await fm(() => { window.__fm.UI.skip = true; window.__fm.UI.mpick?.(-1); });
+  for (let k = 0; k < 8; k++) {
+    await page.waitForFunction(() => ["end", "corner"].includes(window.__fm.UI.FS?.ph), null, { timeout: 20000 });
+    if ((await fm(() => window.__fm.UI.FS.ph)) === "end") break;
+    await click('[data-a="nextround"]'); await fm(() => { window.__fm.UI.skip = true; window.__fm.UI.mpick?.(-1); });
+  }
+  await page.waitForSelector('[data-a="fdone"]'); await page.waitForTimeout(900); await shot("26c-star-result");
+  await click('[data-a="fdone"]'); await settle();
   await fm(() => { window.__fm.UI.rk = 4; window.__fm.go("rankings"); }); await shot("17-rankings");
   await fm(() => { const fm = window.__fm; fm.UI.pid = fm.G.f.find((f) => f.real).id; fm.UI.view = "prof"; fm.render(); }); await shot("18-profile-star");
   await fm(() => window.__fm.go("home"));
@@ -196,7 +219,7 @@ try {
   const overflow2 = await fm(() => document.documentElement.scrollWidth > innerWidth + 1);
   const auto = await fm(() => window.__fm.G.log.filter((l) => l.t.startsWith("Auto-train:")).map((l) => l.t));
   console.log(`fights: ${fought}, booked: ${booked}, bids: ${bids}, sold: ${sold}, sponsor income: ${spons}, events: ${log.length}, mobile overflow: ${overflow}`);
-  console.log(`menu faces visible: ${faces.join("/")}, agency click: ${agencyTab}, sponsors tab: ${sponsorsTab}, market overflow: ${overflow2}, auto-train lines: ${auto.length} (latest: ${auto[0]})`);
+  console.log(`menu faces visible: ${faces.join("/")}, agency click: ${agencyTab}, sponsors tab: ${sponsorsTab}, market overflow: ${overflow2}, auto-train lines: ${auto.length} (latest: ${auto[0]}), corner call seen: ${moments}`);
   ok = errors.length === 0 && fought > 0 && !overflow && booked > 0 && faces.every(Boolean) && agencyTab && auto.length > 0 && sponsorsTab && !overflow2;
 } catch (e) {
   try { const pg = browser.contexts()[0].pages()[0]; await pg.screenshot({ path: SHOTS + "/zz-fail.png" }); console.log("STATE", await pg.evaluate(() => JSON.stringify({ v: window.__fm.UI.view, m: window.__fm.UI.modal, ev: window.__fm.G?.event }))); } catch (x) {}

@@ -34,3 +34,8 @@
 - 2026-11-21 Office opens on a Sponsors tab: offers, running deals (pay, your cut, weeks left, condition), pitching. Sponsor to-dos link there.
 - 2026-11-21 Fighter cards and profile: one main action chosen by what he needs (renew / see offers / book), the rest under More.
 - 2026-11-21 Bug fix: selling or releasing a fighter now also clears his pending sponsor offers.
+- 2026-11-21 Balance bot added (`npm run bot`, 20 seeded one-year careers). Baseline before this session: free agents 59 avg / 76 max OVR, 5.4 real fighters at 92+, KO 2% / sub 14% / dec 84%.
+- 2026-11-21 Real fighters' overall from ranking + win rate + UFC.com strike/takedown numbers (champions ~89, #15 ~73). Free agents now 50 avg / 58 max. Young prospects priced partly on potential.
+- 2026-11-21 Fight night rebuilt: walk-out intro, moving fighters with poses (knockdown, ground top/bottom, KO), impact bursts, camera shake/zoom, round cards, "It's all over" / "To the judges", injury stamp.
+- 2026-11-21 Corner calls replace constant tactic-switching as the main decision: max 2 per round, 8 s timer, auto-pick by personality. Knockdowns added (can finish). Result: KO 28% / sub 14% / dec 57%, close to the real UFC.
+- 2026-11-21 Kept UFC.com headshots for the fight (no drawn sprites): they can lean, lunge, fall and lie down, but not throw visible kicks. Full-body art would be the next step up.
