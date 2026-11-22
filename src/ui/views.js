@@ -65,7 +65,7 @@ export function vMenu() {
   const legal = `<div class="legal">Unofficial fan game. Not affiliated with or endorsed by the UFC. Fighter images © their owners, from ufc.com. Records as of November 2026; skills are the game's own estimates.</div>`;
   const sl = slots(), recent = sl.filter((x) => x.name && !x.over).sort((x, y) => y.saved - x.saved)[0];
   if (UI.menuPage !== "slots") return `<div class="menu front"><div class="glow"></div><div class="mn-beam l"></div><div class="mn-beam r"></div><div class="mn-haze"></div><div class="mn-sparks">${sparks()}</div><div class="mn-floor"></div>
-    <div class="top"><div class="logo mn-logo"><b>Fight</b><span>Manager</span></div><div class="mn-tag">Run the agency. Work the corner. Build a champion.</div></div>
+    <div class="top"><div class="logo mn-logo"><b>Fight</b><span>Manager</span></div></div>
     <div class="stage">${lineup}<div class="fade"></div></div>
     <div class="bottom">
       <div class="menu-btns">${recent
