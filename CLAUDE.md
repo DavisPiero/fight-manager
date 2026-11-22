@@ -26,7 +26,7 @@ Browser management game: run an MMA agency, sign/train/sell fighters, work the c
 - `src/sim/phone.js` phone: contacts, moods, messages, offers, news/social/rumours, notifications. `src/ui/phone.js` phone screens. Content in `src/data/phone-content.js` (starter set — add lines there).
 - `src/state.js` career state, value/ask formulas, save/load.
 - `src/sim/world.js` weekly cycle, fight offers, training, auto-train. `src/sim/market.js` signing, selling, bids, contracts. `src/sim/fight.js` fight engine. `src/sim/events.js` random events. `src/sim/sponsors.js` brand deals.
-- `src/ui/views.js` screens, `src/ui/fightview.js` fight night, `src/ui/arena.js` the octagon canvas and drawn fighters (parts in `PARTS`, poses in `STANCE`/`STRIKE`/`ACT`), `src/ui/tour.js` first-run tutorial, `src/ui/components.js` shared pieces, `src/ui/styles.css` look.
+- `src/ui/views.js` screens, `src/ui/fightview.js` fight night, `src/ui/arena.js` the octagon canvas and drawn fighters (parts in `PARTS`, poses in `STANCE`/`BASE`/`ACT`, strikes and their targets in `STRIKE`, contact/IK in `contact()`), walk-out in `walkout()` in fightview.js, `src/ui/tour.js` first-run tutorial, `src/ui/components.js` shared pieces, `src/ui/styles.css` look.
 - `src/data/` roster (Nov 2026), constants (cities, emblems, brands), `ufc.json` (scraped bio/stats).
 - Saves: 3 slots in localStorage (`fightmanager_slot_N`); settings shared across slots.
 

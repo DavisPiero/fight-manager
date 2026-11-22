@@ -21,7 +21,7 @@ try {
   await page.click('[data-a="newslot"][data-i="1"]'); await page.fill("#an", "Shots MMA");
   await page.click('[data-a="start"]'); await page.waitForSelector(".tour-tip"); await page.click('[data-a="tourskip"]');
   await fm(() => { const fm = window.__fm, g = fm.G, rs = g.f.filter((f) => f.real && f.wc === 4), A = rs[3], B = rs[1]; A.st = "mine"; A.ct = { pct: 20, wks: 50, signed: 0 }; fm.UI.queue = []; fm.UI.modal = null; fm.startFight({ fid: A.id, oid: B.id, purse: 50000, bonus: 50000, wk: g.wk, lab: "Even" }); });
-  for (const [t, n] of [[1000, "a-title"], [2200, "b-left"], [3500, "c-right"], [5200, "d-vs"]]) { await page.waitForTimeout(t - (globalThis.__t || 0)); globalThis.__t = t; await snap("intro-" + n); }
+  for (const [t, n] of [[1100, "a-title"], [2700, "b-left"], [4300, "c-right"], [5900, "d-vs"]]) { await page.waitForTimeout(t - (globalThis.__t || 0)); globalThis.__t = t; await snap("intro-" + n); }
   await page.click("#intro"); await page.waitForTimeout(500); await snap("tape");
   await page.locator('[data-a="fstart"]').scrollIntoViewIfNeeded(); await page.waitForTimeout(300);
   await page.click('[data-a="fstart"]'); await page.waitForTimeout(1500);

@@ -97,7 +97,7 @@ function nextWeek() {
     // Let the week fast-forward finish ("Fight night" tag) before cutting to the walk-out.
     if (UI.instant || matchMedia("(prefers-reduced-motion: reduce)").matches) { startFight(due[0]); return; }
     UI.ffBusy = true; UI.modal = null; render();
-    return new Promise((done) => setTimeout(() => { UI.ffBusy = false; startFight(due[0]); done(); }, 950)); // starts as the overlay fades, intro fades in over it
+    return new Promise((done) => setTimeout(() => { UI.ffBusy = false; startFight(due[0]); done(); }, 950)); // the walk-out fades in over the banner
   }
   afterWeek();
 }
@@ -131,7 +131,8 @@ function fastForward(a, b, fights) {
     <div class="ff-wk"><small>Week</small><b><i>${a}</i><i>${b}</i></b></div>
     ${fights ? `<span class="ff-tag">Fight night</span>` : ""}</div></div>`;
   document.body.appendChild(e);
-  setTimeout(() => { e.classList.add("out"); document.getElementById("wknum")?.classList.add("tick"); }, 950);
+  // On fight night the walk-out fades in over this banner, so it stays put instead of fading (no double fade).
+  setTimeout(() => { if (!fights) e.classList.add("out"); document.getElementById("wknum")?.classList.add("tick"); }, 950);
   setTimeout(() => e.remove(), 1350);
 }
 function startFight(b) {
@@ -139,7 +140,9 @@ function startFight(b) {
   UI.corner = null;
   UI.view = "fight";
   UI.modal = null;
-  render(); scrollTo(0, 0);
+  const show = () => { render(); scrollTo(0, 0); };
+  if (UI.instant || matchMedia("(prefers-reduced-motion: reduce)").matches) { UI.FS.introSeen = true; show(); return; }
+  FV.walkout(UI.FS, { sfx, onCovered: show }); // the fight screen is drawn under the walk-out once it's opaque
 }
 let running = false;
 async function runRound() {
@@ -370,10 +373,9 @@ const A = {
   speed: (i) => { UI.speed = +i; document.querySelectorAll('[data-a="speed"]').forEach((b) => b.classList.toggle("on", b.dataset.i === i)); },
   skip: () => { UI.skip = true; UI.mpick?.(-1); },
   mpick: (i) => { UI.mpick?.(+i); },
-  introskip: () => { const e = document.getElementById("intro"); if (e) { e.classList.add("gone"); setTimeout(() => e.remove(), 300); } },
   fdone: () => { UI.FS = null; if (UI.queue.length) { startFight(UI.queue.shift()); return; } afterWeek(); },
 };
-const QUIET = new Set(["mbg", "skip", "speed", "introskip"]);
+const QUIET = new Set(["mbg", "skip", "speed"]);
 const TABS = new Set(["papp", "pthread", "pback", "phome", "pfilter", "go", "mktab", "oftab", "rkdiv", "mkdiv", "gsel", "gkey", "gint", "plan", "corner", "scol", "semb", "scity", "sfocus", "sdiff", "nyears"]);
 
 document.addEventListener("click", (e) => {
