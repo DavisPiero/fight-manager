@@ -2,6 +2,7 @@
 import { G, ovr, value, askOf, acceptChance, say, spend, earn, mine, rank, bumpRanks } from "../state.js";
 import { R, rnd, ri, cl, pk, round100 } from "../util.js";
 import { AGENCIES, ROSTER_MAX, NO_SALE_WEEKS } from "../data/constants.js";
+import { news } from "./pulse.js";
 
 export const canSell = (f) => G.wk - (f.ct?.signed ?? -99) >= NO_SALE_WEEKS;
 export const listing = (f) => G.listings.find((l) => l.fid === f.id);
@@ -34,9 +35,11 @@ export function trySign(f, cut, bonus, years, fee = 0) {
   const p = dealChance(f, cut, bonus, years, fee);
   if (R() < p) {
     spend(bonus + fee);
-    if (fee) { G.fin.buys += fee; const ag = AGENCIES[f.agency]; say(`Bought ${f.name} from ${ag.name} for ${moneyS(fee)}.`, "good"); }
+    const from = fee ? AGENCIES[f.agency] : null;
+    if (fee) { G.fin.buys += fee; say(`Bought ${f.name} from ${from.name} for ${moneyS(fee)}.`, "good"); }
     else say(`Signed ${f.name}.`, "good");
     joinRoster(f, cut, years);
+    news(from ? "bought" : "signing", f, null, { ag: from?.name });
     return { ok: true };
   }
   f.lock = G.wk + 4;
@@ -80,6 +83,7 @@ export function sell(bid) {
   G.hist.sold++;
   G.rep = cl(G.rep + 1, 0, 100);
   say(`Sold ${f.name} to ${ag.name} for ${moneyS(bid.amount)}.`, "good");
+  news("sold", f, null, { ag: ag.name });
   bumpRanks();
 }
 export function rejectBid(bid) { G.bids = G.bids.filter((b) => b !== bid); }

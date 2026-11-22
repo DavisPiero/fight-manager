@@ -13,5 +13,5 @@ export const UI = {
   speed: 1,
   FS: null, // current fight
   queue: [], // bookings still to fight this week
-  phone: { open: false, app: "home", key: null, filter: "" },
+  phone: { open: false, v: { app: "home" }, stack: [], seen: 0, pick: null },
 };

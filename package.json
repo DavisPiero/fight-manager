@@ -10,6 +10,7 @@
     "test": "node scripts/smoke.mjs",
     "bot": "node scripts/bot.mjs",
     "ufc": "node scripts/fetch-ufc.mjs",
+    "phone": "node scripts/phoneshots.mjs",
     "shots": "node scripts/fightshots.mjs",
     "poses": "node scripts/poses.mjs test-results/arena",
     "skin": "node scripts/skintones.mjs"

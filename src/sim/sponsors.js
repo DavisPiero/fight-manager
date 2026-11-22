@@ -2,14 +2,17 @@
 import { G, mine, say, earn, spend } from "../state.js";
 import { R, ri, pk, round100 } from "../util.js";
 import { BRANDS } from "../data/constants.js";
+import { sponsorPost } from "./pulse.js";
 
 export const dealsOf = (f) => (f.deals ||= []);
 export const offersFor = (f) => G.spons.filter((o) => o.fid === f.id);
 const weeklyFor = (f) => round100(Math.max(300, Math.pow(f.pop, 1.6) * 6 * (1 + Math.max(0, f.streak || 0) * 0.08)));
 
-function makeOffer(f) {
+// A brand offer for a fighter. brand = a specific brand's name (when its rep is pitched directly).
+export function sponsorOffer(f, brand) { return dealsOf(f).length < 3 ? makeOffer(f, brand) : null; }
+function makeOffer(f, brand) {
   const taken = new Set([...dealsOf(f).map((d) => d.brand), ...offersFor(f).map((o) => o.brand)]);
-  const b = pk(BRANDS.filter((x) => !taken.has(x.name)));
+  const b = pk(BRANDS.filter((x) => !taken.has(x.name) && (!brand || x.name === brand)));
   if (!b) return null;
   const o = { id: G.wk * 1000 + ri(0, 999), fid: f.id, brand: b.name, col: b.col, weekly: weeklyFor(f), weeks: pk([12, 20, 26, 40]), exp: G.wk + 2, perf: R() < 0.4 };
   G.spons.push(o);
@@ -41,6 +44,7 @@ export function acceptSponsor(o) {
   f.pop = Math.min(100, f.pop + 2);
   f.tl.push({ w: G.wk, t: `Signed with ${o.brand}` });
   say(`${f.name} signed a sponsorship with ${o.brand}.`, "good");
+  sponsorPost(f, o.brand);
 }
 export function declineSponsor(o) { G.spons = G.spons.filter((x) => x !== o); }
 

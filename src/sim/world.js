@@ -6,6 +6,7 @@ import { contractTick, weeklyBids } from "./market.js";
 import { sponsorWeek } from "./sponsors.js";
 import { rollEvent } from "./events.js";
 import { phoneWeek } from "./phone.js";
+import { heatOf } from "./pulse.js";
 
 function aiWeek() {
   G.wkAI = [];
@@ -82,8 +83,8 @@ export function offersFor(f) {
     const t = mv + d;
     const o = cand.sort((a, b) => Math.abs(ovr(a) - t) - Math.abs(ovr(b) - t)).find((x) => !out.some((y) => y.oid === x.id));
     if (!o) continue;
-    const p = purseFor(o);
-    out.push({ fid: f.id, oid: o.id, lab, purse: p, bonus: p, wk: G.wk + 2, exp: G.wk + 2, push: 0 });
+    const h = heatOf(f.id, o.id), p = round100(purseFor(o) * (1 + h / 150));
+    out.push({ fid: f.id, oid: o.id, lab: h >= 30 ? "Rivalry" : lab, purse: p, bonus: p, wk: G.wk + 2, exp: G.wk + 2, push: 0 });
   }
   // A title shot if you're top 3.
   if (r > 0 && r <= 3) {

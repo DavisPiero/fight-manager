@@ -35,14 +35,23 @@ Check To-do → book fights / answer bids → train → Next week → fight nigh
 - **Feel:** left sidebar nav; loading sting; Next week plays a fast-forward and a summary with the cash change.
 
 ## Phone
-- Opens from the top bar (or P). Apps: Messages, Contacts, Deals, News, Social, Rumours, Alerts, Settings.
-- Contacts are earned: your fighters, plus people you meet (matchmaker, reporter, podcast host, gym owner, brand rep, scout).
-- Fighters have a mood (0–100). They message you about injuries, idle spells, contracts, wins, losses, pay and personal things; you pick a reply. Mood changes renewals and fight form. You can message them about training, fights, goals and money.
-- Business offers (podcast, commercial, promoter fight, gym partnership, fighter wants to sign, buy-out): accept, counter once, or decline. Deadlines, real money and bookings.
-- News, Social and Rumours come from real game events. Rumours carry credibility and resolve 2–3 weeks later: true, partly true or false, and change the world when true (bids, injuries, releases, retirements).
-- Rivalry chain: a win draws a callout, a reply, a rumour, then a promoter offer.
-- Alerts: critical (always pops up), important (pops up if allowed), ordinary (never pops up). Max 3 banners at a time.
-- Content is a small starter set; add more later (see phone-content.js header).
+Opens from the top bar (or P). Two apps, PULSE and PULSE CONNECT, plus Settings. Home shows the latest notifications.
+- **The world moves while you play.** Every 5–13 seconds on a game screen something arrives: a post, a message, an offer. They're spread over the in-game week (the phone clock shows the day and time); whatever hasn't arrived when you press Next week lands with its own timestamp.
+- **Notifications:** critical (always pops up), important (pops up if allowed), ordinary (never). Max 3 banners at a time; none while the phone is open.
+
+### PULSE (news and social, owned by Cageside Media)
+- X-style feed: For you / Following / News. Profiles, verified ticks, timestamps, replies, reposts, likes and views that grow over the hours after a post.
+- Who posts: fighters (training clips, personal updates, wins and losses, by personality), journalists (hot takes, scoops, previews), PULSE News (results, bookings, signings, transfers, injuries, drama), rumour accounts (credibility, later confirmed or denied), brands, agencies, fans (hype, polls, replies).
+- Beef: fighters call each other out and answer days later. Rivalry heat (0–100) raises purses, draws a rivalry fight offer at 55+, and pays extra popularity when the fight happens.
+- Controversy: missed weight, scuffles, old posts, rants, nights out. If it's your fighter, a journalist asks for a statement; ignore it for 2 weeks and he loses fans and maybe a sponsor.
+- Your account: 3 posts a week, picked not typed (three tones: classy / bold / savage). Promote a fight (purse up), call someone out (rivalry), hype a fighter, back him after a loss, thank the fans, take a shot at a rival agency, answer a controversy. Reply to fighters and journalists: respect, banter, provoke; thanks, correct, tease. Bolder posts reach more people and make enemies.
+
+### PULSE CONNECT (chats, contacts, offers)
+- You start with your fighters and one scout. People reach out when something happens (first win, first KO, a ranked fighter, a champion, an injury, a bad loss, reputation 25, a sponsor offer, a rival agency bid). Some need reputation; some only come through an introduction from someone who likes you. Add contacts from "Add contact" or a PULSE profile; remove them (they remember).
+- 29 industry people (matchmakers, promoters, journalists, a podcast host, coaches, a doctor, nine brand reps, six agency managers), each with a voice (warm, blunt, formal, loud, sly) and a relationship score that changes what they offer.
+- Chats: day separators, times, read ticks, unread counts, delete chat. Fighters write by personality, mood and situation; you pick replies. Ask people for things (a fight, a card spot, a story, a camp, rehab, a sponsor pitch, a transfer).
+- Offers arrive as gold cards in the chat and on the Offers tab: fight offers, main-card and rivalry fights, sponsorships, transfer bids, fighters for sale, podcasts, interviews, commercials, camps, rehab, gym deals, fighters wanting to sign. Accept, ask for more once, or decline. Sponsor offers and bids are the same ones the Office and Sell desk show.
+- Fighter mood (0–100) changes renewals and fight form.
 
 ## Not building
 Women's divisions, 5-round main events, managers' staff/coaches, multiplayer, online saves, UFC branding.

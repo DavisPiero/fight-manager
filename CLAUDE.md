@@ -7,6 +7,7 @@ Browser management game: run an MMA agency, sign/train/sell fighters, work the c
 - `npm test` → headless smoke test (Playwright). Plays weeks, a fight and a sale; screenshots in `test-results/`.
 - `npm run ufc` → fetches fighter headshots + bio/stats from UFC.com athlete pages (15 s between requests, ~1.5 h; skips ones already fetched).
 - `npm run bot` → balance bot: 20 seeded one-year careers, compared with `scripts/bot-baseline.json` (`-- --save` to re-baseline). Run it after any rule or data change.
+- `npm run phone` → headless phone screenshots (PULSE and CONNECT after 10 weeks) in `test-results/phone/`. Add `-- <dir> 390 844` for phone size.
 - `npm run shots` → headless fight-night screenshots (intro stages, tale of the tape, each corner call) in `test-results/fight/`. Add `-- <dir> 390 844` for phone size.
 - `npm run poses` → headless arena pose sheet (stance, strikes, takedown, ground, KO) in `test-results/arena/`. `npm run skin` → re-samples skin tones from headshots into `src/data/skintones.json` + contact sheet `test-results/skintones.png` (hand fixes start with `!` and are kept).
 - `npm run build` → static site in `dist/` (relative paths, works on GitHub Pages).
@@ -23,7 +24,7 @@ Browser management game: run an MMA agency, sign/train/sell fighters, work the c
 - Test headlessly; never open the user's browser or play sound during tests.
 
 ## Layout
-- `src/sim/phone.js` phone: contacts, moods, messages, offers, news/social/rumours, notifications. `src/ui/phone.js` phone screens. Content in `src/data/phone-content.js` (starter set — add lines there).
+- Phone: `src/sim/phone.js` core (in-game clock and the week's activity queue, notifications, chats, fighter messages, rumours), `src/sim/connect.js` PULSE CONNECT (contacts, relationships, introductions, offers), `src/sim/pulse.js` PULSE (feed, your posts, rivalries, controversy). Screens: `src/ui/phone.js` (home, shell, banners), `src/ui/pulse.js`, `src/ui/connect.js`. Content: `src/data/phone-content.js` (fighter messages, news, rumours), `src/data/pulse-content.js` (posts), `src/data/people.js` (industry contacts and their voices). Add lines there, not code.
 - `src/state.js` career state, value/ask formulas, save/load.
 - `src/sim/world.js` weekly cycle, fight offers, training, auto-train. `src/sim/market.js` signing, selling, bids, contracts. `src/sim/fight.js` fight engine. `src/sim/events.js` random events. `src/sim/sponsors.js` brand deals.
 - `src/ui/views.js` screens, `src/ui/fightview.js` fight night, `src/ui/arena.js` the octagon canvas and drawn fighters (parts in `PARTS`, poses in `STANCE`/`BASE`/`ACT`, strikes and their targets in `STRIKE`, contact/IK in `contact()`), walk-out in `walkout()` in fightview.js, `src/ui/tour.js` first-run tutorial, `src/ui/components.js` shared pieces, `src/ui/styles.css` look.

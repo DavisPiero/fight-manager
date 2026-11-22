@@ -165,19 +165,22 @@ try {
   const sold = await fm(() => window.__fm.G.hist.sold);
   const spons = await fm(() => window.__fm.G.fin.spons || 0);
 
-  // Phone: home, a business offer, messages, media apps, alerts and a pop-up banner.
-  await fm(() => { const fm = window.__fm; fm.UI.modal = null; fm.G.event = null; fm.go("home"); fm.PS.debugDeal("media"); fm.PS.debugDeal("gym"); });
+  // Phone: home, an offer in PULSE CONNECT, a chat, the PULSE feed, a post, the composer, contacts, a pop-up banner.
+  await fm(() => { const fm = window.__fm; fm.UI.still = true; fm.UI.modal = null; fm.G.event = null; fm.go("home"); fm.PS.debugDeal("media"); fm.PS.debugDeal("gym"); for (let i = 0; i < 10; i++) fm.PS.tick(); });
   await click('[data-a="phone"]'); await page.waitForSelector(".phone"); await shot("30-phone-home");
-  await click('[data-a="papp"][data-i="deals"]'); await shot("31-phone-deals");
+  await click('[data-a="papp"][data-i="connect"]'); await click('[data-a="ptab"][data-i="offers"]'); await shot("31-phone-offers");
   const cash0 = await fm(() => window.__fm.G.cash);
   await click('[data-a="pdeal"][data-x="yes"]'); await page.waitForTimeout(200);
   const dealPaid = (await fm(() => window.__fm.G.cash)) !== cash0;
-  await click('[data-a="phome"]'); await click('[data-a="papp"][data-i="messages"]'); await shot("32-phone-messages");
-  if (await page.$('.ph-row[data-a="pthread"]')) { await click('.ph-row[data-a="pthread"]'); await shot("33-phone-thread"); if (await page.$('[data-a="preply"]')) { await click('[data-a="preply"]'); await shot("33b-phone-replied"); } }
-  for (const app of ["news", "social", "rumours", "alerts", "contacts"]) { await click('[data-a="phome"]'); await click(`[data-a="papp"][data-i="${app}"]`); await shot(`34-phone-${app}`); }
-  const phoneCounts = await fm(() => { const p = window.__fm.G.ph; return { news: p.news.length, social: p.social.length, rumours: p.rumours.length, deals: p.deals.length, threads: Object.keys(p.threads).length, contacts: p.npcs.length }; });
+  await click('[data-a="ptab"][data-i="chats"]'); await shot("32-phone-chats");
+  if (await page.$('.cn-row[data-a="pthread"]')) { await click('.cn-row[data-a="pthread"]'); await shot("33-phone-chat"); if (await page.$('[data-a="preply"]')) { await click('[data-a="preply"]'); await shot("33b-phone-replied"); } }
+  await click('[data-a="phome"]'); await click('[data-a="papp"][data-i="pulse"]'); await shot("34-phone-pulse");
+  await click('article.pp[data-a="ppost"]'); await shot("34b-phone-post"); await click('[data-a="pback"]');
+  await click('[data-a="pcomp"]'); await click('[data-a="pck"][data-i="hype"]'); await click('[data-a="ptg"]'); await click('[data-a="pcpub"][data-i="0"]'); await shot("34c-phone-posted");
+  await click('[data-a="phome"]'); await click('[data-a="papp"][data-i="connect"]'); await click('[data-a="ptab"][data-i="contacts"]'); await shot("34d-phone-contacts");
+  const phoneCounts = await fm(() => { const p = window.__fm.G.ph; return { feed: p.feed.length, mine: p.feed.filter((x) => x.a === "me").length, deals: p.deals.length, threads: Object.keys(p.threads).length, contacts: Object.keys(p.cx).length }; });
   await page.keyboard.press("Escape");
-  await fm(() => { const fm = window.__fm; fm.UI.noteMark = fm.PS.P().id; fm.PS.notify("crit", "deals", "Offer expires next week", "Marco Vitale: fight offer for your fighter."); fm.PS.notify("imp", "messages", "A fighter", "Any news on my next fight?"); fm.flushBanners(); });
+  await fm(() => { const fm = window.__fm; fm.UI.noteMark = fm.PS.P().id; fm.PS.notify("crit", "connect", "Offer expires next week", "Marco Vitale: fight offer for your fighter.", "", "offer"); fm.PS.notify("imp", "connect", "A fighter", "Any news on my next fight?", "", "msg"); fm.flushBanners(); });
   await page.waitForTimeout(700); await page.screenshot({ path: `${SHOTS}/35-phone-banners.png` });
   // A fight between two real UFC fighters, to see headshots in the arena.
   await fm(() => { const fm = window.__fm, g = fm.G, rs = g.f.filter((f) => f.real && f.wc === 4), A = rs[1], B = rs[2]; A.st = "mine"; A.ct = { pct: 20, wks: 50, signed: 0 }; fm.UI.queue = []; fm.UI.modal = null; fm.startFight({ fid: A.id, oid: B.id, purse: 50000, bonus: 50000, wk: g.wk, lab: "Even" }); });
@@ -236,7 +239,7 @@ try {
   console.log(`fights: ${fought}, booked: ${booked}, bids: ${bids}, sold: ${sold}, sponsor income: ${spons}, events: ${log.length}, mobile overflow: ${overflow}`);
   console.log(`menu faces visible: ${faces.join("/")}, agency click: ${agencyTab}, sponsors tab: ${sponsorsTab}, market overflow: ${overflow2}, auto-train lines: ${auto.length} (latest: ${auto[0]}), corner call seen: ${moments}`);
   console.log(`phone: ${JSON.stringify(phoneCounts)}, deal paid: ${dealPaid}`);
-  ok = phoneCounts.news > 0 && phoneCounts.social > 0 && dealPaid && errors.length === 0 && fought > 0 && !overflow && booked > 0 && faces.every(Boolean) && agencyTab && auto.length > 0 && sponsorsTab && !overflow2;
+  ok = phoneCounts.feed > 0 && phoneCounts.mine > 0 && phoneCounts.contacts > 0 && dealPaid && errors.length === 0 && fought > 0 && !overflow && booked > 0 && faces.every(Boolean) && agencyTab && auto.length > 0 && sponsorsTab && !overflow2;
 } catch (e) {
   try { const pg = browser.contexts()[0].pages()[0]; await pg.screenshot({ path: SHOTS + "/zz-fail.png" }); console.log("STATE", await pg.evaluate(() => JSON.stringify({ v: window.__fm.UI.view, m: window.__fm.UI.modal, ev: window.__fm.G?.event }))); } catch (x) {}
   errors.push("TEST: " + e.message.split("\n").slice(0, 6).join(" | "));

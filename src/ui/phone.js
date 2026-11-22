@@ -1,119 +1,81 @@
-// The in-game smartphone: home screen, apps, threads, notification centre and pop-up banners.
-import { G, rankLabel, rank } from "../state.js";
-import { esc, last } from "../util.js";
-import { avatar, photoOf } from "./avatar.js";
+// The in-game smartphone: home screen with two apps (PULSE and PULSE CONNECT), settings, the shell
+// around every screen, and pop-up banners. The apps themselves are in pulse.js and connect.js.
+import { G } from "../state.js";
+import { esc } from "../util.js";
+import { avatar } from "./avatar.js";
 import { UI } from "./uistate.js";
 import { AGENCY_COLOURS } from "../data/constants.js";
-import { TOPICS, NPCS } from "../data/phone-content.js";
-import { P, contacts, thread, unread, mood, moodWord } from "../sim/phone.js";
+import { P, now, unread, DAY } from "../sim/phone.js";
+import { openDeals } from "../sim/connect.js";
+import { pulseScreen } from "./pulse.js";
+import { connectScreen } from "./connect.js";
 
-const I = {
-  messages: '<path d="M4 5h16v11H9l-5 4z"/>',
-  contacts: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-5 4-7 8-7s8 2 8 7"/>',
-  deals: '<path d="M3 12l5-5 4 4 4-4 5 5-9 8z"/>',
-  news: '<rect x="4" y="4" width="16" height="16"/><path d="M8 9h8M8 13h8M8 17h5"/>',
-  social: '<path d="M7 9a5 5 0 1110 0c0 4-5 4-5 8M12 21h.01"/>',
-  rumours: '<path d="M3 12c3-5 15-5 18 0-3 5-15 5-18 0z"/><circle cx="12" cy="12" r="2.5"/>',
-  alerts: '<path d="M6 16v-5a6 6 0 0112 0v5l2 2H4z"/><path d="M10 21h4"/>',
+export const I = {
+  pulse: '<path d="M2 12h4l3-7 4 14 3-7h6"/>',
+  connect: '<path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8"/>',
   settings: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>',
   back: '<path d="M15 5l-7 7 7 7"/>',
+  reply: '<path d="M4 5h16v11H9l-5 4z"/>', rt: '<path d="M7 7h10v6M17 17H7v-6"/><path d="M14 4l3 3-3 3M10 20l-3-3 3-3"/>',
+  like: '<path d="M12 20s-8-5-8-11a4 4 0 018-1 4 4 0 018 1c0 6-8 11-8 11z"/>', views: '<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', play: '<path d="M8 5l11 7-11 7z"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+  add: '<circle cx="10" cy="8" r="4"/><path d="M2 21c0-5 4-7 8-7s8 2 8 7M19 8v6M16 11h6"/>',
 };
-const ic = (k) => `<svg viewBox="0 0 24 24">${I[k] || ""}</svg>`;
-const APPS = [["messages", "Messages"], ["contacts", "Contacts"], ["deals", "Deals"], ["news", "News"], ["social", "Social"], ["rumours", "Rumours"], ["alerts", "Alerts"], ["settings", "Settings"]];
-const NAMES = Object.fromEntries(APPS);
-// In-game calendar: week 1 is Monday 4 January 2027.
-export const gameDate = (wk = G.wk) => new Date(2027, 0, 4 + (wk - 1) * 7).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
-const clockNow = () => new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
-const ago = (wk) => (wk >= G.wk ? "This week" : G.wk - wk === 1 ? "Last week" : `${G.wk - wk} wks ago`);
+export const ic = (k) => `<svg viewBox="0 0 24 24">${I[k] || ""}</svg>`;
+const APPS = [["pulse", "PULSE"], ["connect", "CONNECT"], ["settings", "Settings"]];
+const NAMES = { pulse: "PULSE", connect: "PULSE CONNECT", settings: "Settings" };
 
-function badge(app) {
-  if (app === "messages") return Object.values(P().threads).reduce((s, t) => s + (t.unread || 0), 0);
-  if (app === "alerts") return P().notes.filter((n) => !n.read && n.lvl !== "ord").length;
-  if (app === "deals") return P().deals.filter((d) => d.state === "open").length;
-  // Background apps show a quiet dot, not a number, so they never nag.
-  if (app === "social" || app === "contacts") return 0;
-  if (app === "news" || app === "rumours") return P().notes.filter((n) => !n.read && n.app === app && n.lvl !== "ord").length;
-  return unread(app);
-}
+// ---------- Time ----------
+// In-game calendar: week 1 starts Monday 4 January 2027. t = minutes since then.
+export const dateOf = (t) => new Date(2027, 0, 4 + Math.floor(t / DAY));
+export const gameDate = (wk = G.wk) => dateOf((wk - 1) * 7 * DAY).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+export const clock = (t) => { const m = ((t % DAY) + DAY) % DAY; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
+export const ago = (t) => { const d = now() - t; return d < 1 ? "now" : d < 60 ? d + "m" : d < DAY ? Math.floor(d / 60) + "h" : d < 7 * DAY ? Math.floor(d / DAY) + "d" : dateOf(t).toLocaleDateString("en-GB", { day: "numeric", month: "short" }); };
+export const dayLabel = (t) => { const d = Math.floor(now() / DAY) - Math.floor(t / DAY); return d <= 0 ? "Today" : d === 1 ? "Yesterday" : d < 7 ? dateOf(t).toLocaleDateString("en-GB", { weekday: "long" }) : dateOf(t).toLocaleDateString("en-GB", { day: "numeric", month: "long" }); };
+export const fullTime = (t) => clock(t) + " · " + dateOf(t).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+export const num = (n) => (n >= 1e6 ? (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + "M" : n >= 1e4 ? Math.round(n / 1e3) + "K" : n >= 1e3 ? (n / 1e3).toFixed(1) + "K" : String(n));
+// A face for anyone: headshot / silhouette for fighters, initials for everyone else.
+export const face = (w, s = 40) => (w.f ? avatar(w.f, s, "round") : `<span class="ph-ini" style="--c:${w.col || "#444"};--s:${s}px">${esc(w.ini || (w.name || "?")[0])}</span>`);
+
+// ---------- Badges ----------
+const connectBadge = () => Object.values(P().threads).reduce((s, t) => s + (t.unread || 0), 0) + openDeals().filter((d) => !d.seen).length;
+const pulseBadge = () => P().notes.filter((n) => !n.read && n.app === "pulse" && n.lvl !== "ord").length;
 export function phoneBadge() {
   if (!G) return "";
   const n = P().notes.filter((x) => !x.read && x.lvl !== "ord").length, any = unread();
   return n ? `<i class="dotb">${Math.min(n, 99)}</i>` : any ? '<i class="dotb dot"></i>' : "";
 }
-const who = (key) => {
-  if (key.startsWith("f:")) { const f = G.f[+key.slice(2)]; return { name: f.name, av: avatar(f, 40, "round"), sub: f.st === "mine" ? `${moodWord(mood(f))} · ${rankLabel(rank(f))}` : "Former fighter", f }; }
-  const n = NPCS[key.slice(4)]; return { name: n.name, av: `<span class="ph-ini" style="--c:${n.col}">${n.ini}</span>`, sub: n.role };
-};
-const sAv = (p) => { const f = p.fid != null ? G.f[p.fid] : null; return f && photoOf(f) ? avatar(f, 36, "round") : `<span class="ph-ini sm" style="--c:#333">${esc((p.who || "?")[0])}</span>`; };
 
-// ---------- Apps ----------
+// ---------- Home ----------
 function home() {
-  const ph = P(), recent = Object.entries(ph.threads).sort((a, b) => b[1].last - a[1].last).slice(0, 4);
-  const notes = ph.notes.filter((n) => !n.read).slice(0, 3);
+  const ph = P(), notes = ph.notes.filter((n) => !n.read).slice(0, 4);
+  const b = { pulse: pulseBadge(), connect: connectBadge(), settings: 0 };
+  const quiet = { pulse: !b.pulse && unread("pulse") > 0 };
   return `<div class="ph-home-in" style="--ag:${AGENCY_COLOURS[G.ag.col]}"><div class="ph-hello"><small>${gameDate()}</small><b>${esc(G.ag.name)}</b></div>
-    <div class="ph-grid">${APPS.map(([k, n]) => { const b = badge(k); return `<button class="ph-app" data-a="papp" data-i="${k}"><span class="ph-icon ${k}">${ic(k)}${b ? `<i>${Math.min(b, 99)}</i>` : ""}</span><small>${n}</small></button>`; }).join("")}</div>
-    ${notes.length ? `<div class="ph-recent"><small>Latest</small>${notes.map((n) => noteRow(n)).join("")}</div>` : '<div class="ph-recent quiet"><small>All caught up</small></div>'}
-    ${recent.length ? `<div class="ph-dock">${recent.map(([k]) => `<button data-a="pthread" data-i="${k}" title="${esc(who(k).name)}">${who(k).av}</button>`).join("")}</div>` : ""}</div>`;
+    <div class="ph-grid">${APPS.map(([k, n]) => `<button class="ph-app" data-a="papp" data-i="${k}"><span class="ph-icon ${k}">${ic(k)}${b[k] ? `<i>${Math.min(b[k], 99)}</i>` : quiet[k] ? '<i class="q"></i>' : ""}</span><small>${n}</small></button>`).join("")}</div>
+    ${notes.length ? `<div class="ph-recent"><small>Notifications</small>${notes.map(noteRow).join("")}${ph.notes.length ? '<button class="ph-link" data-a="pclear">Clear all</button>' : ""}</div>` : '<div class="ph-recent quiet"><small>All caught up</small></div>'}</div>`;
 }
-const noteRow = (n) => `<button class="ph-note ${n.lvl} ${n.read ? "read" : ""}" data-a="pnote" data-i="${n.id}"><span class="ph-icon sm ${n.app}">${ic(n.app)}</span><span class="t"><b>${esc(n.title)}</b><small>${esc(n.body).slice(0, 90)}</small></span><span class="w">${n.wk === G.wk ? "now" : "wk " + n.wk}</span></button>`;
-function messages() {
-  const ph = P(), list = Object.entries(ph.threads).sort((a, b) => b[1].last - a[1].last);
-  return list.map(([k, t]) => { const w = who(k), m = t.msgs[t.msgs.length - 1]; return `<button class="ph-row" data-a="pthread" data-i="${k}">${w.av}<span class="t"><b>${esc(w.name)}</b><small>${m ? (m.me ? "You: " : "") + esc(m.text).slice(0, 60) : ""}</small></span>${t.unread ? `<i class="ph-dot">${t.unread}</i>` : `<span class="w">${ago(t.last)}</span>`}</button>`; }).join("")
-    || '<div class="ph-empty">No messages yet. Your fighters and contacts will reach out.</div>';
-}
-function contactsApp() {
-  const list = contacts();
-  return `<div class="ph-sub">${list.length} contacts · meet more by signing fighters and doing business</div>` + list.map((c) => `<button class="ph-row" data-a="pthread" data-i="${c.key}">${who(c.key).av}<span class="t"><b>${esc(c.name)}</b><small>${esc(c.sub)}</small></span></button>`).join("");
-}
-function threadView(key) {
-  const t = thread(key), w = who(key), pend = [...t.msgs].reverse().find((m) => m.opts && !m.done), canAsk = w.f && w.f.st === "mine";
-  return `<div class="ph-thread"><div class="ph-msgs" id="phmsgs">${t.msgs.map((m) => `<div class="bub ${m.me ? "me" : ""}">${esc(m.text)}</div>`).join("") || '<div class="ph-empty">Say hello.</div>'}</div>
-    ${pend ? `<div class="ph-replies"><small>Reply</small>${pend.opts.map((o, i) => `<button data-a="preply" data-i="${i}">${esc(o)}</button>`).join("")}</div>`
-      : canAsk ? `<div class="ph-replies ask"><small>Message ${esc(last(w.name))}</small>${TOPICS.map(([k, q]) => `<button data-a="pask" data-i="${k}">${q}</button>`).join("")}</div>` : ""}</div>`;
-}
-function deals() {
-  const ph = P(), open = ph.deals.filter((d) => d.state === "open"), past = ph.deals.filter((d) => d.state !== "open").slice(0, 6);
-  const card = (d) => `<div class="ph-deal ${d.state}"><div class="row spread"><b>${esc(d.title)}</b><small class="${d.state === "open" && d.exp <= G.wk + 1 ? "bad" : ""}">${d.state === "open" ? `Answer by wk ${d.exp}` : d.state}</small></div>
-    <small class="from">${d.npc ? esc(NPCS[d.npc].name) : "Rival agency"}</small><p>${esc(d.text)}</p>
-    ${d.state === "open" ? `<div class="ph-acts"><button class="ok" data-a="pdeal" data-i="${d.id}" data-x="yes">Accept</button>${d.countered ? "" : `<button data-a="pdeal" data-i="${d.id}" data-x="counter">Counter</button>`}<button data-a="pdeal" data-i="${d.id}" data-x="no">Decline</button></div>` : ""}</div>`;
-  return (open.map(card).join("") || '<div class="ph-empty">No open offers. Promoters, brands and gyms will call as your name grows.</div>') + (past.length ? `<div class="ph-sub">Earlier</div>${past.map(card).join("")}` : "");
-}
-function news() {
-  return P().news.map((n) => `<div class="ph-news ${n.mine ? "mine" : ""}"><small>${ago(n.wk)}</small><b>${esc(n.h)}</b></div>`).join("") || '<div class="ph-empty">No news yet.</div>';
-}
-function social() {
-  const f = UI.phone.filter, list = P().social.filter((p) => !f || (p.fid != null && G.f[p.fid]?.st === "mine"));
-  return `<div class="ph-chips"><button class="${!f ? "on" : ""}" data-a="pfilter" data-i="">All</button><button class="${f ? "on" : ""}" data-a="pfilter" data-i="mine">My fighters</button></div>`
-    + (list.map((p) => `<div class="ph-post">${sAv(p)}<div><b>${esc(p.who)}</b> <small>${esc(p.handle)} · ${ago(p.wk)}</small><p>${esc(p.text)}</p><small class="lk">♥ ${p.likes.toLocaleString("en-US")}</small></div></div>`).join("") || '<div class="ph-empty">Quiet timeline.</div>');
-}
-function rumours() {
-  const lbl = { true: ["True", "good"], partly: ["Partly true", "warn"], false: ["False", "bad"] };
-  return `<div class="ph-sub">Insider talk. Credibility is a guide, not a promise.</div>` + (P().rumours.map((r) => `<div class="ph-rum"><div class="row spread"><span class="cred c${r.cred}"><i></i><i></i><i></i> ${["Low", "Medium", "High"][r.cred]}</span><span class="pill ${r.out ? lbl[r.out][1] : "out"}">${r.out ? lbl[r.out][0] : "Unconfirmed"}</span></div>
-    <p>${esc(r.txt)}</p><small>via ${esc(r.src)} · ${ago(r.wk)}</small></div>`).join("") || '<div class="ph-empty">No whispers yet.</div>');
-}
-function alerts() {
-  const n = P().notes, grp = [["crit", "Critical"], ["imp", "Important"], ["ord", "Everything else"]];
-  return `<div class="row spread ph-sub"><span>${n.length} notifications</span>${n.length ? '<button class="ph-link" data-a="pclear">Clear all</button>' : ""}</div>`
-    + (grp.map(([l, t]) => { const L = n.filter((x) => x.lvl === l).slice(0, l === "ord" ? 12 : 30); return L.length ? `<div class="ph-group"><small>${t}</small>${L.map(noteRow).join("")}</div>` : ""; }).join("") || '<div class="ph-empty">Nothing here.</div>');
-}
+const noteRow = (n) => `<button class="ph-note ${n.lvl} ${n.read ? "read" : ""}" data-a="pnote" data-i="${n.id}"><span class="ph-icon sm ${n.app}">${ic(n.app)}</span><span class="t"><b>${esc(n.title)}</b><small>${esc(n.body).slice(0, 90)}</small></span><span class="w">${n.t != null ? ago(n.t) : ""}</span></button>`;
 function settings() {
   const p = P().prefs, row = (k, t, s) => `<button class="ph-tog ${p[k] ? "on" : ""}" data-a="ppref" data-i="${k}"><span class="t"><b>${t}</b><small>${s}</small></span><span class="sw"></span></button>`;
-  return `<div class="ph-sub">Critical alerts (expiring offers, injuries, fight offers) always pop up.</div>
-    ${row("important", "Important pop-ups", "Messages and business offers")}${row("rumours", "Rumour pop-ups", "Rumours about your fighters")}${row("news", "News pop-ups", "Headlines about your agency")}${row("sound", "Phone sounds", "Different sound per urgency")}
-    <div class="ph-sub">Social media never pops up. Check the app when you like.</div>`;
+  return `<div class="ph-sub">Critical alerts (expiring offers, injuries, fight offers, controversies) always pop up.</div>
+    ${row("important", "Important pop-ups", "Messages and business offers")}${row("rumours", "Rumour pop-ups", "Rumours about your fighters")}${row("news", "News pop-ups", "Every headline about your agency")}${row("sound", "Phone sounds", "Different sound per urgency")}
+    <div class="ph-sub">PULSE posts never pop up. Check the feed when you like.</div>`;
 }
 
 export function phoneHtml() {
-  const s = UI.phone, key = s.key, app = s.app;
-  let title = NAMES[app] || "", sub = "", body;
-  if (key) { const w = who(key); title = w.name; sub = w.sub; body = threadView(key); }
-  else body = ({ home, messages, contacts: contactsApp, deals, news, social, rumours, alerts, settings }[app] || home)();
-  return `<div class="ph-wrap" data-a="pclosebg"><div class="phone ${s.anim ? "in" : ""}" role="dialog" aria-label="Phone"><div class="ph-screen">
-    <div class="ph-status"><b>${clockNow()}</b><span class="ph-island"></span><span class="ph-sig"><i></i><i></i><i></i><i></i> 5G ▮</span></div>
-    ${app === "home" && !key ? "" : `<div class="ph-bar"><button data-a="pback" aria-label="Back">${ic("back")}</button><div><b>${esc(title)}</b>${sub ? `<small>${esc(sub)}</small>` : ""}</div></div>`}
-    <div class="ph-body ${app}" id="phbody">${body}</div>
+  const s = UI.phone, v = s.v, app = v.app;
+  let bar = "", body;
+  if (app === "pulse") ({ bar, body } = pulseScreen(v));
+  else if (app === "connect") ({ bar, body } = connectScreen(v));
+  else if (app === "settings") { bar = backBar("Settings"); body = settings(); }
+  else body = home();
+  const t = now();
+  return `<div class="ph-wrap" data-a="pclosebg"><div class="phone ${s.anim ? "in" : ""}" role="dialog" aria-label="Phone"><div class="ph-screen ${app}">
+    <div class="ph-status"><b>${clock(t)}</b><span class="ph-island"></span><span class="ph-sig">${dateOf(t).toLocaleDateString("en-GB", { weekday: "short" })} <i></i><i></i><i></i><i></i> 5G</span></div>
+    ${bar}<div class="ph-body ${app}${v.key ? " chat" : ""}" id="phbody">${body}</div>
     <button class="ph-homebar" data-a="phome" aria-label="Home"></button></div></div></div>`;
 }
+export const backBar = (title, sub = "", extra = "") => `<div class="ph-bar"><button data-a="pback" aria-label="Back">${ic("back")}</button><div class="ph-bt">${title}${sub ? `<small>${sub}</small>` : ""}</div>${extra}</div>`;
 
 // Smartphone-style banners. Critical ones stay longer. Clicking opens the phone there.
 export function banners(list, sfx) {
