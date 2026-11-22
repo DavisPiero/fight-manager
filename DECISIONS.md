@@ -71,3 +71,5 @@
 - 2026-11-22 Contacts start at your fighters plus one scout; 29 fictional industry people join by events, reputation or introductions. Their voice and a relationship score decide how they write and what they offer. Messages are generated from templates and game state, not written conversations.
 - 2026-11-22 Sponsor offers and transfer bids made by the existing systems arrive in CONNECT as offer cards from the brand rep or agency manager; the Office and Sell desk still show them.
 - 2026-11-22 Made-up fighters no longer share a surname (two "Whitfield"s on one roster read badly in chats).
+- 2026-11-22 Front menu made into a fight-night stage (owner: "stiff, robotic, boring"): sweeping spotlights, haze, sparks, a line-up that breathes and drifts with the mouse, a logo that slams in, a live champions ticker. Continue goes straight into the last-played career; Play becomes "All saves" once a save exists.
+- 2026-11-22 Save screen redesigned as three agency cards in the agency's colour, fronted by the roster's best fighter, with record, cash, titles and a "Last played" tag; empty slots are a big "+". Saves now record when they were last saved.

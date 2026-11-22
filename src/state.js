@@ -168,6 +168,7 @@ export function say(t, k = "info") {
 const key = (s) => SAVE_PREFIX + s;
 export function save() {
   if (!G || !G.slot) return;
+  G.saved = Date.now();
   try { localStorage.setItem(key(G.slot), JSON.stringify(G)); } catch (e) { /* storage full or blocked */ }
 }
 export function load(slot) {
@@ -177,7 +178,10 @@ export function wipe(slot) { try { localStorage.removeItem(key(slot)); } catch (
 export function slots() {
   return Array.from({ length: SLOTS }, (_, i) => {
     const g = load(i + 1);
-    return g ? { slot: i + 1, name: g.ag.name, city: g.ag.city, col: g.ag.col, emblem: g.ag.emblem, wk: g.wk, cash: g.cash, w: g.hist.w, l: g.hist.l, titles: g.hist.titles, over: g.over } : { slot: i + 1 };
+    if (!g) return { slot: i + 1 };
+    // The best fighter on the roster fronts the save card.
+    const ro = g.ro.map((id) => g.f[id]), star = ro.sort((a, b) => ovr(b) - ovr(a))[0];
+    return { slot: i + 1, name: g.ag.name, manager: g.ag.manager, city: g.ag.city, col: g.ag.col, emblem: g.ag.emblem, wk: g.wk, cash: g.cash, w: g.hist.w, l: g.hist.l, titles: g.hist.titles, over: g.over, rep: Math.round(g.rep), n: ro.length, saved: g.saved || g.created || 0, star: star && { name: star.name, ovr: ovr(star), file: star.real && UFC[star.name]?.file } };
   });
 }
 
