@@ -446,6 +446,12 @@ const A = {
 const QUIET = new Set(["mbg", "skip", "speed"]);
 const TABS = new Set(["papp", "pthread", "pback", "phome", "pfilter", "go", "mktab", "oftab", "rkdiv", "mkdiv", "gsel", "gkey", "gint", "plan", "corner", "scol", "semb", "scity", "sfocus", "sdiff", "nyears"]);
 
+// Front menu parallax: the line-up drifts a little against the mouse.
+document.addEventListener("mousemove", (e) => {
+  if (UI.view !== "menu") return;
+  const m = document.querySelector(".menu.front"); if (!m) return;
+  m.style.setProperty("--mx", (e.clientX / innerWidth - 0.5).toFixed(3)); m.style.setProperty("--my", (e.clientY / innerHeight - 0.5).toFixed(3));
+});
 document.addEventListener("click", (e) => {
   const t = e.target.closest("[data-a]");
   if (!t) return;

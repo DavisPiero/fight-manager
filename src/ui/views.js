@@ -48,33 +48,49 @@ export function shell(content) {
 }
 
 // ---------- Menu / setup ----------
+// Front menu: a fight-night stage. Sweeping spotlights, haze, the champions line-up (it follows the mouse a little),
+// a broadcast ticker, and Continue straight into your last career.
+const champsTicker = () => {
+  const ch = Object.entries(UFC_DATA).filter(([, d]) => (d.tags || []).some((t) => /title holder/i.test(t)))
+    .map(([n, d]) => `<span><em>${esc(((d.tags || []).find((t) => /division/i.test(t)) || "").replace(/ Division/i, ""))} champion</em> ${esc(n)}</span>`);
+  const lines = [...ch, "<span><em>Sign</em> the hungry ones</span>", "<span><em>Build</em> them in the gym</span>", "<span><em>Sell</em> high or chase the belt</span>"];
+  return `<div class="mn-ticker"><b>Live</b><div class="mn-tk"><div>${lines.join("")}${lines.join("")}</div></div></div>`;
+};
+const sparks = () => Array.from({ length: 22 }, (_, i) => `<i style="--x:${(i * 37) % 100}%;--d:${6 + (i * 7) % 9}s;--w:${-((i * 13) % 11)}s;--s:${1 + (i % 3)}px"></i>`).join("");
 export function vMenu() {
   const champs = Object.entries(UFC_DATA).filter(([, d]) => (d.tags || []).some((t) => /title holder/i.test(t))).map(([, d]) => d.file);
   const all = [...champs, ...Object.values(UFC_DATA).map((d) => d.file)].filter((v, i, a) => a.indexOf(v) === i), pics = all.slice(0, 5);
   const order = [pics[3], pics[1], pics[0], pics[2], pics[4]].filter(Boolean);
   const lineup = `<div class="lineup">${order.map((p) => `<img src="${import.meta.env.BASE_URL}fighters/${p}" alt="">`).join("")}</div>`;
   const legal = `<div class="legal">Unofficial fan game. Not affiliated with or endorsed by the UFC. Fighter images © their owners, from ufc.com. Records as of November 2026; skills are the game's own estimates.</div>`;
-  if (UI.menuPage !== "slots") return `<div class="menu"><div class="glow"></div>
-    <div class="top"><div class="logo">Fight<br><span>Manager</span></div></div>
+  const sl = slots(), recent = sl.filter((x) => x.name && !x.over).sort((x, y) => y.saved - x.saved)[0];
+  if (UI.menuPage !== "slots") return `<div class="menu front"><div class="glow"></div><div class="mn-beam l"></div><div class="mn-beam r"></div><div class="mn-haze"></div><div class="mn-sparks">${sparks()}</div><div class="mn-floor"></div>
+    <div class="top"><div class="logo mn-logo"><b>Fight</b><span>Manager</span></div><div class="mn-tag">Run the agency. Work the corner. Build a champion.</div></div>
     <div class="stage">${lineup}<div class="fade"></div></div>
     <div class="bottom">
-      <div class="menu-btns"><button class="btn red lg" data-a="play">Play</button><button class="btn quiet lg" data-a="settings">Settings</button></div>
-      ${legal}
+      <div class="menu-btns">${recent
+        ? `<button class="btn red lg mn-cont" data-a="loadslot" data-i="${recent.slot}"><span>Continue</span><small>${esc(recent.name)} · Week ${recent.wk}</small></button><button class="btn quiet lg" data-a="play">All saves</button>`
+        : `<button class="btn red lg mn-cont" data-a="play"><span>Play</span><small>Start your agency</small></button>`}<button class="btn quiet lg mn-set" data-a="settings">Settings</button></div>
+      ${champsTicker()}${legal}
     </div></div>`;
-  const sl = slots();
-  // Save screen: a different look from the front menu. Red slash and cage lines, no fighter.
-  return `<div class="menu slots-page">
-    <div class="sl-cage"></div><div class="sl-slash"></div><div class="sl-slash two"></div>
-    <div class="sl-col">
-      <div class="logo sm">Fight<br><span>Manager</span></div>
-      <div class="sl-head"><span class="eyebrow">Career mode</span><h1>Choose a save</h1></div>
-      <div class="slots v">${sl.map((s) => s.name ? `<button class="slot" data-a="loadslot" data-i="${s.slot}"><span class="sn">Slot ${s.slot}</span>
-          <div class="row" style="gap:10px;margin-top:6px">${emblem(s)}<b style="margin:0">${esc(s.name)}</b></div>
-          <div class="meta">${CITIES.find((c) => c.id === s.city)?.name || ""} · Week ${s.wk}</div>
-          <div class="meta">${kmoney(s.cash)} · ${s.w}-${s.l}${s.titles ? ` · ${s.titles} title${s.titles > 1 ? "s" : ""}` : ""}${s.over ? ' · <span class="bad">Folded</span>' : ""}</div>
-          <span class="del" data-a="delslot" data-i="${s.slot}" role="button" aria-label="Delete save">Delete</span></button>`
-        : `<button class="slot empty" data-a="newslot" data-i="${s.slot}"><span class="sn">Slot ${s.slot}</span><b>+ New agency</b><span class="meta">Start a new career</span></button>`).join("")}</div>
-      <button class="btn link" data-a="menuback">← Back</button>
+  // Save screen: each career is an agency card fronted by its best fighter.
+  const card = (x, i) => {
+    if (!x.name) return `<button class="slot card empty" data-a="newslot" data-i="${x.slot}" style="--i:${i}"><span class="sn">Slot ${x.slot}</span><span class="sc-plus">+</span><b>New agency</b><span class="meta">Start a career from nothing</span></button>`;
+    const star = x.star ? (x.star.file ? `<img src="${import.meta.env.BASE_URL}fighters/${x.star.file}" alt="">` : avatar({ name: x.star.name, sh: 0 }, 150)) : "";
+    return `<button class="slot card ${x.over ? "over" : ""} ${x === recent ? "last" : ""}" data-a="loadslot" data-i="${x.slot}" style="--c:${AGENCY_COLOURS[x.col]};--i:${i}">
+      <span class="sc-band"></span><span class="sc-star">${star}</span>
+      <span class="sc-top"><span class="sn">Slot ${x.slot}</span>${x === recent ? '<span class="sc-last">Last played</span>' : ""}${x.over ? '<span class="sc-last bad">Folded</span>' : ""}</span>
+      <span class="sc-id">${emblem(x, 50)}<span><b>${esc(x.name)}</b><span class="meta">${esc(CITIES.find((c) => c.id === x.city)?.name || "")} · Week ${x.wk}</span></span></span>
+      ${x.star ? `<span class="sc-ace"><small>Top fighter</small>${esc(x.star.name)} <em>${x.star.ovr}</em></span>` : ""}
+      <span class="sc-stats"><span><small>Record</small><b>${x.w}-${x.l}</b></span><span><small>Cash</small><b>${kmoney(x.cash)}</b></span><span><small>${x.titles ? "Titles" : "Fighters"}</small><b>${x.titles || x.n}</b></span></span>
+      <span class="sc-go">${x.over ? "View" : "Continue"} <i>→</i></span>
+      <span class="del" data-a="delslot" data-i="${x.slot}" role="button" aria-label="Delete save" title="Delete save"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></span></button>`;
+  };
+  return `<div class="menu slots-page"><div class="sl-cage"></div><div class="mn-beam l"></div><div class="mn-haze"></div>
+    <div class="sl-wrap">
+      <div class="sl-head"><button class="sl-back" data-a="menuback" aria-label="Back">←</button><div><span class="eyebrow">Career mode</span><h1>Choose your agency</h1></div><div class="logo sm"><b>Fight</b><span>Manager</span></div></div>
+      <div class="slots cards">${sl.map(card).join("")}</div>
+      <div class="legal">Saves live in this browser. Three slots, settings shared between them.</div>
     </div></div>`;
 }
 export function vSetup() {

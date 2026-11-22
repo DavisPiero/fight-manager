@@ -12,6 +12,7 @@
 - Grow the content: more lines in `src/data/pulse-content.js`, `people.js`, `phone-content.js` (no code needed).
 
 ## Open with you
+- New main menu and save screen (2026-11-22): open the game. Guesses: the tagline "Run the agency. Work the corner. Build a champion.", the ticker content, red spotlights, best fighter on each save card.
 - Review the phone: `npm run phone` (screenshots in `test-results/phone/`), or play a few weeks and leave the phone open.
 - Guesses this session: 3 posts a week; tones classy/bold/savage; rivalry fight offer at heat 55; controversy ignored for 2 weeks costs fans and maybe a sponsor; 29 people and who knows whom; start with one scout; new posts every 5–13 s; red ticks for verified people, gold for organisations; phone status bar shows game time, not real time.
 - The fighters' redraw and walk-out (from earlier today) still want your look: `npm run poses`, `npm run shots`.
