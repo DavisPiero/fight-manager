@@ -9,6 +9,8 @@ import { toast, stamp, confetti } from "./ui/components.js";
 import { drawTour, STEPS } from "./ui/tour.js";
 import * as PH from "./ui/phone.js";
 import * as PS from "./sim/phone.js";
+import * as CN from "./sim/connect.js";
+import * as PU from "./sim/pulse.js";
 import { SND, saveSnd, sfx } from "./audio.js";
 import { advance, offersFor, train, autoBook } from "./sim/world.js";
 import { trySign, release, list, unlist, sell, rejectBid, counter, tryRenew, canSell } from "./sim/market.js";
@@ -29,7 +31,11 @@ function render() {
   else h = ({ home: V.vHome, fighters: V.vFighters, prof: V.vProfile, fights: V.vFights, gym: V.vGym, market: V.vMarket, rankings: V.vRankings, office: V.vOffice }[v] || V.vHome)();
   if (UI.modal && (v !== "fight" || UI.modal.kind === "settings")) h += modalHtml();
   else if (UI.phone.open && G && !["menu", "setup", "fight"].includes(v)) h += PH.phoneHtml();
+  // Keep the phone's scroll position when the same phone screen is redrawn (likes, new posts arriving).
+  const sig = UI.phone.open ? JSON.stringify(UI.phone.v) : "", pb = document.getElementById("phbody"), sc = pb && sig === UI.phone.sig ? pb.scrollTop : null;
   app.innerHTML = h;
+  UI.phone.sig = sig;
+  if (sc != null) { const nb = document.getElementById("phbody"); if (nb) nb.scrollTop = sc; }
   document.body.classList.toggle("phone-open", !!(UI.phone.open && G));
   UI.last = v;
   if (UI.modal?.kind === "neg" || UI.modal?.kind === "renew") V.negUpdate();
@@ -115,9 +121,37 @@ function flushBanners() {
   if (!G || UI.view === "fight") return;
   const ph = PS.P(), list = PS.popups(UI.noteMark ?? ph.id);
   UI.noteMark = ph.id;
-  PH.banners(list, sfx);
+  if (!UI.phone.open) PH.banners(list, sfx);
 }
-const phoneGo = (app, key) => { UI.phone.open = true; UI.phone.app = app; UI.phone.key = key || null; if (key) { const t = PS.thread(key); t.unread = 0; PS.P().notes.forEach((n) => { if (n.key === key) n.read = 1; }); } else if (app !== "home" && app !== "alerts") PS.markRead(app); };
+// The world keeps moving while you play: every few seconds something arrives (posts, messages, offers),
+// spread across the in-game week. Paused on menus, fight night, pop-ups and hidden tabs. UI.still stops it (tests).
+let nextDrop = Date.now() + 4000;
+setInterval(() => {
+  if (!G || UI.still || document.hidden || UI.ffBusy || UI.modal || G.over || ["menu", "setup", "fight"].includes(UI.view)) return;
+  if (Date.now() < nextDrop) return;
+  nextDrop = Date.now() + 5000 + Math.random() * 8000;
+  if (!PS.tick()) { if (UI.phone.open) render(); return; }
+  save();
+  if (UI.phone.open) render();
+  else { const b = document.querySelector(".phone-btn"); if (b) { b.querySelector(".dotb")?.remove(); b.insertAdjacentHTML("beforeend", PH.phoneBadge()); } }
+  flushBanners();
+}, 1000);
+// Phone navigation: a stack of screens. v = {app, tab, key (chat), info, dir, post, prof, cmp}.
+const markKey = (key) => { const t = PS.P().threads[key]; if (t) t.unread = 0; PS.P().notes.forEach((n) => { if (n.key === key) n.read = 1; }); };
+const phoneGo = (v, push = true) => {
+  const s = UI.phone;
+  if (push && s.open && s.v.app !== "home") s.stack.push(s.v);
+  if (!push) s.stack = [];
+  s.open = true; s.v = v; UI.phone.pick = null;
+  if (v.key) markKey(v.key);
+  if (v.app === "pulse" && !v.post && !v.prof && !v.cmp) { if (!(s.seen > 0)) s.seen = PS.P().id; PS.P().notes.forEach((n) => { if (n.app === "pulse" && n.lvl === "ord") n.read = 1; }); }
+};
+const phoneRender = () => { render(); scrollMsgs(); };
+// A phone action that may open the signing screen ("neg:<fid>"). Returns true if it did.
+const phoneDone = (r) => {
+  if (typeof r === "string" && r.startsWith("neg:")) { UI.phone.open = false; save(); UI.modal = { kind: "neg", fid: +r.slice(4) }; render(); return true; }
+  if (r) toast(r); save(); phoneRender(); return false;
+};
 // Week fast-forward: a one-second overlay that sweeps the calendar and rolls the week number.
 // Purely visual: the new week is already drawn underneath and clicks pass straight through.
 function fastForward(a, b, fights) {
@@ -243,27 +277,61 @@ const A = {
   adv: () => nextWeek(),
   weekok: () => { UI.modal = null; render(); flushBanners(); },
   // phone
-  phone: () => { if (UI.phone.open) UI.phone.open = false; else { phoneGo("home"); UI.phone.anim = 1; } render(); UI.phone.anim = 0; },
+  phone: () => { if (UI.phone.open) UI.phone.open = false; else { phoneGo({ app: "home" }, false); UI.phone.anim = 1; } render(); UI.phone.anim = 0; },
   pclosebg: (i, t, e) => { if (e.target === t) { UI.phone.open = false; render(); } },
-  phome: () => { phoneGo("home"); render(); },
-  pback: () => { if (UI.phone.key) phoneGo(UI.phone.app === "home" ? "messages" : UI.phone.app); else phoneGo("home"); render(); },
-  papp: (i) => { phoneGo(i); render(); },
-  pthread: (i) => { phoneGo(UI.phone.app === "home" || UI.phone.app === "alerts" ? "messages" : UI.phone.app, i); render(); scrollMsgs(); },
+  phome: () => { phoneGo({ app: "home" }, false); render(); },
+  pback: () => { const s = UI.phone; if (UI.phone.pick) UI.phone.pick = null; else s.v = s.stack.pop() || { app: "home" }; if (s.v.key) markKey(s.v.key); render(); scrollMsgs(); },
+  papp: (i) => { phoneGo({ app: i }, false); render(); },
+  ptab: (i) => { UI.phone.v = { ...UI.phone.v, tab: i }; if (i !== "for" && UI.phone.v.app === "pulse") UI.phone.seen = PS.P().id; render(); document.getElementById("phbody")?.scrollTo(0, 0); },
+  pthread: (i) => { phoneGo({ app: "connect", key: i }); phoneRender(); },
+  pinfo: (i) => { phoneGo({ app: "connect", info: i }); render(); },
+  pdir: () => { phoneGo({ app: "connect", dir: 1 }); render(); },
+  padd: (i) => { const r = CN.add(i); if (r) toast(r, "warn"); else { toast("Added to your contacts", "good"); phoneGo({ app: "connect", key: i }); } save(); phoneRender(); },
+  prem: (i) => { const r = CN.remove(i); toast(r, /stay/.test(r) ? "warn" : ""); commit(); },
+  pdel: (i) => { PS.delThread(i); toast("Chat deleted"); UI.phone.v = UI.phone.stack.pop() || { app: "connect", tab: "chats" }; if (UI.phone.v.key === i) UI.phone.v = { app: "connect", tab: "chats" }; commit(); },
   pnote: (i) => {
     const n = PS.P().notes.find((x) => x.id === +i); if (!n) return;
     n.read = 1; document.getElementById("ph-banners")?.replaceChildren();
-    if (n.key === "sell") { UI.phone.open = false; go("market", "desk"); return; }
-    if (n.key?.startsWith("f:") || n.key?.startsWith("npc:")) phoneGo("messages", n.key); else phoneGo(n.app);
-    render(); scrollMsgs();
+    const k = n.key || "";
+    if (k === "sell") { UI.phone.open = false; go("market", "desk"); return; }
+    if (k.startsWith("f:") || k.startsWith("n:")) phoneGo({ app: "connect", key: k });
+    else if (k.startsWith("deal:")) phoneGo({ app: "connect", tab: "offers" });
+    else if (k.startsWith("post:")) phoneGo({ app: "pulse", post: +k.slice(5) });
+    else if (n.app === "pulse") phoneGo({ app: "pulse", tab: k === "rumours" ? "news" : "for" });
+    else phoneGo({ app: n.app || "home" });
+    phoneRender();
   },
   preply: (i) => {
-    const key = UI.phone.key, r = PS.reply(key, +i);
+    const key = UI.phone.v.key, r = PS.reply(key, +i);
     if (r === "renew") { UI.phone.open = false; save(); UI.modal = { kind: "renew", fid: +key.slice(2) }; render(); return; }
-    if (r) toast(r); commit(); scrollMsgs();
+    if (r) toast(r); save(); phoneRender();
   },
-  pask: (i) => { PS.ask(UI.phone.key, i); commit(); scrollMsgs(); },
-  pdeal: (i, t) => { const r = PS.dealAct(+i, t.dataset.x); toast(r, /gone|enough|walked|isn't|full/i.test(r) ? "warn" : t.dataset.x === "yes" ? "money" : ""); if (t.dataset.x === "yes") sfx("cash"); commit(); },
-  pfilter: (i) => { UI.phone.filter = i; render(); },
+  pask: (i) => {
+    const key = UI.phone.v.key;
+    if (key.startsWith("f:") && G.f[+key.slice(2)].st === "mine") { PS.ask(key, i); save(); phoneRender(); return; }
+    if (CN.needsFighter(i)) { UI.phone.pick = i; phoneRender(); return; }
+    phoneDone(CN.ask(key, i));
+  },
+  paskf: (i) => { const t = UI.phone.pick; UI.phone.pick = null; phoneDone(CN.ask(UI.phone.v.key, t, +i)); },
+  pcancel: () => { UI.phone.pick = null; phoneRender(); },
+  pdeal: (i, t) => {
+    const r = CN.dealAct(+i, t.dataset.x);
+    if (r.startsWith("neg:")) return phoneDone(r);
+    const bad = /gone|enough|walked|isn't|full/i.test(r);
+    toast(r, bad ? "warn" : t.dataset.x === "yes" ? "money" : ""); if (t.dataset.x === "yes" && !bad) sfx("cash");
+    save(); phoneRender();
+  },
+  // PULSE
+  ppost: (i) => { phoneGo({ app: "pulse", post: +i }); render(); },
+  pprof: (i) => { phoneGo({ app: "pulse", prof: i }); render(); },
+  plike: (i) => { PU.like(+i); save(); render(); },
+  prt: (i) => { const r = PU.repost(+i); if (r) toast(r); save(); render(); },
+  pnew: () => { UI.phone.seen = PS.P().id; render(); document.getElementById("phbody")?.scrollTo(0, 0); },
+  pcomp: () => { phoneGo({ app: "pulse", cmp: { sel: {} } }); render(); },
+  pck: (i) => { UI.phone.v = { app: "pulse", cmp: { k: i, sel: {} } }; render(); },
+  ptg: (i) => { const c = UI.phone.v.cmp, need = PU.needs(c.k).find((n) => c.sel[n] == null); c.sel[need] = +i; render(); },
+  pcpub: (i) => { const c = UI.phone.v.cmp, r = PU.publish(c.k, c.sel, +i); toast(r, /No posts|no longer/.test(r) ? "warn" : "good"); sfx("tab"); UI.phone.v = UI.phone.stack.pop() || { app: "pulse" }; UI.phone.seen = PS.P().id; commit(); },
+  prp: (i) => { const r = PU.replyPost(UI.phone.v.post, +i); if (r) toast(r); save(); render(); },
   pclear: () => { PS.P().notes = []; commit(); },
   ppref: (i) => { const p = PS.P().prefs; p[i] = p[i] ? 0 : 1; commit(); },
   inbox: () => { G.unread = 0; UI.modal = { kind: "inbox" }; commit(); },
@@ -415,7 +483,7 @@ document.addEventListener("change", (e) => {
 addEventListener("resize", () => drawTour());
 
 // Debug/test hook (used by the smoke test).
-window.__fm = { get G() { return G; }, UI, go, render, nextWeek, afterWeek, startFight, PS, flushBanners };
+window.__fm = { get G() { return G; }, UI, go, render, nextWeek, afterWeek, startFight, PS, CN, PU, flushBanners };
 
 // Loading sting: logo slams in behind a red sweep while the menu fighters load. Click to skip.
 function boot() {

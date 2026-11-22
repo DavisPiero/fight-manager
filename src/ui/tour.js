@@ -11,7 +11,7 @@ export const STEPS = [
   { view: "gym", sel: '[data-tut="autotrain"]', title: "Training", text: "Pick a skill and train it, or switch on auto-train and the gym works each fighter's weakest skill every week." },
   { view: "market", sel: '[data-tut="market-tabs"]', title: "The market", text: "Sign free agents, buy fighters from rival agencies, and under Sell, list your own fighters. Rivals send offers each week." },
   { view: "home", sel: '[data-tut="settings"]', title: "Settings", text: "Sound, the tutorial and Analyst Mode live here. Want every number? Switch on Analyst Mode for exact skills, UFC stats, stamina and market maths." },
-  { view: "home", sel: '[data-tut="phone"]', title: "Your phone", text: "Fighters, promoters and brands message you here. News, social media and rumours too. Urgent things pop up; the rest waits. Press P to open it." },
+  { view: "home", sel: '[data-tut="phone"]', title: "Your phone", text: "Two apps. PULSE is the fight world's news and social feed: post as your agency, call fighters out, build hype. PULSE CONNECT is your chats and offers: fighters, promoters and brands message you there. You start with one contact; win and do business to meet more. Press P to open it." },
   { view: "home", sel: '[data-tut="next"]', title: "Next week", text: "When you're done for the week, press Next week (or the N key). Fights happen on their booked week. Good luck." },
 ];
 

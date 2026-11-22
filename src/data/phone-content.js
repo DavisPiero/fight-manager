@@ -6,18 +6,6 @@
 // Placeholders: {f} fighter, {fl} his surname, {o} opponent, {ol} surname, {div} division, {how} result,
 // {rd} round, {rk} rank label, {ag} rival agency, {me} your agency, {n} contact name, {amt} money, {brand} brand.
 
-// People you can meet. They join Contacts when the condition is first met.
-export const NPCS = {
-  promo: { name: "Marco Vitale", role: "Matchmaker", col: "#d20a0a", ini: "MV" },
-  press: { name: "Kate Ruiz", role: "Reporter, Cageside Report", col: "#e8c46a", ini: "KR" },
-  media: { name: "Tom Hale", role: "Host, Fight Talk podcast", col: "#9b6cff", ini: "TH" },
-  gym: { name: "Sasha Ivanova", role: "Owner, Northside Combat Club", col: "#2fbf71", ini: "SI" },
-  brand: { name: "Dev Mehta", role: "Partnerships, Redline Energy", col: "#ff8a3d", ini: "DM" },
-  scout: { name: "Luis Ortega", role: "Talent scout", col: "#4c8dff", ini: "LO" },
-};
-export const JOURNALISTS = [["Kate Ruiz", "@CagesideKate"], ["Ben Okafor", "@BenOnTheBeat"], ["Mia Lindqvist", "@MiaMMA"], ["Raj Sood", "@SoodScoops"]];
-export const FANS = ["@octagon_oracle", "@jabjabcross", "@sprawl_n_brawl", "@ringside_rita", "@gnp_gary", "@legkick_larry", "@rnc_rachel", "@thecountpunch"];
-
 export const NEWS = {
   myWin: [
     "{f} beats {o} by {how}", "{f} gets past {o} ({how})", "{me} fighter {fl} too good for {ol}", "{fl} stays busy with {how} win over {ol}",
@@ -30,26 +18,14 @@ export const NEWS = {
   aiWin: ["{f} edges {o} on the scorecards", "{fl} outworks {ol} over three rounds"],
   aiTitle: ["{f} wins the {div} title from {o}", "Changing of the guard: {fl} is the new {div} champ"],
   injury: ["{f} out for {amt} weeks after injury", "{fl} sidelined with an injury"],
-  signing: ["{me} signs {f}", "{f} joins {me}"],
+  signing: ["{me} signs {f}", "{f} joins {me}", "Signed: {f} picks {me} as his new management"],
+  bought: ["{me} buys {f} from {ag}", "Transfer: {f} leaves {ag} for {me}"],
+  sold: ["{f} joins {ag} from {me}", "Transfer: {ag} lands {f}"],
   booking: ["Official: {f} vs {o} is set", "{fl} vs {ol} confirmed for week {amt}"],
   retire: ["{f} announces his retirement", "End of an era: {fl} hangs up the gloves"],
   released: ["{ag} releases {f}", "{f} becomes a free agent"],
   rumourTrue: ["Confirmed: {txt}", "It's true: {txt}"],
   rumourFalse: ["Denied: {txt}", "Nothing to it: {txt}"],
-};
-
-export const SOCIAL = {
-  winSelf: ["Told you. {ol} wasn't ready. 🏆", "Hard work pays. Thank you {me} 🙏", "Next. Who's up?", "That's what happens when you train like I train.", "God is good. Back to the gym Monday."],
-  lossSelf: ["Not my night. I'll be back better.", "No excuses. Respect to {ol}.", "Losing teaches you more than winning. Back to work."],
-  fanWin: ["{fl} is the real deal", "{fl} looked SHARP tonight", "Somebody give {fl} a ranked opponent already", "{ol} got cooked 😭"],
-  fanKO: ["DID YOU SEE THAT {fl} FINISH?!", "{ol} is still asleep", "KO of the year contender. {fl} is scary."],
-  fanLoss: ["{fl} needs a new game plan honestly", "Overrated. Said it before.", "Tough night for {fl}. He'll bounce back."],
-  journalist: ["{fl} is quietly building something at {me}.", "Scouts I've spoken to love {fl}'s pace.", "Hearing {ol}'s camp wants an immediate rematch with {fl}."],
-  callout: ["@{fl} you got lucky. Run it back? I'm not going anywhere.", "{fl} is all hype. Put me in front of him.", "I see {fl} talking. Sign the contract.", "{fl} doesn't want this smoke. Ask his manager."],
-  reply: ["Keep my name out your mouth, {ol}. Book it.", "Get in line, {ol}.", "😂 Sure. Tell your manager to call mine."],
-  training: ["Camp mode. 🥊", "Two-a-days. No days off.", "New coach, new tricks.", "Sparring went crazy today", "Cutting weight is the real fight."],
-  agency: ["Proud to represent {f}. Big things coming.", "{ag} welcomes {f} to the family.", "Our roster is stacked this year."],
-  unhappy: ["Sometimes you wonder who's in your corner...", "Been ready for months. Waiting on a phone call.", "Loyalty goes both ways."],
 };
 
 // Rumours: kind decides what happens if it comes true. cred: 0 low, 1 medium, 2 high.
@@ -74,6 +50,11 @@ export const MSG = {
   personal: { _: ["Family stuff at home. Can I take a week off?", "Need a few days. Personal things."] },
   recruit: { _: ["Heads up: {ag} called me. Said they'd treat me better.", "{ag} reached out. Just so you know."] },
   title: { _: ["CHAMPION!!! We did it. I'll never forget this."] },
+  broken: { _: ["You said you'd book me. Nothing. 👎", "Two weeks, you said. Still waiting."], Hotheaded: ["You LIED to me. No fight. Nothing."], Loyal: ["I know you're busy. But you promised."] },
+  fightweek: { _: ["Fight week. Weight's on track. Let's go.", "{ol} is in trouble. I feel sharp.", "Couple of days out. Nerves are good nerves."], Hotheaded: ["Can't wait to shut {ol} up. Can't WAIT."], Professional: ["On weight, game plan locked in. Ready."], Easygoing: ["Fight week vibes 😎 Feeling loose."], Inconsistent: ["Some days I feel unbeatable, some days... ready either way."] },
+  unfair: { _: ["Can we talk about my contract? Doesn't feel fair anymore.", "I've been thinking. My deal isn't right for where I am now."], Demanding: ["Let's be honest: I'm underpaid. Fix it."], Loyal: ["Not trying to be difficult, but the contract's been bugging me."] },
+  checkin: { _: ["Training's good. Just saying hi 👊", "Watched some tape of the division. Lot of guys I can beat.", "Coach says I'm moving better than ever."], Easygoing: ["Yo boss 😎 all good this side.", "Just had the best burrito of my life. That's the update."], Ambitious: ["Who's ranked above me that's free? Asking for me.", "When do I get a ranked guy? Not complaining. Yet."], Professional: ["Weekly update: weight good, cardio up, no knocks.", "Sparring went well. Ready when you need me."], Hotheaded: ["Somebody at the gym said I'm overrated. He's not saying it anymore."] },
+  teammate: { _: ["Huge win for {amt}! Team's on fire 🔥", "{amt} looked great. I'm next."], Ambitious: ["Nice one for {amt}. Now get ME a fight like that."], Loyal: ["So proud of {amt}. Best team in the sport."] },
 };
 // Replies to fighter messages: [label, mood change, effect key]. Effects are applied in src/sim/phone.js.
 export const REPLIES = {
@@ -86,6 +67,18 @@ export const REPLIES = {
   personal: [["Take the week", 8, "rest"], ["We need you in the gym", -9, ""]],
   recruit: [["You're worth more here. I'll prove it.", 5, ""], ["Listen if you want", -5, "listen"]],
   title: [["You earned every second of it", 8, ""], ["Now we defend it", 3, "prep"]],
+  broken: [["You're right. I'm sorry.", 4, ""], ["It's harder than it looks", -2, ""]],
+  fightweek: [["You've got this", 4, ""], ["Stick to the game plan", 2, "prep"], ["Make some noise online", 1, "hype"]],
+  unfair: [["OK, my cut drops 5%", 12, "cut"], ["Let's talk renewal", 3, "renew"], ["A deal is a deal", -10, ""]],
+  checkin: [["Keep it up 💪", 3, ""], ["Good. Stay ready.", 1, "prep"]],
+  teammate: [["You're next. Promise.", 3, "promise"], ["Great team 🙌", 2, ""]],
+};
+// How fighters answer your replies. good / ok / bad by how it landed; again = you asked twice this week.
+export const ACK = {
+  good: { _: ["🙏", "Appreciate it boss.", "Thanks. Means a lot.", "👍"], Hotheaded: ["LET'S GO 🔥", "That's what I'm talking about!"], Professional: ["Thank you. Noted.", "Appreciated."], Easygoing: ["Legend 😎", "Love that 🙌"], Demanding: ["About time.", "Good. That's more like it."] },
+  ok: { _: ["Got it.", "OK boss.", "Understood."], Hotheaded: ["Fine.", "Whatever you say."], Easygoing: ["Cool cool 👍", "No worries."] },
+  bad: { _: ["...", "OK.", "Right.", "If you say so."], Hotheaded: ["Are you serious right now?", "Unbelievable."], Loyal: ["OK. That hurts a bit.", "I thought we were a team."], Demanding: ["We'll see about that.", "Noted. And remembered."] },
+  again: { _: ["We just talked about this 😅", "Same as I said earlier, boss."], Hotheaded: ["You asked me that already!"] },
 };
 // What fighters say when you message them. Picked by topic and mood (low / ok / high).
 export const ASK = {
@@ -96,12 +89,3 @@ export const ASK = {
 };
 export const TOPICS = [["training", "How's training?"], ["fight", "Ready for a fight?"], ["goals", "What are your goals?"], ["money", "Happy with the money?"]];
 
-// Business offers. npc: who sends it. Each has its own effect in src/sim/phone.js.
-export const BUSINESS = {
-  media: { npc: "media", title: "Podcast appearance", text: ["Want {fl} on Fight Talk this week? We pay {amt}.", "Big episode coming. {fl} would be perfect. {amt} for an hour."] },
-  commercial: { npc: "brand", title: "Commercial shoot", text: ["We'd love {fl} in our next ad. {amt}, one day of filming.", "Shoot a commercial with {fl}? {amt}."] },
-  promoter: { npc: "promo", title: "Fight offer", text: ["I can put {fl} against {ol} in week {wk}. Purse {amt}.", "Short notice: {fl} vs {ol}, week {wk}, {amt} purse. Fans want it."] },
-  gym: { npc: "gym", title: "Gym partnership", text: ["Train your team at Northside for a season. {amt}, and every fighter gets sharper.", "Partnership offer: {amt} up front, my coaches work with all your guys."] },
-  request: { npc: "scout", title: "Fighter wants to sign", text: ["{f} ({div}) wants to join {me}. He'd sign for {amt}.", "I found {f}. He's heard good things and would sign for {amt}."] },
-  buyout: { npc: "", title: "Buy-out offer", text: ["{ag} offers {amt} for {f}'s management contract.", "{ag} wants {f}. Their offer: {amt}."] },
-};
