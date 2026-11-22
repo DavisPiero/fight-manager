@@ -23,16 +23,34 @@ try {
   await page.evaluate(() => { window.__fm.UI.FS.cue = null; window.__fm.UI.speed = 0.0001; });
   const arena = page.locator("#arena");
   await arena.screenshot({ path: `${OUT}/p-stand.png` });
-  for (const [n, js] of [
-    ["jab", `a.arenaAct(0,"atk","jab"); a.arenaAct(1,"atk","head kick")`, 140],
-    ["kick", `a.arenaAct(0,"atk","leg kick"); a.arenaAct(1,"atk","knee")`, 200],
-    ["hit", `a.arenaAct(0,"atk","overhand"); a.arenaAct(1,"bighit")`, 150],
-    ["shoot", `a.arenaAct(0,"dash"); a.arenaAct(1,"sprawl")`, 180],
-    ["ground", `a.arenaSet(0,46,"top",{}); a.arenaSet(1,54,"bottom",{})`, 900],
-    ["ko", `a.arenaSet(0,40,"win",{}); a.arenaSet(1,62,"ko",{cut:1})`, 900],
-  ]) {
-    await page.evaluate(`import("/src/ui/arena.js").then(a=>{${js}})`);
-    await page.waitForTimeout(n === "ground" || n === "ko" ? 900 : n === "kick" ? 200 : 140);
+  // Each move is shot at its moment of impact (strikes) or once it has settled (positions).
+  const shots = [
+    ["jab", `a.arenaAct(0,"atk","jab"); a.arenaAct(1,"hit")`, "imp0"],
+    ["cross", `a.arenaAct(1,"atk","cross"); a.arenaAct(0,"hit")`, "imp1"],
+    ["hook", `a.arenaAct(0,"atk","hook"); a.arenaAct(1,"bighit")`, "imp0"],
+    ["uppercut", `a.arenaAct(1,"atk","uppercut"); a.arenaAct(0,"hit")`, "imp1"],
+    ["overhand", `a.arenaAct(0,"atk","overhand"); a.arenaAct(1,"bighit")`, "imp0"],
+    ["elbow", `a.arenaAct(1,"atk","elbow"); a.arenaAct(0,"hit")`, "imp1"],
+    ["legkick", `a.arenaAct(0,"atk","leg kick"); a.arenaAct(1,"hit")`, "imp0"],
+    ["bodykick", `a.arenaAct(1,"atk","body kick"); a.arenaAct(0,"hit")`, "imp1"],
+    ["headkick", `a.arenaAct(0,"atk","head kick"); a.arenaAct(1,"bighit")`, "imp0"],
+    ["knee", `a.arenaAct(1,"atk","knee"); a.arenaAct(0,"hit")`, "imp1"],
+    ["miss", `a.arenaAct(0,"atk","cross",{miss:true}); a.arenaAct(1,"dodge")`, "imp0"],
+    ["guard", `a.arenaAct(1,"atk","hook"); a.arenaAct(0,"guard")`, "imp1"],
+    ["shoot", `a.arenaAct(0,"dash"); a.arenaAct(1,"sprawl")`, 260],
+    ["kd", `a.arenaAct(1,"kd")`, 300],
+    ["ground", `a.arenaSet(0,46,"top",{}); a.arenaSet(1,54,"bottom",{})`, 1200],
+    ["pound", `a.arenaAct(0,"pound"); a.arenaAct(1,"hit")`, "imp0"],
+    ["sub", `a.arenaAct(0,"squeeze")`, 450],
+    ["ko", `a.arenaSet(0,40,"win",{}); a.arenaSet(1,62,"ko",{cut:1})`, 1200],
+  ];
+  for (const [n, js, wait] of shots) {
+    if (n === "jab" || n === "kd") await page.evaluate(`import("/src/ui/arena.js").then(a=>{a.arenaSet(0,32,"stand",{});a.arenaSet(1,68,"stand",{})})`), await page.waitForTimeout(900);
+    // Freeze time, start the move, step exactly to the impact (or settle time), shoot, then let it play out.
+    await page.evaluate(`import("/src/ui/arena.js").then(a=>{a.arenaPause(true); ${js}; a.arenaStep(${typeof wait === "string" ? `a.arenaImpactIn(${wait[3]})/1000+0.02` : wait / 1000})})`);
+    await page.waitForTimeout(120);
     await arena.screenshot({ path: `${OUT}/p-${n}.png` });
+    await page.evaluate(`import("/src/ui/arena.js").then(a=>a.arenaPause(false))`);
+    await page.waitForTimeout(typeof wait === "string" ? 800 : 100);
   }
 } finally { await browser.close(); await server.close(); console.log(errors.length ? "ERRORS: " + errors.join(" | ") : "no page errors"); }

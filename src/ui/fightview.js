@@ -7,7 +7,7 @@ import { analyst, AREAS, areaVal, grade, ovrCol } from "./components.js";
 import { PLANS, CORNER, clock } from "../sim/fight.js";
 import { UI } from "./uistate.js";
 import { aicon } from "./icons.js";
-import { arenaInit, arenaSet, arenaAct, arenaMount, screenPct } from "./arena.js";
+import { arenaInit, arenaSet, arenaAct, arenaMount, arenaImpactIn, arenaHitPt, screenPct } from "./arena.js";
 
 const SIL = '<svg viewBox="0 0 100 120" class="sil"><path d="M50 10c-12 0-20 10-20 23 0 10 5 18 10 22v7c-16 3-30 11-34 26L4 120h92l-2-32c-4-15-18-23-34-26v-7c5-4 10-12 10-22 0-13-8-23-20-23z"/></svg>';
 const pic = (f) => { const p = photoOf(f); return p ? `<img src="${p}" alt="${esc(f.name)}">` : SIL; };
@@ -26,15 +26,38 @@ function plate(FS, i) {
     <span>${rec(f)} · ${rankLabel(FS.r0[i])} · ${esc(f.style)}</span></div></div>`;
 }
 const OCT = '<svg viewBox="-50 -50 100 100" class="in-oct"><polygon points="-20.7,-50 20.7,-50 50,-20.7 50,20.7 20.7,50 -20.7,50 -50,20.7 -50,-20.7"/><polygon points="-14.5,-35 14.5,-35 35,-14.5 35,14.5 14.5,35 -14.5,35 -35,14.5 -35,-14.5"/></svg>';
-function intro(FS) {
-  if (FS.introSeen) return "";
+// The walk-out: its own overlay on <body>, so re-renders underneath can't cut it off. It fades in over whatever
+// is on screen, calls onCovered() once it's opaque (the caller renders the fight screen then, unseen), steps
+// through its stages on one timeline, and fades out to reveal the tale of the tape. A click skips to the fade.
+export function walkout(FS, { onCovered, sfx = () => {} } = {}) {
+  document.getElementById("intro")?.remove();
   FS.introSeen = true;
-  const [A] = FS.f;
-  return `<div class="intro" data-a="introskip" id="intro"><div class="in-bg"></div>${OCT}<div class="in-streaks"><i></i><i></i><i></i><i></i></div><div class="spots"></div><div class="haze"></div>
+  const [A] = FS.f, e = document.createElement("div");
+  e.className = "intro"; e.id = "intro";
+  e.innerHTML = `<div class="wo-bg"></div>${OCT}<div class="in-streaks"><i></i><i></i><i></i><i></i></div>
+    <div class="wo-spot l" style="--c:${myCol()}"></div><div class="wo-spot r" style="--c:${OPP_COL}"></div>
     <div class="in-title"><small>Fight night · Week ${G.wk}</small><b>${FS.b.title ? "Title fight" : "Main event"}</b><span>${DIVISIONS[A.wc]} · 3 rounds</span></div>
     <div class="in-f l"><div class="in-pic">${pic(FS.f[0])}</div>${plate(FS, 0)}</div>
     <div class="in-f r"><div class="in-pic">${pic(FS.f[1])}</div>${plate(FS, 1)}</div>
-    <div class="in-vs">VS</div><div class="in-skip">Click to skip</div></div>`;
+    <div class="in-vs">VS</div><div class="wo-flash"></div><div class="in-skip">Click to skip</div>`;
+  document.body.appendChild(e);
+  const timers = [], at = (ms, fn) => timers.push(setTimeout(fn, ms));
+  let covered = false;
+  const cover = () => { if (!covered) { covered = true; onCovered?.(); } };
+  const end = (fast) => {
+    if (e.classList.contains("s-out")) return;
+    timers.forEach(clearTimeout); cover();
+    e.classList.toggle("fast", fast); e.classList.add("s-out");
+    setTimeout(() => e.remove(), fast ? 320 : 600);
+  };
+  requestAnimationFrame(() => requestAnimationFrame(() => e.classList.add("on")));
+  at(380, cover);
+  at(450, () => e.classList.add("s-title"));
+  at(1700, () => { e.classList.add("s-a"); sfx("whoosh"); });
+  at(3300, () => { e.classList.add("s-b"); sfx("whoosh"); });
+  at(4900, () => { e.classList.add("s-vs"); sfx("crowd"); });
+  at(6700, () => end(false));
+  e.addEventListener("click", () => end(true));
 }
 function pre(FS) {
   const [A, B] = FS.f, a = analyst();
@@ -46,7 +69,7 @@ function pre(FS) {
   if (A.reach && B.reach) rows.push(row("Reach", A.reach + '"', B.reach + '"'));
   if (a) ATTR_KEYS.forEach((k, i) => rows.push(row(ATTR_SHORT[i], A.at[k], B.at[k], cmp(A.at[k], B.at[k]))));
   else AREAS.forEach(([n, k]) => { const x = areaVal(A, k), y = areaVal(B, k); rows.push(row(n, grade(x), grade(y), cmp(x, y))); });
-  return `<div class="fn view-in">${intro(FS)}
+  return `<div class="fn view-in">
     <div class="row spread" style="margin-bottom:12px"><div class="eyebrow">${FS.b.title ? "Title fight · " : ""}${DIVISIONS[A.wc]} bout · 3 rounds</div><span class="small mute">Week ${G.wk}</span></div>
     <div class="tape">
       <div class="tside l">${pic(A)}</div>
@@ -82,8 +105,7 @@ function syncArena(FS) {
   const L = layout(FS);
   for (const i of [0, 1]) {
     arenaSet(i, L.x[i], L.pose[i], { cut: FS.hp[i] < 45, wobbly: FS.hp[i] < 28 });
-    const p = $("p" + i); if (p) p.style.setProperty("--x", screenPct(L.x[i]));
-  }
+  } // the arena keeps #p0/#p1 on the drawn fighters
 }
 
 function live(FS) {
@@ -124,10 +146,12 @@ const callLine = (e) => { const el = Math.max(0, 300 - (e.t + 1) * 25); return `
 
 // ---------- Effects ----------
 const $ = (id) => document.getElementById(id);
-function retrigger(el, cls, mv) { if (!el) return; if (/^p[01]$/.test(el.id)) arenaAct(+el.id[1], cls, mv); }
-function burst(FS, i, { big = false, label = "", col } = {}) {
+function retrigger(el, cls, mv, opt) { if (!el) return; if (/^p[01]$/.test(el.id)) arenaAct(+el.id[1], cls, mv, opt); }
+function burst(FS, i, { big = false, label = "", col, part = "head" } = {}) {
   const fx = $("fx"), p = $("p" + i); if (!fx || !p) return;
-  const x = +p.style.getPropertyValue("--x") + (i ? -3 : 3), cs = getComputedStyle($("arena")), fl = +cs.getPropertyValue("--fl") || 76, fh = +cs.getPropertyValue("--fh") || 43, y = FS.pos === "ground" ? fl - fh * 0.15 : fl - fh * (0.62 + Math.random() * 0.26);
+  // On the drawn fighter: his head (or body), nudged towards the side the blow came from.
+  const pt = arenaHitPt(i, part), cs = getComputedStyle($("arena")), fl = +cs.getPropertyValue("--fl") || 76, fh = +cs.getPropertyValue("--fh") || 43;
+  const x = pt ? pt.x + (i ? -1.5 : 1.5) : +p.style.getPropertyValue("--x"), y = pt ? pt.y : fl - fh * 0.8;
   const b = document.createElement("div");
   b.className = "burst" + (big ? " big" : "");
   b.style.cssText = `left:${x}%;top:${y}%;${col ? `--bc:${col}` : ""}`;
@@ -154,22 +178,27 @@ export function updateLive(FS, ev) {
   if (!ev) return relayout(FS);
   const pa = $("p" + ev.a), pd = $("p" + ev.d);
   switch (ev.kind) {
-    case "punch": case "kick":
+    case "punch": case "kick": {
       retrigger(pa, "atk", ev.mv);
       if (ev.dmg) {
         retrigger(pd, ev.big ? "bighit" : "hit");
-        burst(FS, ev.d, { big: ev.big, label: ev.kd ? "DOWN!" : ev.big ? ev.mv.toUpperCase() : "" });
-        if (ev.big) shake(ev.kd);
-        if (ev.kd) { retrigger(pd, "kd"); flash(); }
+        if (ev.kd) retrigger(pd, "kd");
+        const part = /leg kick/.test(ev.mv || "") ? "legs" : /body|knee/.test(ev.mv || "") ? "body" : "head";
+        setTimeout(() => {
+          burst(FS, ev.d, { big: ev.big, part, label: ev.kd ? "DOWN!" : ev.big ? ev.mv.toUpperCase() : "" });
+          if (ev.big) shake(ev.kd);
+          if (ev.kd) flash();
+        }, arenaImpactIn(ev.a));
       } break;
-    case "miss": retrigger(pa, "atk", ev.mv); retrigger(pd, "dodge"); break;
+    }
+    case "miss": retrigger(pa, "atk", ev.mv, { miss: true }); retrigger(pd, "dodge"); break;
     case "td": retrigger(pa, "dash"); burst(FS, ev.d, { label: "TAKEDOWN", col: "#e8c46a" }); shake(false); break;
     case "tdx": retrigger(pa, "dash"); retrigger(pd, "sprawl"); break;
     case "gnp": retrigger(pa, "pound"); retrigger(pd, "hit"); burst(FS, ev.d, {}); break;
     case "subtry": retrigger(pa, "squeeze"); break;
     case "sub": retrigger(pa, "squeeze"); burst(FS, ev.d, { big: true, label: "TAP!", col: "#e8c46a" }); flash(); break;
   }
-  if (ev.ko) { arenaAct(ev.d, "bighit"); flash(); shake(true); burst(FS, ev.d, { big: true, label: "KO!" }); }
+  if (ev.ko) { arenaAct(ev.d, "bighit"); setTimeout(() => { flash(); shake(true); burst(FS, ev.d, { big: true, label: "KO!" }); }, arenaImpactIn(ev.a)); }
   setTimeout(() => relayout(FS), ev.kind === "td" ? 260 : 120);
 }
 
@@ -188,7 +217,7 @@ export function playMoment(FS, res) {
   else if (anim === "sub") { retrigger(pa, "squeeze"); setTimeout(() => { burst(FS, d, { big: true, label: "TAP!", col: "#e8c46a" }); flash(); }, 500); }
   else if (anim === "clinch") { retrigger($("p0"), "dash"); }
   else if (anim === "block") { retrigger($("p1"), "atk"); retrigger($("p0"), ok ? "guard" : "hit"); if (!ok) burst(FS, 0, {}); }
-  else if (anim === "slip") { retrigger($("p1"), "atk"); retrigger($("p0"), "dodge"); setTimeout(() => { retrigger($("p0"), "atk"); retrigger($("p1"), "hit"); burst(FS, 1, {}); }, 260); }
+  else if (anim === "slip") { retrigger($("p1"), "atk", "", { miss: true }); retrigger($("p0"), "dodge"); setTimeout(() => { retrigger($("p0"), "atk"); retrigger($("p1"), "hit"); burst(FS, 1, {}); }, 260); }
   else if (anim === "escape" || anim === "up" || anim === "scramble") { retrigger($("p0"), "dodge"); }
   if (res.ko) setTimeout(flash, 200);
   setTimeout(() => updateLive(FS), 400);
