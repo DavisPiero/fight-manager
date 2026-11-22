@@ -1,8 +1,8 @@
-# State — 2026-11-21
+# State — 2026-11-22
 
 ## Where we are
-- Branch `pulse-fightnight` (not merged). `main` is the last signed-off build; live at https://davispiero.github.io/fight-manager/.
-- Agenda "PULSE & Fight Night", 4 sessions. **Sessions 1 and 2 done, both awaiting your sign-off.**
+- Everything is on `main` (sessions 1 and 2 signed off 2026-11-22); live at https://davispiero.github.io/fight-manager/.
+- Agenda "PULSE & Fight Night", 4 sessions. **Sessions 1 and 2 done and signed off.**
   - Session 1: broadcast intro, overall-led tale of the tape, quick icon corner calls.
   - Session 2: the octagon is now a drawn, animated arena (crowd, lights, fence, mat) with drawn, rigged fighters: build by division, skin tone from the headshot, looks fixed per fighter, stance and strikes by style. Strikes, takedowns, sprawls, ground positions, knockdowns, KO and the win pose are all animated.
 - `npm test` passes. `npm run bot`: win 60%, KO/sub/dec 30/14/56, same as before session 2 (baseline not re-saved).
