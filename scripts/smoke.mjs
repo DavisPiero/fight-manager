@@ -166,11 +166,11 @@ try {
   const spons = await fm(() => window.__fm.G.fin.spons || 0);
 
   // Phone: home, an offer in PULSE CONNECT, a chat, the PULSE feed, a post, the composer, contacts, a pop-up banner.
-  await fm(() => { const fm = window.__fm; fm.UI.still = true; fm.UI.modal = null; fm.G.event = null; fm.go("home"); fm.PS.debugDeal("media"); fm.PS.debugDeal("gym"); for (let i = 0; i < 10; i++) fm.PS.tick(); });
+  const mediaId = await fm(() => { const fm = window.__fm; fm.UI.still = true; fm.UI.modal = null; fm.G.event = null; fm.go("home"); const d = fm.PS.debugDeal("media"); fm.PS.debugDeal("gym"); for (let i = 0; i < 10; i++) fm.PS.tick(); return d?.id; });
   await click('[data-a="phone"]'); await page.waitForSelector(".phone"); await shot("30-phone-home");
   await click('[data-a="papp"][data-i="connect"]'); await click('[data-a="ptab"][data-i="offers"]'); await shot("31-phone-offers");
   const cash0 = await fm(() => window.__fm.G.cash);
-  await click('[data-a="pdeal"][data-x="yes"]'); await page.waitForTimeout(200);
+  await click(mediaId != null ? `[data-a="pdeal"][data-i="${mediaId}"][data-x="yes"]` : '[data-a="pdeal"][data-x="yes"]'); await page.waitForTimeout(200);
   const dealPaid = (await fm(() => window.__fm.G.cash)) !== cash0;
   await click('[data-a="ptab"][data-i="chats"]'); await shot("32-phone-chats");
   if (await page.$('.cn-row[data-a="pthread"]')) { await click('.cn-row[data-a="pthread"]'); await shot("33-phone-chat"); if (await page.$('[data-a="preply"]')) { await click('[data-a="preply"]'); await shot("33b-phone-replied"); } }
