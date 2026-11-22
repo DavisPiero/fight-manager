@@ -6,6 +6,8 @@ import { photoOf } from "./avatar.js";
 import { analyst, AREAS, areaVal, grade, ovrCol } from "./components.js";
 import { PLANS, CORNER, clock } from "../sim/fight.js";
 import { UI } from "./uistate.js";
+import { aicon } from "./icons.js";
+import { arenaInit, arenaSet, arenaAct, arenaMount, screenPct } from "./arena.js";
 
 const SIL = '<svg viewBox="0 0 100 120" class="sil"><path d="M50 10c-12 0-20 10-20 23 0 10 5 18 10 22v7c-16 3-30 11-34 26L4 120h92l-2-32c-4-15-18-23-34-26v-7c5-4 10-12 10-22 0-13-8-23-20-23z"/></svg>';
 const pic = (f) => { const p = photoOf(f); return p ? `<img src="${p}" alt="${esc(f.name)}">` : SIL; };
@@ -17,34 +19,39 @@ export function vFight() { return UI.FS.ph === "pre" ? pre(UI.FS) : live(UI.FS);
 
 // ---------- Walk-out intro + tale of the tape ----------
 function plate(FS, i) {
-  const f = FS.f[i];
-  return `<div class="in-plate" style="--c:${i ? OPP_COL : myCol()}"><small>${i ? "Opponent" : esc(G.ag.name)}</small>${f.nick ? `<i>"${esc(f.nick)}"</i>` : ""}<b>${esc(f.name)}</b>
-    <span>${rec(f)} · ${rankLabel(FS.r0[i])} · <em style="color:${ovrCol(ovr(f))}">${ovr(f)} OVR</em></span></div>`;
+  const f = FS.f[i], o = ovr(f);
+  return `<div class="in-plate" style="--c:${i ? OPP_COL : myCol()}">
+    <div class="in-ovr" style="--oc:${ovrCol(o)}"><b>${o}</b><small>OVR</small></div>
+    <div class="in-id"><small>${i ? "Opponent" : esc(G.ag.name)}</small>${f.nick ? `<i>"${esc(f.nick)}"</i>` : ""}<b>${esc(f.name)}</b>
+    <span>${rec(f)} · ${rankLabel(FS.r0[i])} · ${esc(f.style)}</span></div></div>`;
 }
+const OCT = '<svg viewBox="-50 -50 100 100" class="in-oct"><polygon points="-20.7,-50 20.7,-50 50,-20.7 50,20.7 20.7,50 -20.7,50 -50,20.7 -50,-20.7"/><polygon points="-14.5,-35 14.5,-35 35,-14.5 35,14.5 14.5,35 -14.5,35 -35,14.5 -35,-14.5"/></svg>';
 function intro(FS) {
   if (FS.introSeen) return "";
   FS.introSeen = true;
   const [A] = FS.f;
-  return `<div class="intro" data-a="introskip" id="intro"><div class="spots"></div><div class="haze"></div>
+  return `<div class="intro" data-a="introskip" id="intro"><div class="in-bg"></div>${OCT}<div class="in-streaks"><i></i><i></i><i></i><i></i></div><div class="spots"></div><div class="haze"></div>
     <div class="in-title"><small>Fight night · Week ${G.wk}</small><b>${FS.b.title ? "Title fight" : "Main event"}</b><span>${DIVISIONS[A.wc]} · 3 rounds</span></div>
-    <div class="in-f l">${pic(FS.f[0])}${plate(FS, 0)}</div>
-    <div class="in-f r">${pic(FS.f[1])}${plate(FS, 1)}</div>
+    <div class="in-f l"><div class="in-pic">${pic(FS.f[0])}</div>${plate(FS, 0)}</div>
+    <div class="in-f r"><div class="in-pic">${pic(FS.f[1])}</div>${plate(FS, 1)}</div>
     <div class="in-vs">VS</div><div class="in-skip">Click to skip</div></div>`;
 }
 function pre(FS) {
   const [A, B] = FS.f, a = analyst();
   const cmp = (x, y) => (x > y ? 0 : y > x ? 1 : -1);
   const row = (l, x, y, better = -1) => `<div class="trow"><b class="${better === 0 ? "adv" : ""}">${x}</b><span>${l}</span><b class="${better === 1 ? "adv" : ""}" style="text-align:left">${y}</b></div>`;
-  const rows = [row("Record", rec(A), rec(B)), row("Rank", rankLabel(FS.r0[0]), rankLabel(FS.r0[1])), row("Age", A.age, B.age), row("Overall", ovr(A), ovr(B), cmp(ovr(A), ovr(B)))];
+  const oA = ovr(A), oB = ovr(B), ob = cmp(oA, oB);
+  const top = `<div class="trow tovr"><b class="${ob === 0 ? "adv" : ""}" style="color:${ovrCol(oA)}">${oA}</b><span>Overall</span><b class="${ob === 1 ? "adv" : ""}" style="text-align:left;color:${ovrCol(oB)}">${oB}</b></div>`;
+  const rows = [row("Record", rec(A), rec(B)), row("Wins", A.w, B.w, cmp(A.w, B.w)), row("Losses", A.l, B.l, cmp(B.l, A.l)), row("Style", esc(A.style), esc(B.style)), row("Rank", rankLabel(FS.r0[0]), rankLabel(FS.r0[1]))];
+  if (A.reach && B.reach) rows.push(row("Reach", A.reach + '"', B.reach + '"'));
   if (a) ATTR_KEYS.forEach((k, i) => rows.push(row(ATTR_SHORT[i], A.at[k], B.at[k], cmp(A.at[k], B.at[k]))));
   else AREAS.forEach(([n, k]) => { const x = areaVal(A, k), y = areaVal(B, k); rows.push(row(n, grade(x), grade(y), cmp(x, y))); });
-  if (A.reach && B.reach) rows.push(row("Reach", A.reach + '"', B.reach + '"'));
   return `<div class="fn view-in">${intro(FS)}
     <div class="row spread" style="margin-bottom:12px"><div class="eyebrow">${FS.b.title ? "Title fight · " : ""}${DIVISIONS[A.wc]} bout · 3 rounds</div><span class="small mute">Week ${G.wk}</span></div>
     <div class="tape">
-      <div class="side l">${pic(A)}</div>
-      <div class="mid"><div class="names"><b style="text-align:right">${esc(A.name)}</b><span class="vs">VS</span><b>${esc(B.name)}</b></div>${rows.join("")}</div>
-      <div class="side r">${pic(B)}</div>
+      <div class="tside l">${pic(A)}</div>
+      <div class="mid"><div class="names"><b style="text-align:right">${esc(A.name)}</b><span class="vs">VS</span><b>${esc(B.name)}</b></div>${top}${rows.join("")}</div>
+      <div class="tside r">${pic(B)}</div>
     </div>
     <div class="panel" style="margin-top:16px"><div class="panel-h"><h2>Game plan</h2><span class="small mute">Your corner will get calls to make during the fight</span></div>
       <div class="plans">${planButtons(FS)}</div>
@@ -67,13 +74,22 @@ function layout(FS) {
   const end = FS.ph === "end" && FS.fin, lose = end ? 1 - FS.fin.w : -1;
   const pose = [0, 1].map((i) => (i === lose ? "ko" : end && i === FS.fin.w ? "win" : FS.pos === "ground" ? (FS.top === i ? "top" : "bottom") : "stand"));
   const x = FS.pos === "ground" ? [c - 4, c + 4] : [c - 18, c + 18];
-  if (end && FS.fin.how !== "Submission") { x[lose] = lose ? c + 10 : c - 10; x[1 - lose] = lose ? c - 12 : c + 12; }
+  if (end && FS.fin.how !== "Submission") { x[lose] = lose ? c + 14 : c - 14; x[1 - lose] = lose ? c - 18 : c + 18; }
   return { x, pose };
 }
-const ftrCls = (FS, i, L) => `ftr ${i ? "r" : "l"} ${L.pose[i]} ${FS.hp[i] < 45 ? "cut" : ""} ${FS.hp[i] < 28 ? "wobbly" : ""}`;
+// The arena canvas draws the fighters; #p0/#p1 are invisible anchors that keep their spot for effects.
+function syncArena(FS) {
+  const L = layout(FS);
+  for (const i of [0, 1]) {
+    arenaSet(i, L.x[i], L.pose[i], { cut: FS.hp[i] < 45, wobbly: FS.hp[i] < 28 });
+    const p = $("p" + i); if (p) p.style.setProperty("--x", screenPct(L.x[i]));
+  }
+}
 
 function live(FS) {
   const [A, B] = FS.f, end = FS.ph === "end", a = analyst(), L = layout(FS);
+  arenaInit(FS, [myCol(), OPP_COL]);
+  requestAnimationFrame(() => { syncArena(FS); arenaMount(G.ag.name); });
   let ctl = "";
   if (FS.ph === "run") ctl = `<div class="plans">${planButtons(FS)}</div>
     <div class="fctl"><span class="small mute">Speed</span><div class="seg">${[1, 2, 4].map((s) => `<button class="${UI.speed === s ? "on" : ""}" data-a="speed" data-i="${s}">${s}×</button>`).join("")}</div><button class="btn quiet sm" data-a="skip" style="margin-left:auto">Skip to result</button></div>`;
@@ -90,9 +106,8 @@ function live(FS) {
   return `<div class="fn">
     <div class="arena ${FS.title ? "title" : ""}" id="arena">
       <div class="cam" id="cam">
-        <div class="cage"><div class="fence"></div><div class="floor"><span>${esc(G.ag.name)}</span></div><div class="beams"></div></div>
-        <div class="${ftrCls(FS, 0, L)}" id="p0" style="--x:${L.x[0]}"><div class="bd">${pic(A)}</div><div class="shd"></div></div>
-        <div class="${ftrCls(FS, 1, L)}" id="p1" style="--x:${L.x[1]}"><div class="bd">${pic(B)}</div><div class="shd"></div></div>
+        <canvas id="oct" aria-label="${esc(A.name)} against ${esc(B.name)}"></canvas>
+        <div class="anc" id="p0" style="--x:${screenPct(L.x[0])}"></div><div class="anc" id="p1" style="--x:${screenPct(L.x[1])}"></div>
         <div class="fx" id="fx"></div>
       </div>
       <div class="posb ${FS.pos === "ground" ? "gr" : ""}" id="pos">${posText(FS)}</div>
@@ -109,22 +124,19 @@ const callLine = (e) => { const el = Math.max(0, 300 - (e.t + 1) * 25); return `
 
 // ---------- Effects ----------
 const $ = (id) => document.getElementById(id);
-function retrigger(el, cls) { if (!el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+function retrigger(el, cls, mv) { if (!el) return; if (/^p[01]$/.test(el.id)) arenaAct(+el.id[1], cls, mv); }
 function burst(FS, i, { big = false, label = "", col } = {}) {
   const fx = $("fx"), p = $("p" + i); if (!fx || !p) return;
-  const x = +p.style.getPropertyValue("--x") + (i ? -5 : 5), y = FS.pos === "ground" ? 70 : 34 + Math.random() * 10;
+  const x = +p.style.getPropertyValue("--x") + (i ? -3 : 3), cs = getComputedStyle($("arena")), fl = +cs.getPropertyValue("--fl") || 76, fh = +cs.getPropertyValue("--fh") || 43, y = FS.pos === "ground" ? fl - fh * 0.15 : fl - fh * (0.62 + Math.random() * 0.26);
   const b = document.createElement("div");
   b.className = "burst" + (big ? " big" : "");
   b.style.cssText = `left:${x}%;top:${y}%;${col ? `--bc:${col}` : ""}`;
   b.innerHTML = `<i></i>${label ? `<b>${label}</b>` : ""}`;
   fx.appendChild(b); setTimeout(() => b.remove(), big ? 1100 : 650);
 }
-function shake(big) { retrigger($("cam"), big ? "shake-big" : "shake"); }
+function shake(big) { const c = $("cam"); if (!c) return; const k = big ? "shake-big" : "shake"; c.classList.remove(k); void c.offsetWidth; c.classList.add(k); }
 function flash() { const a = $("arena"); if (!a) return; const f = document.createElement("div"); f.className = "flash"; a.appendChild(f); setTimeout(() => f.remove(), 500); }
-function relayout(FS) {
-  const L = layout(FS);
-  for (const i of [0, 1]) { const p = $("p" + i); if (!p) continue; p.style.setProperty("--x", L.x[i]); const keep = [...p.classList].filter((c) => /^(atk|hit|bighit|kd|dodge|sprawl|dash|pound|squeeze|flurry)$/.test(c)); p.className = ftrCls(FS, i, L) + " " + keep.join(" "); }
-}
+const relayout = syncArena;
 
 export function updateLive(FS, ev) {
   for (const i of [0, 1]) {
@@ -143,21 +155,21 @@ export function updateLive(FS, ev) {
   const pa = $("p" + ev.a), pd = $("p" + ev.d);
   switch (ev.kind) {
     case "punch": case "kick":
-      retrigger(pa, "atk");
+      retrigger(pa, "atk", ev.mv);
       if (ev.dmg) {
         retrigger(pd, ev.big ? "bighit" : "hit");
         burst(FS, ev.d, { big: ev.big, label: ev.kd ? "DOWN!" : ev.big ? ev.mv.toUpperCase() : "" });
         if (ev.big) shake(ev.kd);
         if (ev.kd) { retrigger(pd, "kd"); flash(); }
       } break;
-    case "miss": retrigger(pa, "atk"); retrigger(pd, "dodge"); break;
+    case "miss": retrigger(pa, "atk", ev.mv); retrigger(pd, "dodge"); break;
     case "td": retrigger(pa, "dash"); burst(FS, ev.d, { label: "TAKEDOWN", col: "#e8c46a" }); shake(false); break;
     case "tdx": retrigger(pa, "dash"); retrigger(pd, "sprawl"); break;
     case "gnp": retrigger(pa, "pound"); retrigger(pd, "hit"); burst(FS, ev.d, {}); break;
     case "subtry": retrigger(pa, "squeeze"); break;
     case "sub": retrigger(pa, "squeeze"); burst(FS, ev.d, { big: true, label: "TAP!", col: "#e8c46a" }); flash(); break;
   }
-  if (ev.ko) { flash(); shake(true); burst(FS, ev.d, { big: true, label: "KO!" }); }
+  if (ev.ko) { arenaAct(ev.d, "bighit"); flash(); shake(true); burst(FS, ev.d, { big: true, label: "KO!" }); }
   setTimeout(() => relayout(FS), ev.kind === "td" ? 260 : 120);
 }
 
@@ -168,31 +180,54 @@ export function playMoment(FS, res) {
   const pa = $("p" + att), pd = $("p" + d);
   const hitAnim = { swarm: "flurry", flurry: "flurry", big: "atk", kick: "atk", counter: "atk", eat: "atk", gnp: "pound", "gnp-me": "pound" }[anim];
   if (hitAnim) {
-    retrigger(pa, hitAnim);
+    retrigger(pa, hitAnim, { kick: "head kick", big: "overhand", counter: "cross", gnp: "", "gnp-me": "" }[anim]);
     const n = hitAnim === "flurry" ? 3 : 1;
     for (let k = 0; k < n; k++) setTimeout(() => { retrigger(pd, k === n - 1 && (anim === "big" || res.ko) ? "bighit" : "hit"); burst(FS, d, { big: k === n - 1 && (anim === "big" || res.ko || anim === "counter"), label: k === n - 1 ? (res.ko ? "KO!" : anim === "big" ? "DOWN!" : anim === "counter" ? "COUNTER" : "") : "" }); }, 120 + k * 170);
     if (anim === "big" || res.ko || anim === "counter") setTimeout(() => { shake(true); if (anim === "big") { retrigger(pd, "kd"); flash(); } }, 150 + (n - 1) * 170);
   } else if (anim === "td" || anim === "tdx") { retrigger(pa, "dash"); if (anim === "tdx") retrigger(pd, "sprawl"); else burst(FS, d, { label: "TAKEDOWN", col: "#e8c46a" }); }
   else if (anim === "sub") { retrigger(pa, "squeeze"); setTimeout(() => { burst(FS, d, { big: true, label: "TAP!", col: "#e8c46a" }); flash(); }, 500); }
   else if (anim === "clinch") { retrigger($("p0"), "dash"); }
+  else if (anim === "block") { retrigger($("p1"), "atk"); retrigger($("p0"), ok ? "guard" : "hit"); if (!ok) burst(FS, 0, {}); }
+  else if (anim === "slip") { retrigger($("p1"), "atk"); retrigger($("p0"), "dodge"); setTimeout(() => { retrigger($("p0"), "atk"); retrigger($("p1"), "hit"); burst(FS, 1, {}); }, 260); }
   else if (anim === "escape" || anim === "up" || anim === "scramble") { retrigger($("p0"), "dodge"); }
   if (res.ko) setTimeout(flash, 200);
   setTimeout(() => updateLive(FS), 400);
 }
 
-// Corner-call pop-up over the arena. Resolves with the choice, or the fighter's own pick when time runs out.
-export function askMoment(FS, m, autoIdx, seconds = 8) {
-  const mo = $("mo"), arena = $("arena");
-  if (!mo) return Promise.resolve(autoIdx);
-  const focus = m.id === "hurtOpp" || m.id === "top" ? 1 : 0;
-  arena.classList.add("mo-on"); arena.style.setProperty("--fx", (+$("p" + focus).style.getPropertyValue("--x") || 50) + "%");
-  mo.innerHTML = `<div class="moment ${m.tone}"><div class="mo-in"><small>Corner call</small><h2>${esc(m.title)}</h2><p>${esc(m.sub)}</p>
-    <div class="mo-c">${m.choices.map((c, i) => `<button data-a="mpick" data-i="${i}"><b>${esc(c.label)}</b><small>${esc(c.hint)}</small></button>`).join("")}</div>
-    <div class="mo-timer"><i style="animation-duration:${seconds}s"></i></div><div class="mo-note">No call and he goes with his instinct</div></div></div>`;
+// Corner call: the fight slows, the camera pushes in on the key fighter, a ring marks the target,
+// and 2–3 icon buttons appear. Resolves with the choice, or the fighter's own pick when time runs out.
+export function askMoment(FS, m, autoIdx, seconds = 5) {
+  const mo = $("mo"), arena = $("arena"), fx = $("fx"), pf = $("p" + m.focus);
+  if (!mo || !arena) return Promise.resolve(autoIdx);
+  const x = +pf?.style.getPropertyValue("--x") || 50;
+  arena.style.setProperty("--fx", x + "%");
+  arena.classList.add("mo-on");
+  let ring = null;
+  if (m.target && fx) {
+    ring = document.createElement("div");
+    ring.className = `tgt t-${m.target} ${m.tone}`;
+    ring.style.left = x + (m.focus ? -1 : 1) + "%";
+    fx.appendChild(ring);
+  }
+  const btn = (c, i) => `<button data-a="mpick" data-i="${i}" class="${i === m.hint ? "hint" : ""}"><span class="mo-ic">${aicon(c.icon)}</span><b>${esc(c.label)}</b>${i === m.hint ? `<small>${esc(m.why)}</small>` : ""}</button>`;
   return new Promise((res) => {
-    const done = (i, auto) => { clearTimeout(t); UI.mpick = null; arena.classList.remove("mo-on"); mo.innerHTML = auto ? `<div class="mo-auto">He goes with his instinct: <b>${esc(m.choices[i].label)}</b></div>` : ""; setTimeout(() => { if (mo.firstChild?.className === "mo-auto") mo.innerHTML = ""; }, 1400); res(i); };
-    const t = setTimeout(() => done(autoIdx, true), seconds * 1000);
-    UI.mpick = (i) => done(i < 0 ? autoIdx : i, false);
+    let t = 0, shown = false;
+    const show = () => {
+      shown = true;
+      mo.innerHTML = `<div class="moment ${m.tone} f${m.focus}"><div class="mo-in"><h2>${esc(m.title)}</h2>
+        <div class="mo-c n${m.choices.length}">${m.choices.map(btn).join("")}</div>
+        <div class="mo-timer"><i style="animation-duration:${seconds}s"></i></div></div></div>`;
+      t = setTimeout(() => done(autoIdx, true), seconds * 1000);
+    };
+    const s0 = setTimeout(show, 380); // the slow-motion push-in plays first
+    const done = (i, auto) => {
+      clearTimeout(t); clearTimeout(s0); UI.mpick = null;
+      arena.classList.remove("mo-on"); ring?.remove();
+      mo.innerHTML = auto ? `<div class="mo-auto">On instinct: <b>${esc(m.choices[i].label)}</b></div>` : "";
+      setTimeout(() => { if (mo.firstChild?.className === "mo-auto") mo.innerHTML = ""; }, 1200);
+      res(i);
+    };
+    UI.mpick = (i) => { if (i >= 0 && !shown) return; done(i < 0 ? autoIdx : i, false); };
   });
 }
 // Big text card over the arena: round starts, "It's all over", "To the judges".

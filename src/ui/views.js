@@ -42,7 +42,7 @@ export function shell(content) {
       <div class="money" data-tut="cash"><b id="cash" class="num ${G.cash < 0 ? "bad" : ""}">${kmoney(G.cash)}</b><small>${G.red ? `<span class="bad">Red ${G.red}/${WEEKS_IN_RED_LIMIT}</span>` : `<a class="rep-link" data-a="rephelp" title="What is reputation?">Rep ${Math.round(G.rep)} <i>?</i></a>`}</small></div>
       <button class="ib phone-btn ${UI.phone.open ? "on" : ""}" data-a="phone" data-tut="phone" aria-label="Phone (P)" title="Phone (P)">${icon("phone")}${phoneBadge()}</button>
       <button class="ib top-set" data-a="settings" aria-label="Settings">${icon("gear")}</button>
-      <button class="btn red sm adv-btn" data-a="adv" data-tut="next" title="Advance one week (N)"><span class="lbl">Next week</span><span class="kbd">N</span></button>
+      <button class="btn red sm adv-btn" data-a="adv" data-tut="next" title="Advance to week ${G.wk + 1} (shortcut: N)"><span class="lbl">Next week</span><span class="wkn">(${G.wk + 1})</span></button>
     </div></div></header>
   <main class="${UI.view !== UI.last ? "view-in" : ""}">${content}</main></div></div>`;
 }

@@ -7,6 +7,8 @@ Browser management game: run an MMA agency, sign/train/sell fighters, work the c
 - `npm test` → headless smoke test (Playwright). Plays weeks, a fight and a sale; screenshots in `test-results/`.
 - `npm run ufc` → fetches fighter headshots + bio/stats from UFC.com athlete pages (15 s between requests, ~1.5 h; skips ones already fetched).
 - `npm run bot` → balance bot: 20 seeded one-year careers, compared with `scripts/bot-baseline.json` (`-- --save` to re-baseline). Run it after any rule or data change.
+- `npm run shots` → headless fight-night screenshots (intro stages, tale of the tape, each corner call) in `test-results/fight/`. Add `-- <dir> 390 844` for phone size.
+- `npm run poses` → headless arena pose sheet (stance, strikes, takedown, ground, KO) in `test-results/arena/`. `npm run skin` → re-samples skin tones from headshots into `src/data/skintones.json` + contact sheet `test-results/skintones.png` (hand fixes start with `!` and are kept).
 - `npm run build` → static site in `dist/` (relative paths, works on GitHub Pages).
 
 ## Hard rules
@@ -24,7 +26,7 @@ Browser management game: run an MMA agency, sign/train/sell fighters, work the c
 - `src/sim/phone.js` phone: contacts, moods, messages, offers, news/social/rumours, notifications. `src/ui/phone.js` phone screens. Content in `src/data/phone-content.js` (starter set — add lines there).
 - `src/state.js` career state, value/ask formulas, save/load.
 - `src/sim/world.js` weekly cycle, fight offers, training, auto-train. `src/sim/market.js` signing, selling, bids, contracts. `src/sim/fight.js` fight engine. `src/sim/events.js` random events. `src/sim/sponsors.js` brand deals.
-- `src/ui/views.js` screens, `src/ui/fightview.js` fight night, `src/ui/tour.js` first-run tutorial, `src/ui/components.js` shared pieces, `src/ui/styles.css` look.
+- `src/ui/views.js` screens, `src/ui/fightview.js` fight night, `src/ui/arena.js` the octagon canvas and drawn fighters (parts in `PARTS`, poses in `STANCE`/`STRIKE`/`ACT`), `src/ui/tour.js` first-run tutorial, `src/ui/components.js` shared pieces, `src/ui/styles.css` look.
 - `src/data/` roster (Nov 2026), constants (cities, emblems, brands), `ufc.json` (scraped bio/stats).
 - Saves: 3 slots in localStorage (`fightmanager_slot_N`); settings shared across slots.
 

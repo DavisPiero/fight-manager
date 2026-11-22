@@ -45,3 +45,18 @@
 - 2026-11-21 Notifications: critical always pop up, important optional, social never; badges on background apps stay quiet.
 - 2026-11-21 Rest weeks after fights not added (user said no for now).
 - 2026-11-21 Fight weeks: the fight intro fades in as the week fast-forward fades out (no hard cut). Save screen redesigned: red slash, drifting cage lines, slots in a column, no fighter (user's call).
+- 2026-11-21 Agenda (PULSE, PULSE CONNECT, fight night) split into 4 sessions with sign-off between: 1 intro + quick decisions, 2 animated octagon, 3 PULSE CONNECT, 4 PULSE.
+- 2026-11-21 Next week button shows the week you move into, "Next week (12)"; N still works (in the tooltip).
+- 2026-11-21 Fight intro: name plates lead with a big overall rating; octagon and light-streak background. Age removed from fight night only (still drives value elsewhere).
+- 2026-11-21 Corner calls are icons + 1–2 word labels, 5 s, slow-motion push-in, target ring, keys 1–3. New situations: incoming and backs off. Hint = glow on the choice whose skill-vs-opponent fit is clearly best.
+- 2026-11-21 "Incoming" softened and capped at 18% so it doesn't drag win rate: bot win 60% (61% before), KO/sub/dec 30/14/56. ~3.7 calls a fight (was 3.1).
+- 2026-11-21 Bug fix: the "lead leg is hurt" opening was being resolved as the "hands low" one.
+- 2026-11-21 Bug fix: tale-of-the-tape photos shared a class with the phone nav bar and were pinned to the bottom of the screen on phones; photos also no longer stretch.
+- 2026-11-21 `npm run shots` added: headless screenshots of the intro, tale of the tape and each corner call.
+
+- 2026-11-21 Open questions answered "go with your recommendations": vector body parts you can later replace with painted ones; drawn heads, not headshots, in the octagon; skin tone sampled from headshots and checked on a contact sheet; PULSE owner is "Cageside Media"; session-1 guesses (5 s timer, hint tags, incoming 18%) kept.
+- 2026-11-21 Octagon is one canvas (crowd, lights, fence, mat, fighters) instead of photo cut-outs; effects (bursts, ring, round cards) stay as HTML on top.
+- 2026-11-21 Fighters rigged from parts (torso, arms, legs, gloves, head, hair, beard, shorts); poses are joint angles, so painted parts can replace the drawn ones later without new animation.
+- 2026-11-21 Build by division (width) and UFC.com height; skin from headshot (5 hand-fixed where hair or beard fooled the sampler); prospects get a tone by country; hair/beard/trim seeded from the name, so each fighter always looks the same.
+- 2026-11-21 Style-specific strikes swap a move for one of the same weight (heavy punch, light kick...), not more kicks or punches: a first try that changed how often each style kicks dropped bot win rate 60% → 56%. Now identical to before.
+- 2026-11-21 Floor line sits just above the scorebug on any screen, so legs and feet are never hidden on phones.
