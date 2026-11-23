@@ -525,7 +525,7 @@ label.f b { float: right; color: #fff; letter-spacing: 0; font-size: 14px; }
 @keyframes shakebig { 15% { transform: translate(-16px, 6px) scale(1.05); } 35% { transform: translate(14px, -8px) scale(1.05); } 60% { transform: translate(-8px, 4px) scale(1.03); } }
 #oct { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .anc { position: absolute; left: calc(var(--x) * 1%); top: calc(var(--fl, 76) * 1%); width: 0; height: 0; }
-.arena.mo-on .cam { transition: transform .4s cubic-bezier(.2, .8, .2, 1), filter .35s; transform: scale(1.24); transform-origin: var(--fx, 50%) 55%; filter: saturate(.6) brightness(.75); }
+.arena.mo-on .cam { transition: transform .4s cubic-bezier(.2, .8, .2, 1), filter .35s; transform: scale(1.14); transform-origin: var(--fx, 50%) 30%; filter: saturate(.6) brightness(.75); }
 .fx { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
 .burst { position: absolute; transform: translate(-50%, -50%); }
 .burst i { display: block; width: 90px; height: 90px; background: radial-gradient(circle, #fff 0 12%, var(--bc, #ff2d2d) 13% 22%, transparent 23%), conic-gradient(from 0deg, transparent 0 10deg, #fff 10deg 14deg, transparent 14deg 40deg, var(--bc, #ff2d2d) 40deg 44deg, transparent 44deg 70deg, #fff 70deg 74deg, transparent 74deg 100deg, var(--bc, #ff2d2d) 100deg 104deg, transparent 104deg 130deg, #fff 130deg 134deg, transparent 134deg 160deg, var(--bc, #ff2d2d) 160deg 164deg, transparent 164deg 190deg, #fff 190deg 194deg, transparent 194deg 220deg, var(--bc, #ff2d2d) 220deg 224deg, transparent 224deg 250deg, #fff 250deg 254deg, transparent 254deg 280deg, var(--bc, #ff2d2d) 280deg 284deg, transparent 284deg 310deg, #fff 310deg 314deg, transparent 314deg 340deg, var(--bc, #ff2d2d) 340deg 344deg, transparent 344deg); -webkit-mask-image: radial-gradient(circle, #000 30%, transparent 70%); mask-image: radial-gradient(circle, #000 30%, transparent 70%); animation: burst .55s ease-out forwards; }
@@ -643,6 +643,7 @@ label.f b { float: right; color: #fff; letter-spacing: 0; font-size: 14px; }
 .ph-bar b { display: block; font: 700 17px var(--body); } .ph-bar small { color: var(--mute); font-size: 12px; }
 .ph-body { flex: 1; overflow-y: auto; padding: 10px 12px 30px; scrollbar-width: none; animation: ph-app .25s ease-out; }
 .ph-body::-webkit-scrollbar { display: none; }
+.phone.redraw .ph-body, .phone.redraw .bub { animation: none; } .phone.redraw .bub.new { animation: pop .25s; }
 @keyframes ph-app { from { opacity: 0; transform: translateX(14px); } }
 .ph-body.home { padding: 0; animation: none; }
 .ph-homebar { position: absolute; left: 50%; bottom: 7px; transform: translateX(-50%); width: 130px; height: 5px; border-radius: 3px; background: #ffffffcc; z-index: 4; }
