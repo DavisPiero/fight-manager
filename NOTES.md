@@ -1,14 +1,14 @@
-# Hand-off — 2026-11-22
+# Hand-off — 2026-11-23
 
-## Done (merged to main, pushed)
-- Fighters redrawn + walk-out rebuilt (earlier in the day).
-- Phone overhaul: PULSE (`src/sim/pulse.js`, `src/ui/pulse.js`, `src/data/pulse-content.js`) and PULSE CONNECT (`src/sim/connect.js`, `src/ui/connect.js`, `src/data/people.js`). Core clock/queue/chats in `src/sim/phone.js`. Old saves migrate (`migrate()` in phone.js).
-- `npm run phone` = headless phone screenshots. Smoke test covers the new phone.
+## Done (branch `names-phone-arena`, not merged)
+- Names: `freshName`/`fixNames`/`surname` in `src/state.js`, bigger lists in `src/data/constants.js`. `load()` runs `fixNames`.
+- Phone: `render()` in `src/main.js` adds `.redraw` to the phone when the same screen is redrawn; CSS turns its animations off (new bubbles get `.new`).
+- Fight night (`src/ui/arena.js`): `arenaRock(i, on)` from `askMoment` for hurt moments; `S.rt` is real time (wobble shows in slow motion); `S.imp` slow-motion beat on bighit/kd; `drawCage` redrawn + `drawHaze`; mat sponsors in `S.brands`. Push-in in `styles.css` (`.arena.mo-on .cam`).
 
 ## Next
-- Owner reviews the phone (open questions in STATE.md). Then a cold playtest.
+- Owner signs off the branch → merge, push, delete branch.
+- Cold playtest still overdue.
 
 ## Key decisions
-- Activity is queued across an in-game week and drips in on a real-time ticker in main.js (`UI.still` stops it for tests).
-- Posts and replies are picked, not typed; 3 posts a week.
-- Sponsor offers and bids from the old systems are wrapped as CONNECT offer cards (`CN.scan`).
+- Your own fighters are never renamed by the save fix.
+- Bot shift is random-stream only (verified by running it without the fight changes).

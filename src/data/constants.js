@@ -47,15 +47,24 @@ export const STYLES = {
 };
 
 export const NAMES = {
-  Brazil: ["Thiago Caio Rafael Mateus Bruno Lucas Gustavo Davi", "Silva Costa Almeida Rocha Barbosa Nunes Moraes Teixeira"],
-  USA: ["Cody Dalton Marcus Tyler Jalen Wyatt Devin Trey", "Brooks Hayes Mercer Cole Dawson Reyes Whitfield Grant"],
-  Russia: ["Magomed Rustam Abdul Shamil Ilyas Murat Zaur Ruslan", "Ismailov Kurbanov Zaitsev Volkov Petrov Hasanov Aliev Gadzhiev"],
-  Ireland: ["Declan Liam Callum Ryan Jack Owen Cian Rory", "Doyle Walsh Hughes Barrett Keane Fraser Quinn Byrne"],
-  Mexico: ["Diego Emilio Santiago Alonso Mauricio Cristian Joaquin Adrian", "Herrera Ruiz Salazar Ortega Vega Castillo Navarro Ibarra"],
-  Australia: ["Jake Mitch Noah Beau Kai Harry Lachlan Zac", "Turner Nguyen Mason Kelly Reid Walker Fitzgerald Lowe"],
-  Japan: ["Kenta Ryo Daiki Shoma Takumi Yuto Sora Haruki", "Sato Tanaka Mori Ishida Kobayashi Endo Ueda Kimura"],
-  Poland: ["Kamil Mateusz Piotr Bartosz Jakub Szymon Michal Oskar", "Nowak Wojcik Kaczmarek Zielinski Mazur Krol Wrobel Sikora"],
-  Nigeria: ["Tobi Chidi Emeka Femi Kunle Seun Ifeanyi Dayo", "Okafor Adeyemi Nwosu Balogun Eze Obi Okonkwo Adebayo"],
+  Brazil: ["Thiago Caio Rafael Mateus Bruno Lucas Gustavo Davi Rodrigo Felipe Vinicius Leandro Renan Henrique Diego Matheus Otavio Wellington Luan Igor Paulo Jefferson Kaique Emerson Arthur Wesley Fabricio Marcelo Joao Cristiano",
+           "Almeida Rocha Barbosa Nunes Moraes Teixeira Cardoso Ribeiro Carvalho Gomes Martins Araujo Pinto Correia Monteiro Mendes Freitas Cavalcanti Duarte Batista Lacerda Siqueira Vasconcelos Peixoto Brandao Fontes Queiroz Campos Rezende Viana Tavares Medeiros Bezerra Coelho Farias Guimaraes Leal Sampaio Aguiar Prado"],
+  USA: ["Cody Dalton Marcus Tyler Jalen Wyatt Devin Trey Brandon Austin Colton Dustin Garrett Isaiah Logan Tanner Darius Mason Hunter Caleb Andre Brody Kyle Travis Damon Nolan Jace Reggie Quentin Shane",
+        "Brooks Hayes Mercer Whitfield Grant Carver Holloway Pruitt Sutton Bishop Calloway Harlan Merritt Vance Kincaid Boone Hollis Lancaster Pierce Ramsey Thornton Gaines Maddox Ellison Stroud Crawford Dempsey Talbot Haskins Fowler Langley Sheffield Winslow Briggs Garrison Yates Rhodes Mathers Booker Dunbar"],
+  Russia: ["Magomed Rustam Abdul Shamil Ilyas Murat Zaur Ruslan Arsen Timur Akhmed Said Kamil Islam Rasul Aslan Dmitri Sergei Artem Nikita Gadzhi Ibragim Umar Khasan Alikhan Daud Tagir Yusup Ramazan Denis",
+           "Ismailov Kurbanov Zaitsev Hasanov Gadzhiev Abdulaev Omarov Rasulov Magomedaliev Shikhsaidov Dzhabrailov Temirov Yakhyaev Saidov Bagautdinov Umarov Isaev Kadyrbekov Alibekov Tagirov Sorokin Kuznetsov Lebedev Morozov Novikov Fedorov Belov Orlov Gusev Tarasov Zhukov Nikitin Melnikov Kozlov Abakarov Murtazaliev Akhmedov Daudov Khalidov Batyrov"],
+  Ireland: ["Declan Liam Callum Ryan Jack Owen Cian Rory Seamus Niall Eoin Darragh Padraig Ronan Tadhg Fionn Oisin Colm Shane Kieran Brendan Aidan Conor Diarmuid Cathal Donal Ciaran Killian Fergal Eamon",
+            "Doyle Walsh Hughes Barrett Keane Fraser Quinn Byrne Gallagher Kavanagh Brennan Lynch Moran Flanagan Doherty Farrell Mulligan Gilmore Carey Kinsella Devlin Hennessy Sheridan Corrigan Dunne Lennon Tierney Costello Nolan McGrath Phelan Rafferty Cullinane Geraghty Halloran Duggan Foley Madden Egan Cassidy"],
+  Mexico: ["Diego Emilio Santiago Alonso Mauricio Cristian Joaquin Adrian Ulises Ramiro Fernando Eduardo Leonel Hector Gerardo Arturo Ivan Rogelio Jesus Osvaldo Saul Esteban Marco Victor Rodolfo Tomas Andres Abel Gael Ignacio",
+           "Herrera Ruiz Salazar Ortega Vega Castillo Navarro Ibarra Mendoza Cervantes Aguilar Fuentes Montoya Delgado Cordero Espinoza Rosales Villanueva Pacheco Trujillo Arellano Zamora Valdez Camacho Galindo Becerra Quintero Bautista Escobedo Solis Barajas Carrillo Avila Juarez Lozano Maldonado Robles Sandoval Tapia Urias"],
+  Australia: ["Jake Mitch Noah Beau Kai Harry Lachlan Zac Riley Cooper Hamish Flynn Jarrah Corey Brodie Tom Lincoln Callan Bailey Archie Toby Declan Jett Marley Fraser Darcy Lockie Heath Kobe Angus",
+              "Turner Nguyen Mason Kelly Reid Walker Fitzgerald Lowe Hargreaves Pascoe Sinclair Dwyer Bancroft Horsfield Kennedy Mackay Prentice Gillespie Ashworth Holt Wakefield Crowther Rennie Lister Mortimer Petrie Bramley Sexton Whitlock Ridley Haddon Cutler Pemberton Fenwick Stanfield Gorman Atherton Brierley Coles Tully"],
+  Japan: ["Kenta Ryo Daiki Shoma Takumi Yuto Sora Haruki Kazuki Shota Ren Hayato Takeru Yusuke Kenji Riku Masato Tatsuya Kaito Naoki Shun Taiga Hiroto Ryota Kosuke Akira Yuki Sota Itsuki Genki",
+          "Tanaka Ishida Kobayashi Endo Ueda Kimura Hayashi Matsumoto Nakamura Yoshida Yamaguchi Inoue Watanabe Saito Fujita Okada Hasegawa Murakami Kondo Ogawa Goto Aoki Fukuda Ota Miura Takeuchi Nishimura Kaneko Sakamoto Ikeda Ono Shimizu Sugiyama Arai Hirano Kudo Nomura Iwasaki Takagi Maeda"],
+  Poland: ["Kamil Mateusz Piotr Bartosz Jakub Szymon Michal Oskar Lukasz Pawel Tomasz Krzysztof Adrian Dawid Marcin Wojciech Grzegorz Filip Hubert Igor Dominik Patryk Rafal Sebastian Maciej Damian Artur Przemek Kacper Wiktor",
+           "Nowak Wojcik Kaczmarek Zielinski Mazur Wrobel Sikora Lewandowski Kaminski Wisniewski Dabrowski Pawlak Michalski Grabowski Jasinski Zawadzki Szczepanski Baran Kubiak Gorski Witkowski Rutkowski Ostrowski Walczak Stepien Malinowski Sobczak Czarnecki Bielecki Adamczyk Duda Laskowski Kowalczyk Sadowski Wilk Chmielewski Urbanski Borkowski Kalinowski Tomaszewski"],
+  Nigeria: ["Tobi Chidi Emeka Femi Kunle Seun Ifeanyi Dayo Tunde Bayo Uche Obinna Chuka Kelechi Segun Jide Nnamdi Kayode Gbenga Ade Ikenna Somto Damilola Babatunde Chinedu Olumide Ebuka Tayo Wale Ayo",
+            "Okafor Adeyemi Nwosu Balogun Eze Obi Okonkwo Adebayo Ogunleye Chukwu Afolabi Nnadi Oyelaran Bankole Ajayi Onyeka Akande Olawale Ibekwe Okoro Adewale Emenike Fashola Uzor Oduya Ikwuemesi Abiodun Nwachukwu Olaniyan Ekwueme Ogbonna Akinola Anozie Oyebanji Iwobi Okeke Adeleke Nwankwo Odukoya Mbah"],
 };
 
 // Rival agencies are fictional.

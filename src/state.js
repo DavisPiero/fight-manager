@@ -1,5 +1,5 @@
 // Game state, creation, save slots and derived numbers (overall, rank, market value).
-import { R, rnd, ri, cl, pk, round100, last } from "./util.js";
+import { R, rnd, ri, cl, pk, round100 } from "./util.js";
 import { ATTR_KEYS, STYLES, NAMES, PERSONALITIES, AGENCIES, DIFFICULTY, SAVE_PREFIX, SLOTS, CITIES } from "./data/constants.js";
 import { ROSTER, HAND_TUNED } from "./data/roster.js";
 import UFC from "./data/ufc.json";
@@ -85,24 +85,46 @@ const cleanNick = (n) => (n || "").replace(/&quot;|&#0?34;|"/g, "").replace(/&am
 const STYLE_MAP = [[/wrest|sambo/i, "Wrestler"], [/jiu|grappl|judo/i, "Grappler"], [/muay/i, "Muay Thai"], [/kick|karate|taekwon/i, "Kickboxer"], [/box/i, "Boxer"]];
 const styleFrom = (s) => (s && STYLE_MAP.find(([re]) => re.test(s))?.[1]) || null;
 
-// Surnames already in use, so two made-up fighters never share one (it reads badly on the phone and in lists).
-const taken = new Set();
-function freshName(fn, ln) {
-  for (const f of G?.f || []) taken.add(last(f.name));
-  let n;
-  for (let i = 0; i < 10; i++) { n = pk(fn.split(" ")) + " " + pk(ln.split(" ")); if (!taken.has(last(n))) break; }
-  taken.add(last(n));
-  return n;
+// Made-up fighters never share a surname with anyone (real or made-up), and first names repeat as little as possible.
+// Reads badly otherwise: the phone, the market and fight night all lean on surnames.
+const SUFFIX = /^(jr\.?|sr\.?|ii|iii|iv)$/i;
+export const surname = (name) => { const w = name.split(" "); while (w.length > 1 && SUFFIX.test(w[w.length - 1])) w.pop(); return w[w.length - 1]; };
+function freshName(nat, list = G?.f || []) {
+  const taken = new Set(list.map((f) => surname(f.name))), firsts = {};
+  list.forEach((f) => { if (!f.real) { const k = f.name.split(" ")[0]; firsts[k] = (firsts[k] || 0) + 1; } });
+  // If this country has run out of surnames, the fighter comes from another one.
+  const nats = [nat, ...Object.keys(NAMES).sort(() => R() - 0.5)];
+  for (const n of nats) {
+    const [fn, ln] = NAMES[n], free = ln.split(" ").filter((x) => !taken.has(x));
+    if (!free.length) continue;
+    const fs = fn.split(" "), low = Math.min(...fs.map((x) => firsts[x] || 0));
+    return { name: pk(fs.filter((x) => (firsts[x] || 0) === low)) + " " + pk(free), nat: n };
+  }
+  const [fn, ln] = NAMES[nat]; // every surname in the game is used (years in): allow a repeat
+  return { name: pk(fn.split(" ")) + " " + pk(ln.split(" ")), nat };
+}
+// Older saves made duplicate names. Rename made-up fighters who aren't yours so every surname is unique again.
+export function fixNames(g) {
+  const seen = new Set(), keep = new Set(g.ro);
+  const order = [...g.f].sort((a, b) => (b.real - a.real) || (keep.has(b.id) - keep.has(a.id)));
+  const done = [];
+  for (const f of order) {
+    const k = surname(f.name);
+    if (seen.has(k) && !f.real && !keep.has(f.id)) { const r = freshName(f.nat in NAMES ? f.nat : pk(Object.keys(NAMES)), done); f.name = r.name; f.nat = r.nat; }
+    seen.add(surname(f.name)); done.push(f);
+  }
+  return g;
 }
 export function makeProspect(id, own, nat) {
   nat ||= R() < 0.5 && G ? city().nat : pk(Object.keys(NAMES));
   if (!NAMES[nat]) nat = pk(Object.keys(NAMES));
-  const [fn, ln] = NAMES[nat], style = pk(Object.keys(STYLES));
+  const nm = freshName(nat), style = pk(Object.keys(STYLES));
+  nat = nm.nat;
   // Prospects land ~40–60 overall: well below UFC regulars (72+). Their upside is potential, not current skill.
   const a = ri(19, 30), base = (own ? 42 : 39) + R() * (own ? 10 : 13) + Math.min(a - 19, 8) * 0.7;
   const w = ri(0, Math.max(1, a - 18));
   const f = {
-    id, real: 0, name: freshName(fn, ln), nat, wc: ri(0, 7), age: a,
+    id, real: 0, name: nm.name, nat, wc: ri(0, 7), age: a,
     w, l: ri(0, Math.min(4, w / 2 + 2)), style, pers: pk(Object.keys(PERSONALITIES)),
     at: makeAttrs(base, style, 14), pop: ri(8, 35), sh: ri(0, 359),
     st: own ? "mine" : "free", agency: null, earn: 0, en: 100, prep: 0, inj: 0, sl: 2, lock: 0, ct: null,
@@ -136,8 +158,7 @@ export function newGame({ name, manager, col, diff, city: cityId, focus, emblem,
       });
     });
   });
-  G = { ag: { city: c.id } }; // so makeProspect can see the city
-  taken.clear(); f.forEach((x) => taken.add(last(x.name)));
+  G = { ag: { city: c.id }, f }; // so makeProspect can see the city and the names already taken
   for (let i = 0; i < 48; i++) {
     const p = makeProspect(f.length, false);
     if (R() < 0.3) { p.st = "other"; p.agency = ri(0, AGENCIES.length - 1); p.ct = { pct: 20, wks: ri(20, 120) }; }
@@ -172,7 +193,7 @@ export function save() {
   try { localStorage.setItem(key(G.slot), JSON.stringify(G)); } catch (e) { /* storage full or blocked */ }
 }
 export function load(slot) {
-  try { const g = JSON.parse(localStorage.getItem(key(slot))); return g && g.v === 2 ? g : null; } catch (e) { return null; }
+  try { const g = JSON.parse(localStorage.getItem(key(slot))); return g && g.v === 2 ? fixNames(g) : null; } catch (e) { return null; }
 }
 export function wipe(slot) { try { localStorage.removeItem(key(slot)); } catch (e) {} }
 export function slots() {

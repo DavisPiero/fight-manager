@@ -10,6 +10,7 @@
 //  - Parts (PARTS) are drawn as shaded, muscled outlines along each bone, lit from the rig above with a
 //    corner-coloured rim light. A painted image could replace any part later by drawing along the same bone.
 import SKIN from "../data/skintones.json";
+import { BRANDS } from "../data/constants.js";
 import { UFC_DATA } from "../state.js";
 
 // ---------- Looks: fixed per fighter ----------
@@ -240,7 +241,7 @@ const PARTS = {
     const c0 = Math.cos(J.hr), s0 = Math.sin(J.hr), top = add(J.hd, P2(-0.8 * c0 - 4.2 * s0, -0.8 * s0 + 4.2 * c0));
     seg(c, add(J.neck, P2(0, 1.5)), top, [[0, 4.6, 4.6], [0.6, 3.5, 3.4], [1, 3.3, 3.3]], L.skin, L, { dark: 0.12 });
   },
-  head(c, J, L, hurt) {
+  head(c, J, L, hurt, dazed) {
     c.save(); c.translate(J.hd.x, J.hd.y); c.rotate(J.hr); const k = LEN.head / 6.6; c.scale(k, k);
     // Skull and face in one silhouette, facing right (three-quarter).
     c.beginPath();
@@ -268,6 +269,10 @@ const PARTS = {
     c.fillStyle = shade(L.skin, -0.25); c.beginPath(); c.ellipse(-1.6, 0.6, 1.5, 2.3, -0.15, 0, 7); c.fill(); // ear
     c.strokeStyle = d(0.6); c.lineWidth = 0.4; c.beginPath(); c.arc(-1.5, 0.6, 0.9, -1.2, 1.8); c.stroke();
     PARTS.beard(c, L); PARTS.hair(c, L);
+    if (dazed) { // swollen, flushed cheek and a heavy, half-shut eye
+      c.fillStyle = "rgba(190,30,40,0.32)"; c.beginPath(); c.ellipse(3.4, 1.2, 2.6, 2, 0, 0, 7); c.fill();
+      c.fillStyle = shade(L.skin, -0.15); c.beginPath(); c.ellipse(4.2, -0.95, 1.25, 0.55, 0.1, 0, 7); c.fill();
+    }
     if (hurt) { c.fillStyle = "rgba(170,0,0,0.85)"; c.beginPath(); c.ellipse(4.4, -2.6, 1.6, 0.6, -0.3, 0, 7); c.fill(); c.fillRect(4.6, -2.4, 0.45, 3.4); c.fillStyle = "rgba(150,40,60,0.25)"; c.beginPath(); c.ellipse(3.6, 0.6, 2.2, 1.6, 0, 0, 7); c.fill(); }
     c.restore();
   },
@@ -304,7 +309,10 @@ let S = null; // the scene
 function fighter(f, col, side) { return { L: lookOf(f, col), side, tx: side ? 68 : 32, base: "stand", from: null, bt: 1, flags: {}, acts: [], ph: side * 2.1 }; }
 export function arenaInit(FS, cols) {
   if (S && S.fs === FS) return;
-  S = { fs: FS, F: [fighter(FS.f[0], cols[0], 0), fighter(FS.f[1], cols[1], 1)], hype: 0, t: 0, crowd: null, w: 0, h: 0, slow: 1, name: "", cx: 50, gap: 48, draw: [null, null] };
+  // Sponsors on the mat: your fighter's own brand deals, else two house brands picked by the fight.
+  const own = (FS.f[0].deals || []).map((d) => BRANDS.find((b) => b.name === d.brand)).filter(Boolean), seed = (FS.f[0].id * 7 + FS.f[1].id * 3) % BRANDS.length;
+  const brands = [...own, BRANDS[seed], BRANDS[(seed + 4) % BRANDS.length]].filter((b, i, a) => a.indexOf(b) === i).slice(0, 2);
+  S = { fs: FS, brands, rt: 0, F: [fighter(FS.f[0], cols[0], 0), fighter(FS.f[1], cols[1], 1)], hype: 0, t: 0, crowd: null, w: 0, h: 0, slow: 1, name: "", cx: 50, gap: 48, draw: [null, null] };
 }
 export function arenaSet(i, x, pose, flags = {}) {
   if (!S) return; const F = S.F[i]; F.tx = x; F.flags = flags;
@@ -327,7 +335,7 @@ export function arenaAct(i, kind, mv, opt = {}) {
   if (kind === "dash") { F.acts.push({ dash: 1, len: 0.55, in: 0.45, t: 0 }); return; }
   if (kind === "squeeze") { F.acts.push({ squeeze: 1, len: 1.4, in: 0.25, hold: 0.55, t: 0 }); return; }
   const A = ACT[kind]; if (!A) return;
-  if (kind === "bighit" || kind === "kd") S.hype = Math.min(1, S.hype + (kind === "kd" ? 0.8 : 0.45));
+  if (kind === "bighit" || kind === "kd") { S.hype = Math.min(1, S.hype + (kind === "kd" ? 0.8 : 0.45)); S.imp = kind === "kd" ? 1 : 0.7; S.impWait = 0.12; } // a beat of slow motion on the shot
   let delay = 0;
   if (/hit|kd/.test(kind)) { const O = S.F[1 - i], s = O.acts.find((a) => a.s && a.t < a.len * a.imp); if (s) delay = s.len * s.imp - s.t; } // land the reaction on the impact
   if (kind === "dodge") { const O = S.F[1 - i], s = O.acts.find((a) => a.s && a.t < a.len * a.imp); if (s) delay = Math.max(0, s.len * s.imp - s.t - 0.12); }
@@ -352,7 +360,11 @@ function poseOf(F, dt, moving) {
     const b = Math.sin(S.t * 6 + F.ph) * (st.bob || 1);
     P.up += Math.max(0, b) * 0.6; P.sF += b * 2; P.sB -= b * 1.5; P.t += Math.sin(S.t * 3 + F.ph) * 1.2;
     if (moving) { const w = Math.sin(S.t * 14 + F.ph) * 9; P.kF += w; P.kB -= w; }
-    if (F.flags.wobbly) { P.t += Math.sin(S.t * 3) * 7; P.h += Math.sin(S.t * 2.3) * 10; P.nF -= 8; P.sF -= 18; P.eF -= 30; }
+    if (F.flags.wobbly || F.rocked) { // hurt: hands drop, chin dips, knees sag, he sways (on real time, so it shows in slow motion too)
+      const k = F.rocked ? 1.4 : 1, rt = S.rt;
+      P.t += (Math.sin(rt * 2.6) * 5 - 5) * k; P.h += (Math.sin(rt * 2.1) * 8 + 9) * k; P.nF -= 8 * k; P.sF -= 22 * k; P.eF -= 34 * k; P.sB -= 14 * k; P.eB -= 20 * k;
+      P.kF += 10 * k; P.kB -= 8 * k; P.up -= 1.5 * k; P.dx += (Math.sin(rt * 1.7) * 1.5 - 3) * k;
+    }
   } else if (F.base === "win") { P.up += Math.max(0, Math.sin(S.t * 5)) * 4; P.sF += Math.sin(S.t * 5) * 6; }
   else if (F.base === "top" || F.base === "bottom") { const b = Math.sin(S.t * 2.2 + F.ph); P.t += b * 2.5; P.sF += b * 6; }
   for (const A of F.acts) {
@@ -403,20 +415,58 @@ function octPts(cx, cy, rx, ry) { const pts = []; for (let k = 0; k < 8; k++) { 
 function drawCage(c, w, h, floorY) {
   const cx = w / 2, cy = floorY + h * 0.05, rx = w * 0.62, ry = h * 0.24;
   const back = octPts(cx, cy, rx, ry).filter((p) => p[1] < cy), fenceH = h * 0.42;
+  // Fence mesh behind the fighters, lit a little where the spotlights fall.
   c.save();
   c.beginPath(); c.moveTo(-10, floorY + 4); for (const [x, y] of back.sort((a, b) => a[0] - b[0])) c.lineTo(x, y); c.lineTo(w + 10, floorY + 4); c.lineTo(w + 10, floorY - fenceH); c.lineTo(-10, floorY - fenceH); c.closePath(); c.clip();
-  c.strokeStyle = "rgba(200,200,210,0.07)"; c.lineWidth = 1;
+  const mg = c.createLinearGradient(0, floorY - fenceH, 0, floorY); mg.addColorStop(0, "rgba(200,200,210,0.05)"); mg.addColorStop(1, "rgba(220,220,230,0.12)");
+  c.strokeStyle = mg; c.lineWidth = 1;
   for (let x = -h; x < w + h; x += 14) { c.beginPath(); c.moveTo(x, floorY - fenceH); c.lineTo(x + fenceH, floorY); c.stroke(); c.beginPath(); c.moveTo(x + fenceH, floorY - fenceH); c.lineTo(x, floorY); c.stroke(); }
   c.restore();
+  // Top rail, then padded posts (black with a red top pad and a lit edge).
   c.fillStyle = "#0b0b0b"; c.fillRect(0, floorY - fenceH - 6, w, 8);
-  for (const [x, y] of back) { c.fillStyle = "#101010"; c.fillRect(x - 5, y - fenceH, 10, fenceH); c.fillStyle = "#1c1c1c"; c.fillRect(x - 5, y - fenceH * 0.45, 10, fenceH * 0.45 - 2); }
-  const pts = octPts(cx, cy, rx, ry);
-  const g = c.createRadialGradient(cx, cy - ry * 0.2, 10, cx, cy, rx); g.addColorStop(0, "#3d3d41"); g.addColorStop(0.55, "#252528"); g.addColorStop(1, "#0f0f10");
-  c.fillStyle = g; c.beginPath(); pts.forEach(([x, y], k) => (k ? c.lineTo(x, y) : c.moveTo(x, y))); c.closePath(); c.fill();
+  c.fillStyle = "rgba(255,255,255,0.06)"; c.fillRect(0, floorY - fenceH - 6, w, 1.5);
+  for (const [x, y] of back) {
+    const pw = Math.max(8, w * 0.011), top = y - fenceH;
+    const pg = c.createLinearGradient(x - pw, 0, x + pw, 0); pg.addColorStop(0, "#050505"); pg.addColorStop(0.45, "#1d1d20"); pg.addColorStop(1, "#070707");
+    c.fillStyle = pg; c.fillRect(x - pw, top, pw * 2, fenceH);
+    c.fillStyle = "#7a0a0a"; c.fillRect(x - pw, top - 2, pw * 2, fenceH * 0.1);
+    c.fillStyle = "rgba(255,90,90,0.35)"; c.fillRect(x - pw, top - 2, pw * 2, 1.5);
+    c.fillStyle = "#151517"; c.fillRect(x - pw * 1.1, y - fenceH * 0.42, pw * 2.2, fenceH * 0.42 - 2); // padding at the foot
+  }
+  // The mat: canvas grey, darker toward the fence, with the painted border ring.
+  const pts = octPts(cx, cy, rx, ry), path = (k) => { c.beginPath(); octPts(cx, cy, rx * k, ry * k).forEach(([x, y], i) => (i ? c.lineTo(x, y) : c.moveTo(x, y))); c.closePath(); };
+  const g = c.createRadialGradient(cx, cy - ry * 0.2, 10, cx, cy, rx); g.addColorStop(0, "#47474c"); g.addColorStop(0.5, "#2a2a2e"); g.addColorStop(1, "#0e0e0f");
+  c.fillStyle = g; path(1); c.fill();
   c.strokeStyle = "#000"; c.lineWidth = 6; c.stroke();
-  c.save(); c.translate(cx, cy - ry * 0.05); c.scale(1, 0.32); c.fillStyle = "rgba(255,255,255,0.06)"; c.font = `800 italic ${Math.round(w * 0.07)}px Oswald, Impact, sans-serif`; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText(S.name.toUpperCase(), 0, 0); c.restore();
-  const sp = c.createRadialGradient(cx, floorY + h * 0.02, 0, cx, floorY + h * 0.02, w * 0.35); sp.addColorStop(0, `rgba(255,250,235,${0.08 + S.hype * 0.05})`); sp.addColorStop(1, "rgba(255,250,235,0)");
-  c.fillStyle = sp; c.fillRect(0, floorY - h * 0.1, w, h * 0.5);
+  c.save(); path(1); c.clip();
+  c.fillStyle = "rgba(0,0,0,0.38)"; path(1); path(0.86); c.fill("evenodd"); // dark apron by the fence
+  c.strokeStyle = "rgba(225,38,45,0.7)"; c.lineWidth = 2.5; path(0.86); c.stroke();
+  c.strokeStyle = "rgba(255,255,255,0.08)"; c.lineWidth = 1; path(0.83); c.stroke();
+  // Centre logo (your agency) and the sponsors on the apron, squashed into the mat's perspective.
+  const txt = (t, x, y, size, col, sq = 0.32) => { c.save(); c.translate(x, y); c.scale(1, sq); c.fillStyle = col; c.font = `800 italic ${Math.round(size)}px Oswald, Impact, sans-serif`; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText(t, 0, 0); c.restore(); };
+  c.save(); c.translate(cx, cy - ry * 0.05); c.scale(1, 0.32);
+  c.strokeStyle = "rgba(255,255,255,0.07)"; c.lineWidth = 3; c.beginPath(); c.arc(0, 0, w * 0.13, 0, 7); c.stroke();
+  c.restore();
+  txt((S.name || "").toUpperCase(), cx, cy - ry * 0.05, w * 0.06, "rgba(255,255,255,0.1)");
+  const [b0, b1] = S.brands;
+  if (b0) txt(b0.name.toUpperCase(), cx - rx * 0.52, cy - ry * 0.5, w * 0.022, shade(b0.col, 0, 0.62), 0.4);
+  if (b1) txt(b1.name.toUpperCase(), cx + rx * 0.52, cy - ry * 0.5, w * 0.022, shade(b1.col, 0, 0.62), 0.4);
+  c.restore();
+  // Light pool on the mat where the fighters stand, warmer when the crowd is up.
+  const sp = c.createRadialGradient(cx, floorY + h * 0.01, 0, cx, floorY + h * 0.01, w * 0.32);
+  sp.addColorStop(0, `rgba(255,248,230,${0.16 + S.hype * 0.07})`); sp.addColorStop(0.5, `rgba(255,248,230,${0.06 + S.hype * 0.03})`); sp.addColorStop(1, "rgba(255,248,230,0)");
+  c.save(); c.translate(0, floorY + h * 0.01); c.scale(1, 0.3); c.translate(0, -(floorY + h * 0.01));
+  c.fillStyle = sp; c.fillRect(0, floorY - w * 0.35, w, w * 0.7); c.restore();
+}
+// Haze drifting through the lights, drawn over the fighters' backs but under the vignette.
+function drawHaze(c, w, h) {
+  c.save(); c.globalCompositeOperation = "lighter";
+  for (let k = 0; k < 4; k++) {
+    const x = ((k * 0.31 + S.rt * 0.008 * (k % 2 ? 1 : -1)) % 1.4 + 1.4) % 1.4 * w - w * 0.2, y = h * (0.18 + k * 0.09), r = w * (0.22 + k * 0.04);
+    const g = c.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, `rgba(210,215,230,${0.035 + S.hype * 0.02})`); g.addColorStop(1, "rgba(210,215,230,0)");
+    c.fillStyle = g; c.fillRect(x - r, y - r, r * 2, r * 2);
+  }
+  c.restore();
 }
 
 // Contact radii (body units) used to rest a fighter on the mat.
@@ -481,7 +531,7 @@ function contact(me, op, P, J) {
   // Standing guard: gloves held at the chin (style decides how high and how far out), loosening when rocked.
   if (F.base === "stand" && F.bt > 0.5) {
     const g = GUARD[L.style] || GUARD["Well-rounded"], loose = Math.max(0, ...F.acts.filter((a) => a.p === ACT.bighit.p || a.p === ACT.kd.p).map((a) => a.k || 0));
-    const w = (1 - loose) * (F.flags.wobbly ? 0.6 : 1) * ease(clamp((F.bt - 0.5) * 2, 0, 1));
+    const w = (1 - loose) * (F.rocked ? 0.15 : F.flags.wobbly ? 0.6 : 1) * ease(clamp((F.bt - 0.5) * 2, 0, 1));
     for (const [h, o] of [["hF", g[0]], ["hB", g[1]]]) if (!used.has(h) && !F.acts.some((a) => a.p === ACT.guard.p)) {
       const t = add(J.hd, P2(o[0] + Math.sin(S.t * 6 + F.ph + (h === "hB" ? 1 : 0)) * 0.6, o[1])), r = J[h];
       solve(J, h, P2(lerp(r.x, t.x, w), lerp(r.y, t.y, w)), L, 1);
@@ -510,8 +560,9 @@ function drawFighter(c, d) {
   PARTS.arm(c, J, "B", L, true); PARTS.leg(c, J, "B", L, true);
   PARTS.torso(c, J, L); PARTS.leg(c, J, "F", L, false);
   PARTS.neck(c, J, L);
+  const dazed = F.base === "stand" && (F.flags.wobbly || F.rocked);
   if (F.base === "win") { PARTS.arm(c, J, "F", L, false); PARTS.head(c, J, L, F.flags.cut); }
-  else { PARTS.head(c, J, L, F.flags.cut); PARTS.arm(c, J, "F", L, false); }
+  else { PARTS.head(c, J, L, F.flags.cut, dazed); PARTS.arm(c, J, "F", L, false); }
   c.restore();
 }
 
@@ -526,8 +577,11 @@ function frame(now) {
   if (!cv || !S) { raf = 0; return; }
   const dt0 = Math.min(0.05, (now - (last || now)) / 1000); last = now;
   const slow = document.getElementById("arena")?.classList.contains("mo-on") ? 0.25 : 1;
-  S.slow += (slow - S.slow) * 0.15;
-  let dt = dt0 * S.slow; if (S.paused) { dt = S.step || 0; S.step = 0; } S.t += dt; S.hype = Math.max(0, S.hype - dt0 * 0.25);
+  // Big shot: once the blow lands, time drops to ~30% for a moment and the frame darkens at the edges.
+  if (S.imp > 0) { if (S.impWait > 0) S.impWait -= dt0; else S.imp = Math.max(0, S.imp - dt0 * 1.6); }
+  const beat = S.imp > 0 && !(S.impWait > 0) ? S.imp : 0;
+  S.slow += (Math.min(slow, 1 - beat * 0.7) - S.slow) * 0.25;
+  let dt = dt0 * S.slow; if (S.paused) { dt = S.step || 0; S.step = 0; } S.t += dt; S.rt = (S.rt || 0) + (S.paused ? dt : dt0); S.hype = Math.max(0, S.hype - dt0 * 0.25);
   const dpr = Math.min(2, window.devicePixelRatio || 1), w = cv.clientWidth, h = cv.clientHeight;
   if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
   if (!S.crowd || S.w !== w || S.h !== h) { S.crowd = buildCrowd(w, h); S.w = w; S.h = h; }
@@ -555,11 +609,14 @@ function frame(now) {
   // Draw order: whoever is underneath first.
   const order = [0, 1].sort((a, b) => (S.F[a].base === "top") - (S.F[b].base === "top") || (S.F[b].base === "ko") - (S.F[a].base === "ko"));
   for (const i of order) drawFighter(c, D[i]);
-  const v = c.createRadialGradient(w / 2, h * 0.55, h * 0.3, w / 2, h * 0.55, w * 0.75); v.addColorStop(0, "rgba(0,0,0,0)"); v.addColorStop(1, "rgba(0,0,0,0.6)");
+  drawHaze(c, w, h);
+  const v = c.createRadialGradient(w / 2, h * 0.55, h * 0.3, w / 2, h * 0.55, w * 0.75); v.addColorStop(0, "rgba(0,0,0,0)"); v.addColorStop(1, `rgba(0,0,0,${0.6 + beat * 0.3})`);
   c.fillStyle = v; c.fillRect(0, 0, w, h);
   raf = requestAnimationFrame(frame);
 }
 // For the pose sheet: freeze time, then step it by exact amounts.
+// A corner call on a hurt fighter: show it on his body until the call is made.
+export function arenaRock(i, on) { if (S) S.F[i].rocked = on; }
 export function arenaPause(on) { if (S) S.paused = on; }
 export function arenaStep(sec) { if (S) S.step = (S.step || 0) + sec; }
 // Called after each render of the live screen; starts the loop if it isn't running.

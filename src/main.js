@@ -36,6 +36,10 @@ function render() {
   app.innerHTML = h;
   UI.phone.sig = sig;
   if (sc != null) { const nb = document.getElementById("phbody"); if (nb) nb.scrollTop = sc; }
+  // Same phone screen redrawn (something arrived): nothing slides or pops again, except a chat bubble that is actually new.
+  const ph = app.querySelector(".phone"), bubs = ph ? ph.querySelectorAll(".bub") : [];
+  if (ph && sc != null) { ph.classList.add("redraw"); for (let i = UI.phone.nb || 0; i < bubs.length; i++) bubs[i].classList.add("new"); }
+  UI.phone.nb = bubs.length;
   document.body.classList.toggle("phone-open", !!(UI.phone.open && G));
   UI.last = v;
   if (UI.modal?.kind === "neg" || UI.modal?.kind === "renew") V.negUpdate();
