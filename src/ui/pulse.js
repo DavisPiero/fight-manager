@@ -29,13 +29,13 @@ function media(m) {
 }
 
 // ---------- Post ----------
-function head(p, a) { return `<div class="pp-h"><button class="pp-n" data-a="pprof" data-i="${p.a}"><b>${esc(a.name)}</b>${tick(a)}</button><small>${esc(a.handle)}</small><small class="tm">· ${ago(p.t)}</small></div>`; }
+function head(p, a) { return `<div class="pp-h"><button class="pp-n" data-a="pprof" data-i="${p.a}"><b>${esc(a.name)}</b>${tick(a)}</button><small class="tm">· ${ago(p.t)}</small></div>`; }
 function body(p, big) {
   const a = PU.author(p.a), q = p.q && PU.post(p.q), r = p.kind === "rumour" && PU.rumourOf(p);
   const lbl = p.kind === "news" ? `<span class="pp-lab news">${esc(a.name)} · News</span>` : r ? `<span class="pp-lab rum">Rumour <span class="cred c${r.cred}"><i></i><i></i><i></i></span>${r.out ? `<span class="pill ${r.out === "true" ? "good" : r.out === "false" ? "bad" : "warn"}">${r.out === "true" ? "Confirmed" : r.out === "false" ? "Denied" : "Partly true"}</span>` : ""}</span>` : "";
   return `${q ? `<small class="pp-re">Replying to ${esc(PU.author(q.a).handle)}</small>` : ""}${lbl}<p class="${p.kind === "news" ? "hl" : ""}${big ? " big" : ""}">${esc(p.text)}</p>${media(p.media)}`;
 }
-const acts = (p) => `<div class="pp-a"><button data-a="ppost" data-i="${p.id}">${ic("reply")}<span>${num(PU.replyCount(p))}</span></button><button class="${p.rt ? "on rt" : ""}" data-a="prt" data-i="${p.id}">${ic("rt")}<span>${num(PU.reposts(p))}</span></button><button class="${p.lk ? "on lk" : ""}" data-a="plike" data-i="${p.id}">${ic("like")}<span>${num(PU.likes(p))}</span></button><span>${ic("views")}<span>${num(PU.likes(p) * 14 + 9)}</span></span></div>`;
+const acts = (p) => `<div class="pp-a"><button data-a="ppost" data-i="${p.id}">${ic("reply")}<span>${num(PU.replyCount(p))}</span></button><button class="${p.rt ? "on rt" : ""}" data-a="prt" data-i="${p.id}">${ic("rt")}<span>${num(PU.reposts(p))}</span></button><button class="${p.lk ? "on lk" : ""}" data-a="plike" data-i="${p.id}">${ic("like")}<span>${num(PU.likes(p))}</span></button></div>`;
 const row = (p) => { const a = PU.author(p.a); return `<article class="pp ${p.kind} ${p.about.some(mineF) || p.a === "me" ? "mine" : ""}" data-a="ppost" data-i="${p.id}"><button class="pp-av" data-a="pprof" data-i="${p.a}">${face(a, 40)}</button><div class="pp-c">${head(p, a)}${body(p)}${acts(p)}</div></article>`; };
 
 // ---------- Screens ----------
@@ -58,7 +58,7 @@ function thread(id) {
     body: `<article class="pp big ${p.kind}"><div class="pp-top"><button class="pp-av" data-a="pprof" data-i="${p.a}">${face(a, 44)}</button><div><button class="pp-n" data-a="pprof" data-i="${p.a}"><b>${esc(a.name)}</b>${tick(a)}</button><small>${esc(a.handle)}</small></div></div>
       ${body(p, true)}<small class="pp-time">${fullTime(p.t)} · <b>${num(PU.likes(p) * 14 + 9)}</b> views</small>${acts(p)}</article>
       ${opts.length ? `<div class="pu-reply"><small>Reply as ${esc(G.ag.name)}</small>${opts.map((o, i) => `<button data-a="prp" data-i="${i}"><b>${esc(o.label)}</b><span>${esc(o.text)}</span></button>`).join("")}</div>` : ""}
-      ${rs.map((r) => { const ra = PU.author(r.a); return `<div class="pp rep ${r.a === "me" ? "mine" : ""}"><button class="pp-av" data-a="pprof" data-i="${r.a}">${face(ra, 34)}</button><div class="pp-c"><div class="pp-h"><button class="pp-n" data-a="pprof" data-i="${r.a}"><b>${esc(ra.name)}</b>${tick(ra)}</button><small>${esc(ra.handle)}</small><small class="tm">· ${ago(r.t)}</small></div><p>${esc(r.text)}</p></div></div>`; }).join("") || '<div class="ph-empty">No replies yet.</div>'}`,
+      ${rs.map((r) => { const ra = PU.author(r.a); return `<div class="pp rep ${r.a === "me" ? "mine" : ""}"><button class="pp-av" data-a="pprof" data-i="${r.a}">${face(ra, 34)}</button><div class="pp-c"><div class="pp-h"><button class="pp-n" data-a="pprof" data-i="${r.a}"><b>${esc(ra.name)}</b>${tick(ra)}</button><small class="tm">· ${ago(r.t)}</small></div><p>${esc(r.text)}</p></div></div>`; }).join("") || '<div class="ph-empty">No replies yet.</div>'}`,
   };
 }
 function profile(key) {

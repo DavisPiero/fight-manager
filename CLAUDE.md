@@ -9,7 +9,7 @@ Browser management game: run an MMA agency, sign/train/sell fighters, work the c
 - `npm run bot` → balance bot: 20 seeded one-year careers, compared with `scripts/bot-baseline.json` (`-- --save` to re-baseline). Run it after any rule or data change.
 - `npm run phone` → headless phone screenshots (PULSE and CONNECT after 10 weeks) in `test-results/phone/`. Add `-- <dir> 390 844` for phone size.
 - `npm run shots` → headless fight-night screenshots (intro stages, tale of the tape, each corner call) in `test-results/fight/`. Add `-- <dir> 390 844` for phone size.
-- `npm run poses` → headless arena pose sheet (stance, strikes, takedown, ground, KO) in `test-results/arena/`. `npm run skin` → re-samples skin tones from headshots into `src/data/skintones.json` + contact sheet `test-results/skintones.png` (hand fixes start with `!` and are kept).
+- `npm run poses` → headless arena pose sheet (stance, strikes, takedown, ground, KO) in `test-results/arena/`. `npm run skin` → re-samples skin tones from headshots into `src/data/skintones.json` + contact sheet `test-results/skintones.png` (hand fixes start with `!` and are kept). `npm run hair` → reads hair and beard from the headshots into `src/data/hair.json` + sheet `test-results/hair.png` (hand fixes have `"fix": 1`).
 - `npm run build` → static site in `dist/` (relative paths, works on GitHub Pages).
 
 ## Hard rules
@@ -27,7 +27,7 @@ Browser management game: run an MMA agency, sign/train/sell fighters, work the c
 - Phone: `src/sim/phone.js` core (in-game clock and the week's activity queue, notifications, chats, fighter messages, rumours), `src/sim/connect.js` PULSE CONNECT (contacts, relationships, introductions, offers), `src/sim/pulse.js` PULSE (feed, your posts, rivalries, controversy). Screens: `src/ui/phone.js` (home, shell, banners), `src/ui/pulse.js`, `src/ui/connect.js`. Content: `src/data/phone-content.js` (fighter messages, news, rumours), `src/data/pulse-content.js` (posts), `src/data/people.js` (industry contacts and their voices). Add lines there, not code.
 - `src/state.js` career state, value/ask formulas, save/load.
 - `src/sim/world.js` weekly cycle, fight offers, training, auto-train. `src/sim/market.js` signing, selling, bids, contracts. `src/sim/fight.js` fight engine. `src/sim/events.js` random events. `src/sim/sponsors.js` brand deals.
-- `src/ui/views.js` screens, `src/ui/fightview.js` fight night, `src/ui/arena.js` the octagon canvas and drawn fighters (parts in `PARTS`, poses in `STANCE`/`BASE`/`ACT`, strikes and their targets in `STRIKE`, contact/IK in `contact()`), walk-out in `walkout()` in fightview.js, `src/ui/tour.js` first-run tutorial, `src/ui/components.js` shared pieces, `src/ui/styles.css` look.
+- `src/ui/views.js` screens, `src/ui/fightview.js` fight night, `src/ui/arena.js` the octagon canvas and drawn fighters (parts in `PARTS`, poses in `STANCE`/`BASE`/`ACT`, strikes and their targets in `STRIKE`, contact/IK in `contact()`, body collision in `separate()`, camera in `camUpdate()`), walk-out in `walkout()` in fightview.js, `src/ui/tour.js` first-run tutorial, `src/ui/components.js` shared pieces, `src/ui/styles.css` look.
 - `src/data/` roster (Nov 2026), constants (cities, emblems, brands), `ufc.json` (scraped bio/stats).
 - Saves: 3 slots in localStorage (`fightmanager_slot_N`); settings shared across slots.
 

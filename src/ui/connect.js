@@ -27,8 +27,8 @@ export function offerCard(d, inChat) {
   const st = CN.live(d), open = st === "open", soonx = open && d.exp <= G.wk + 1;
   return `<div class="of ${open ? "open" : "closed"} ${CN.BIG.has(d.kind) ? "big" : ""}"><div class="of-h"><span class="of-k">${esc(d.title)}</span><small class="${soonx ? "bad" : ""}">${open ? `Answer by week ${d.exp}` : st === "done" ? "Accepted" : st === "gone" ? "No longer available" : st[0].toUpperCase() + st.slice(1)}</small></div>
     ${inChat ? "" : `<button class="of-from" data-a="pthread" data-i="n:${d.npc}">${face(who("n:" + d.npc), 22)}<span>${esc(PEOPLE[d.npc].name)}</span></button>`}
-    ${fact(d)}${inChat ? "" : `<p>${esc(d.text)}</p>`}
-    ${open ? `<div class="of-a"><button class="main" data-a="pdeal" data-i="${d.id}" data-x="yes">${d.kind === "sale" ? "Negotiate" : "Accept"}</button>${d.countered || d.kind === "sale" || d.kind === "interview" ? "" : `<button data-a="pdeal" data-i="${d.id}" data-x="counter">Ask for more</button>`}<button data-a="pdeal" data-i="${d.id}" data-x="no">Decline</button></div>` : ""}</div>`;
+    ${fact(d)}${d.oid != null ? "" : `<p>${esc(d.text)}</p>`}
+    ${open ? `<div class="of-a"><button class="main" data-a="pdeal" data-i="${d.id}" data-x="yes">${d.kind === "sale" ? "Negotiate" : "Accept"}</button>${d.countered || d.kind === "sale" || d.kind === "interview" ? "" : `<button data-a="pdeal" data-i="${d.id}" data-x="counter">Counter</button>`}<button data-a="pdeal" data-i="${d.id}" data-x="no">Decline</button></div>` : ""}</div>`;
 }
 
 // ---------- Lists ----------
@@ -36,9 +36,9 @@ function chats() {
   const ph = P(), list = Object.entries(ph.threads).filter(([, t]) => t.msgs.length).sort((a, b) => b[1].last - a[1].last);
   return list.map(([k, t]) => {
     const w = who(k), m = t.msgs[t.msgs.length - 1], deal = m.deal != null && ph.deals.find((d) => d.id === m.deal);
-    const prev = deal ? `<span class="tag">${esc(deal.title)}</span>${esc(deal.text)}` : (m.me ? '<span class="tk">✓✓</span> ' : "") + esc(m.text);
+    const prev = deal ? `<span class="tag">${esc(deal.title)}</span>${esc(PEOPLE[deal.npc]?.name.split(" ")[0] || "")} sent an offer` : (m.me ? '<span class="tk">✓✓</span> ' : "") + esc(m.text);
     const open = ph.deals.some((d) => d.npc === k.slice(2) && CN.live(d) === "open");
-    return `<button class="cn-row" data-a="pthread" data-i="${k}">${face(w, 46)}<span class="t"><span class="tt"><b>${esc(w.name)}</b><span class="w ${t.unread ? "u" : ""}">${Math.floor(t.last / 1440) === Math.floor(now() / 1440) ? clock(t.last) : dayLabel(t.last)}</span></span><span class="tt"><small>${prev}</small>${t.unread ? `<i class="cn-dot">${t.unread}</i>` : open ? '<i class="cn-dot of">!</i>' : ""}</span></span></button>`;
+    return `<button class="cn-row" data-a="pthread" data-i="${k}">${face(w, 46)}<span class="t"><span class="tt"><b>${esc(w.name)}</b><span class="w ${t.unread ? "u" : ""}">${Math.floor(t.last / 1440) === Math.floor(now() / 1440) ? clock(t.last) : dayLabel(t.last)}</span></span><span class="tt"><small>${prev}</small>${t.unread ? `<i class="cn-dot">${t.unread > 9 ? "9+" : t.unread}</i>` : open ? '<i class="cn-dot of">!</i>' : ""}</span></span></button>`;
   }).join("") || '<div class="ph-empty">No chats yet. Your fighters and the people you meet will message you here.</div>';
 }
 function offers() {
@@ -103,6 +103,6 @@ export function connectScreen(v) {
   if (v.info) return info(v.info);
   if (v.dir) return { bar: backBar("Add contact"), body: directory() };
   const tab = v.tab || "chats", nOff = CN.openDeals().length, nMsg = Object.values(P().threads).reduce((s, t) => s + (t.unread || 0), 0);
-  const bar = `<div class="cn-top"><b>CONNECT</b><small>by PULSE</small></div><div class="pu-tabs cn-tabs">${[["chats", "Chats", nMsg], ["offers", "Offers", nOff], ["contacts", "Contacts", 0]].map(([k, t, n]) => `<button class="${tab === k ? "on" : ""}" data-a="ptab" data-i="${k}">${t}${n ? `<i>${n}</i>` : ""}</button>`).join("")}</div>`;
+  const bar = `<div class="cn-top"><b>CONNECT</b><small>by PULSE</small></div><div class="pu-tabs cn-tabs">${[["chats", "Chats", nMsg], ["offers", "Offers", nOff], ["contacts", "Contacts", 0]].map(([k, t, n]) => `<button class="${tab === k ? "on" : ""}" data-a="ptab" data-i="${k}">${t}${n ? `<i>${n > 9 ? "9+" : n}</i>` : ""}</button>`).join("")}</div>`;
   return { bar, body: tab === "offers" ? offers() : tab === "contacts" ? contactsList() : chats() };
 }
