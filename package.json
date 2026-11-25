@@ -13,7 +13,8 @@
     "phone": "node scripts/phoneshots.mjs",
     "shots": "node scripts/fightshots.mjs",
     "poses": "node scripts/poses.mjs test-results/arena",
-    "skin": "node scripts/skintones.mjs"
+    "skin": "node scripts/skintones.mjs",
+    "hair": "node scripts/hair.mjs"
   },
   "devDependencies": {
     "playwright": "^1.49.1",

@@ -525,7 +525,7 @@ label.f b { float: right; color: #fff; letter-spacing: 0; font-size: 14px; }
 @keyframes shakebig { 15% { transform: translate(-16px, 6px) scale(1.05); } 35% { transform: translate(14px, -8px) scale(1.05); } 60% { transform: translate(-8px, 4px) scale(1.03); } }
 #oct { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .anc { position: absolute; left: calc(var(--x) * 1%); top: calc(var(--fl, 76) * 1%); width: 0; height: 0; }
-.arena.mo-on .cam { transition: transform .4s cubic-bezier(.2, .8, .2, 1), filter .35s; transform: scale(1.14); transform-origin: var(--fx, 50%) 30%; filter: saturate(.6) brightness(.75); }
+.arena.mo-on .cam { transition: filter .35s; filter: saturate(.6) brightness(.75); } /* the canvas camera does the push-in */
 .fx { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
 .burst { position: absolute; transform: translate(-50%, -50%); }
 .burst i { display: block; width: 90px; height: 90px; background: radial-gradient(circle, #fff 0 12%, var(--bc, #ff2d2d) 13% 22%, transparent 23%), conic-gradient(from 0deg, transparent 0 10deg, #fff 10deg 14deg, transparent 14deg 40deg, var(--bc, #ff2d2d) 40deg 44deg, transparent 44deg 70deg, #fff 70deg 74deg, transparent 74deg 100deg, var(--bc, #ff2d2d) 100deg 104deg, transparent 104deg 130deg, #fff 130deg 134deg, transparent 134deg 160deg, var(--bc, #ff2d2d) 160deg 164deg, transparent 164deg 190deg, #fff 190deg 194deg, transparent 194deg 220deg, var(--bc, #ff2d2d) 220deg 224deg, transparent 224deg 250deg, #fff 250deg 254deg, transparent 254deg 280deg, var(--bc, #ff2d2d) 280deg 284deg, transparent 284deg 310deg, #fff 310deg 314deg, transparent 314deg 340deg, var(--bc, #ff2d2d) 340deg 344deg, transparent 344deg); -webkit-mask-image: radial-gradient(circle, #000 30%, transparent 70%); mask-image: radial-gradient(circle, #000 30%, transparent 70%); animation: burst .55s ease-out forwards; }
@@ -713,7 +713,7 @@ label.f b { float: right; color: #fff; letter-spacing: 0; font-size: 14px; }
 .ph-body.pulse { padding: 0 0 70px; background: #000; }
 .pu-new { position: sticky; top: 8px; z-index: 2; display: block; margin: 8px auto -36px; padding: 7px 16px; border-radius: 18px; background: #e01313; font-weight: 700; font-size: 12.5px; box-shadow: 0 6px 16px #000a; }
 .pp { display: flex; gap: 10px; padding: 11px 14px 6px; border-bottom: 1px solid #2f3336; cursor: pointer; }
-.pp:hover { background: #ffffff06; } .pp.mine { box-shadow: inset 3px 0 0 #e01313; }
+.pp:hover { background: #ffffff06; } .pp.mine { background: #e013130a; }
 .pp-av { flex: none; align-self: flex-start; }
 .pp-c { flex: 1; min-width: 0; }
 .pp-h { display: flex; align-items: baseline; gap: 5px; min-width: 0; } .pp-h small { color: #71767b; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .pp-h small.tm { flex: none; overflow: visible; }
@@ -727,7 +727,7 @@ label.f b { float: right; color: #fff; letter-spacing: 0; font-size: 14px; }
 .pp-lab.news { color: #fff; background: #e01313; padding: 2px 7px; border-radius: 3px; }
 .pp-lab.rum { color: #ffb347; } .pp-lab .pill { font-size: 9.5px; letter-spacing: .06em; }
 .pp.news { background: linear-gradient(#e013130d, transparent 70%); }
-.pp-a { display: flex; justify-content: space-between; max-width: 290px; margin: 2px 0 4px; color: #71767b; font-size: 12.5px; }
+.pp-a { display: flex; gap: 34px; max-width: 290px; margin: 2px 0 4px; color: #71767b; font-size: 12.5px; }
 .pp-a > * { display: inline-flex; align-items: center; gap: 4px; padding: 4px 4px 4px 0; border-radius: 14px; }
 .pp-a svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .pp-a button:hover { color: #fff; } .pp-a .on.lk { color: #f91880; } .pp-a .on.lk svg { fill: #f91880; } .pp-a .on.rt { color: #00ba7c; }
@@ -790,7 +790,7 @@ label.f b { float: right; color: #fff; letter-spacing: 0; font-size: 14px; }
 button.cn-row:hover { background: #ffffff08; } .cn-row .t { flex: 1; min-width: 0; }
 .cn-row .tt { display: flex; align-items: center; justify-content: space-between; gap: 8px; } .cn-row b { font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cn-row small { display: block; color: #8b8f94; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-.cn-row .w { color: #777; font-size: 11px; white-space: nowrap; } .cn-row .w.u { color: #ff5a5a; font-weight: 700; }
+.cn-row .w { color: #777; font-size: 11px; white-space: nowrap; } .cn-row .w.u { color: #ddd; font-weight: 700; }
 .cn-row .tag { font: 700 9.5px var(--body); letter-spacing: .08em; text-transform: uppercase; color: #000; background: #d7b35c; padding: 1px 5px; border-radius: 3px; margin-right: 5px; }
 .cn-row .tk { color: #4cc3ff; letter-spacing: -2px; }
 .cn-dot { min-width: 20px; height: 20px; flex: none; border-radius: 10px; background: var(--red); font: 700 11px/20px var(--body); font-style: normal; text-align: center; padding: 0 5px; } .cn-dot.of { background: #d7b35c; color: #000; }
@@ -804,7 +804,7 @@ button.cn-row:hover { background: #ffffff08; } .cn-row .t { flex: 1; min-width: 
 .ph-body.chat { background: #0b0b0c radial-gradient(#ffffff09 1px, transparent 1px) 0 0 / 16px 16px; }
 .cn-day { text-align: center; margin: 8px 0 4px; } .cn-day span { font-size: 11px; color: #aaa; background: #1c1c1f; padding: 3px 10px; border-radius: 8px; }
 .bub { position: relative; padding: 7px 11px 6px; } .bub .bm { float: right; margin: 6px 0 -3px 10px; font-size: 10.5px; color: #ffffff88; } .bub .bm i { font-style: normal; letter-spacing: -2px; } .bub .bm i.rd { color: #7fd8ff; }
-.bub.deal { max-width: 92%; width: 92%; display: flex; flex-direction: column; background: #17150f; border: 1px solid #d7b35c66; } .bub.deal .bt { display: block; margin-bottom: 6px; } .bub.deal .bm { align-self: flex-end; float: none; margin: 4px 0 0; }
+.bub.deal { max-width: 94%; width: 94%; display: flex; flex-direction: column; background: none; padding: 0; border: 0; box-shadow: none; } .bub.deal .bt { display: none; } .bub.deal .bm { align-self: flex-end; float: none; margin: 3px 4px 0; }
 .of { background: #151517; border: 1px solid #2a2a2e; border-radius: 14px; padding: 11px 12px; margin-bottom: 10px; }
 .of.big, .bub .of { border-color: #d7b35c; background: linear-gradient(#d7b35c14, #151517 60%); }
 .bub .of { margin: 0; padding: 9px 10px; }

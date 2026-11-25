@@ -42,7 +42,7 @@ const pulseBadge = () => P().notes.filter((n) => !n.read && n.app === "pulse" &&
 export function phoneBadge() {
   if (!G) return "";
   const n = P().notes.filter((x) => !x.read && x.lvl !== "ord").length, any = unread();
-  return n ? `<i class="dotb">${Math.min(n, 99)}</i>` : any ? '<i class="dotb dot"></i>' : "";
+  return n ? `<i class="dotb">${n > 9 ? "9+" : n}</i>` : any ? '<i class="dotb dot"></i>' : "";
 }
 
 // ---------- Home ----------
@@ -51,7 +51,7 @@ function home() {
   const b = { pulse: pulseBadge(), connect: connectBadge(), settings: 0 };
   const quiet = { pulse: !b.pulse && unread("pulse") > 0 };
   return `<div class="ph-home-in" style="--ag:${AGENCY_COLOURS[G.ag.col]}"><div class="ph-hello"><small>${gameDate()}</small><b>${esc(G.ag.name)}</b></div>
-    <div class="ph-grid">${APPS.map(([k, n]) => `<button class="ph-app" data-a="papp" data-i="${k}"><span class="ph-icon ${k}">${ic(k)}${b[k] ? `<i>${Math.min(b[k], 99)}</i>` : quiet[k] ? '<i class="q"></i>' : ""}</span><small>${n}</small></button>`).join("")}</div>
+    <div class="ph-grid">${APPS.map(([k, n]) => `<button class="ph-app" data-a="papp" data-i="${k}"><span class="ph-icon ${k}">${ic(k)}${b[k] ? `<i>${b[k] > 9 ? "9+" : b[k]}</i>` : quiet[k] ? '<i class="q"></i>' : ""}</span><small>${n}</small></button>`).join("")}</div>
     ${notes.length ? `<div class="ph-recent"><small>Notifications</small>${notes.map(noteRow).join("")}${ph.notes.length ? '<button class="ph-link" data-a="pclear">Clear all</button>' : ""}</div>` : '<div class="ph-recent quiet"><small>All caught up</small></div>'}</div>`;
 }
 const noteRow = (n) => `<button class="ph-note ${n.lvl} ${n.read ? "read" : ""}" data-a="pnote" data-i="${n.id}"><span class="ph-icon sm ${n.app}">${ic(n.app)}</span><span class="t"><b>${esc(n.title)}</b><small>${esc(n.body).slice(0, 90)}</small></span><span class="w">${n.t != null ? ago(n.t) : ""}</span></button>`;

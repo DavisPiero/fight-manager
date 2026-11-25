@@ -1,14 +1,12 @@
-# Hand-off — 2026-11-23
+# Hand-off — 2026-11-25
 
 ## Done (merged to main, pushed)
-- Names: `freshName`/`fixNames`/`surname` in `src/state.js`, bigger lists in `src/data/constants.js`. `load()` runs `fixNames`.
-- Phone: `render()` in `src/main.js` adds `.redraw` to the phone when the same screen is redrawn; CSS turns its animations off (new bubbles get `.new`).
-- Fight night (`src/ui/arena.js`): `arenaRock(i, on)` from `askMoment` for hurt moments; `S.rt` is real time (wobble shows in slow motion); `S.imp` slow-motion beat on bighit/kd; `drawCage` redrawn + `drawHaze`; mat sponsors in `S.brands`. Push-in in `styles.css` (`.arena.mo-on .cam`).
+- Phone: `src/ui/pulse.js` (feed rows), `src/ui/connect.js` (offer card, chat preview, 9+), `src/ui/phone.js` (9+), CSS in `styles.css` (`.pp.mine`, `.bub.deal`).
+- Arena (`src/ui/arena.js`): `camUpdate`/`camT`/`camApply`/`camPt` (canvas camera; `arenaHitPt` and `#p0/#p1` go through it), `drawFrontFence`, `separate()` (collision, then `contact(..., again=true)` re-aims), knockback `kb` on ACT reactions (`F.kb/F.kbv`), circling `S.orb` (depth via `place()`), footwork `F.dn`, feints (`ACT.feint/level`). `arenaFocus(i)` from `askMoment` replaces the CSS push-in.
+- Hair: `scripts/hair.mjs` → `src/data/hair.json`, used in `lookOf`. New styles shaved/tall/long.
 
 ## Next
-
 - Cold playtest still overdue.
 
 ## Key decisions
-- Your own fighters are never renamed by the save fix.
-- Bot shift is random-stream only (verified by running it without the fight changes).
+- Camera moves now (owner's ask), reversing the 2026-11-23 fixed camera.

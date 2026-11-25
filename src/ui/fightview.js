@@ -7,7 +7,7 @@ import { analyst, AREAS, areaVal, grade, ovrCol } from "./components.js";
 import { PLANS, CORNER, clock } from "../sim/fight.js";
 import { UI } from "./uistate.js";
 import { aicon } from "./icons.js";
-import { arenaInit, arenaSet, arenaAct, arenaMount, arenaImpactIn, arenaHitPt, arenaRock, screenPct } from "./arena.js";
+import { arenaInit, arenaSet, arenaAct, arenaMount, arenaImpactIn, arenaHitPt, arenaRock, arenaFocus, screenPct } from "./arena.js";
 
 const SIL = '<svg viewBox="0 0 100 120" class="sil"><path d="M50 10c-12 0-20 10-20 23 0 10 5 18 10 22v7c-16 3-30 11-34 26L4 120h92l-2-32c-4-15-18-23-34-26v-7c5-4 10-12 10-22 0-13-8-23-20-23z"/></svg>';
 const pic = (f) => { const p = photoOf(f); return p ? `<img src="${p}" alt="${esc(f.name)}">` : SIL; };
@@ -230,14 +230,14 @@ export function askMoment(FS, m, autoIdx, seconds = 5) {
   if (!mo || !arena) return Promise.resolve(autoIdx);
   const x = +pf?.style.getPropertyValue("--x") || 50;
   arena.style.setProperty("--fx", x + "%");
-  arena.classList.add("mo-on");
+  arena.classList.add("mo-on"); arenaFocus(m.focus);
   const rocked = /^hurt/.test(m.id || "") ? m.focus : -1;
   if (rocked >= 0) arenaRock(rocked, true);
   let ring = null;
   if (m.target && fx) {
     ring = document.createElement("div");
     ring.className = `tgt t-${m.target} ${m.tone}`;
-    ring.style.left = x + (m.focus ? -1 : 1) + "%";
+    ring.style.left = x + (m.focus ? -1 : 1) + "%"; ring.style.visibility = "hidden"; // shown once the camera has pushed in
     fx.appendChild(ring);
   }
   const btn = (c, i) => `<button data-a="mpick" data-i="${i}" class="${i === m.hint ? "hint" : ""}"><span class="mo-ic">${aicon(c.icon)}</span><b>${esc(c.label)}</b>${i === m.hint ? `<small>${esc(m.why)}</small>` : ""}</button>`;
@@ -249,12 +249,12 @@ export function askMoment(FS, m, autoIdx, seconds = 5) {
         <div class="mo-c n${m.choices.length}">${m.choices.map(btn).join("")}</div>
         <div class="mo-timer"><i style="animation-duration:${seconds}s"></i></div></div></div>`;
       t = setTimeout(() => done(autoIdx, true), seconds * 1000);
-      const hp = rocked >= 0 && ring && arenaHitPt(rocked, m.target); if (hp) ring.style.top = hp.y + "%"; // follow the dipped head
+      const hp = ring && arenaHitPt(m.focus, m.target); if (hp) { ring.style.top = hp.y + "%"; ring.style.left = hp.x + (m.focus ? -1 : 1) + "%"; } if (ring) ring.style.visibility = ""; // where the camera now has him
     };
     const s0 = setTimeout(show, 380); // the slow-motion push-in plays first
     const done = (i, auto) => {
       clearTimeout(t); clearTimeout(s0); UI.mpick = null;
-      arena.classList.remove("mo-on"); ring?.remove(); if (rocked >= 0) arenaRock(rocked, false);
+      arena.classList.remove("mo-on"); arenaFocus(-1); ring?.remove(); if (rocked >= 0) arenaRock(rocked, false);
       mo.innerHTML = auto ? `<div class="mo-auto">On instinct: <b>${esc(m.choices[i].label)}</b></div>` : "";
       setTimeout(() => { if (mo.firstChild?.className === "mo-auto") mo.innerHTML = ""; }, 1200);
       res(i);
